@@ -17,8 +17,8 @@ public class Tag {
 
     private String name;
 
-    @ManyToMany(mappedBy = "tagList")
-    private List<Place> placeList;
+//    @ManyToMany(mappedBy = "tagList")
+//    private List<Place> placeList;
 
     @Builder
     public Tag(String name) {
@@ -27,6 +27,6 @@ public class Tag {
 
     public void addPlace(Place place){
 //        this.placeList.add(place);
-        placeList.add(place);
+//        placeList.add(place);
     }
 }

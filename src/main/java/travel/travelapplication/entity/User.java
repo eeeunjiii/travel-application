@@ -20,17 +20,12 @@ public class User {
 
     private String name;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+//    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.DATE)
     private LocalDate createdAt;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.DATE)
     private LocalDate updatedAt;
-
-    @OneToMany(mappedBy = "user")
-    private List<SavedPlan> savedPlanList;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserPlan> userPlanList;
 
     @Builder
     public User(String name, LocalDate createdAt, LocalDate updatedAt) {

@@ -21,6 +21,6 @@ public class CityCountyDistrict {
 
     private String name;
 
-    @OneToMany(mappedBy = "city")
-    private List<ProvCity> provCityList;
+//    @OneToMany(mappedBy = "city")
+//    private List<ProvCity> provCityList;
 }

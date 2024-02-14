@@ -16,7 +16,7 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Map<Long, Place> placeMap;
+    private Map<Long, Place> placeMap; // 경로의 시작, 종료 지점의 장소 + 인근 추천 장소
     private Map<Long, Transportation> transMap;
 
     @ManyToOne

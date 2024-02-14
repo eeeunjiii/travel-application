@@ -11,7 +11,7 @@ import java.util.List;
 @Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Plan {
+public class Plan { // 커뮤니티에 올라오는 public 처리된 userplan
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,6 @@ public class Plan {
     @JoinColumn(name = "userPlan_id")
     private UserPlan userPlan;
 
-    @OneToMany(mappedBy = "plan")
-    private List<Place> placeList;
-
     @Builder
     public Plan(String name, String update, LocalDate createdAt, LocalDate updatedAt, UserPlan userPlan) {
         this.name = name;
@@ -41,10 +38,5 @@ public class Plan {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userPlan = userPlan;
-    }
-
-    public void addPlace(Place place) {
-//        this.placeList.add(place);
-        placeList.add(place);
     }
 }

@@ -25,8 +25,9 @@ public class Place {
 
     private Long cost;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate availableTime;
+//    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.TIME)
+    private LocalDate availableTime; // ??
 
     @OneToOne
     @JoinColumn(name = "city_id")

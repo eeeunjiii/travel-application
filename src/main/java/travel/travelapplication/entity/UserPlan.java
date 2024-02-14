@@ -20,28 +20,25 @@ public class UserPlan {
 
     private String name;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.DATE)
     private LocalDate startDate;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.DATE)
     private LocalDate endDate;
     private Long budget;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.DATE)
     private LocalDate createdAt;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Temporal(TemporalType.DATE)
     private LocalDate updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToMany(mappedBy = "userPlan")
-    private List<Route> routeList;
 
     @Builder
     public UserPlan(String name, LocalDate startDate, LocalDate endDate, Long budget,
@@ -54,11 +51,6 @@ public class UserPlan {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.user = user;
-    }
-
-    public void addRoute(Route route) {
-//        this.routeList.add(route);
-        routeList.add(route);
     }
 
     public void updatePlanName(String name) {

@@ -3,11 +3,13 @@ package travel.travelapplication.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SavedPlan {
+public class SavedPlan { // 저장된 Plan의 집합
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

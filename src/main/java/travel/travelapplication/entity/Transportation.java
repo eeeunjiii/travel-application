@@ -21,17 +21,9 @@ public class Transportation {
     @Enumerated(EnumType.STRING)
     private TransportationType type;
 
-    @ManyToMany(mappedBy = "transportationList")
-    private List<Route> routeList;
-
     @Builder
     public Transportation(String name, TransportationType type) {
         this.name = name;
         this.type = type;
-    }
-
-    public void addRoute(Route route) {
-//        this.routeList.add(route);
-        routeList.add(route);
     }
 }
