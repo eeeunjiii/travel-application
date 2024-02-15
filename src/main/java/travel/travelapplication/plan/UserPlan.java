@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class UserPlan extends BaseEntity {
     @Id
@@ -29,4 +28,12 @@ public class UserPlan extends BaseEntity {
     @Column
     private Long routeId;
 
+    public UserPlan(Long id, String myPlanName, LocalDateTime startAt, LocalDateTime endAt, Long budget, Long routeId) {
+        this.id = id;
+        this.myPlanName = myPlanName;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.budget = budget;
+        this.routeId = routeId;
+    }
 }

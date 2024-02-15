@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class User extends BaseEntity {
     @Id
@@ -33,4 +32,12 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public User(Long id, String name, Long myPlanId, Long savedPlanId, Long likedPlaceId, Status status) {
+        this.id = id;
+        this.name = name;
+        this.myPlanId = myPlanId;
+        this.savedPlanId = savedPlanId;
+        this.likedPlaceId = likedPlaceId;
+        this.status = status;
+    }
 }

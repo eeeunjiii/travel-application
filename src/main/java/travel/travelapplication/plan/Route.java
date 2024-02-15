@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class Route {
     @Id
@@ -19,4 +18,10 @@ public class Route {
     @ManyToOne
     @JoinColumn(name = "transportation_id")
     private Long transportationId;
+
+    public Route(Long id, Long placeId, Long transportationId) {
+        this.id = id;
+        this.placeId = placeId;
+        this.transportationId = transportationId;
+    }
 }

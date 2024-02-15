@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class Tag {
     @Id
@@ -15,4 +14,8 @@ public class Tag {
     @Column
     private String name;
 
+    public Tag(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

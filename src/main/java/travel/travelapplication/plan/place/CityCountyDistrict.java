@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class CityCountyDistrict {
     @Id
@@ -18,4 +17,10 @@ public class CityCountyDistrict {
     @ManyToOne
     @JoinColumn(name = "prov_city")
     private Long provId;
+
+    public CityCountyDistrict(Long id, String name, Long provId) {
+        this.id = id;
+        this.name = name;
+        this.provId = provId;
+    }
 }

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class Place {
     @Id
@@ -25,7 +24,6 @@ public class Place {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-
     @ManyToOne
     @JoinColumn(name = "tag_id")
     private Long tagId;
@@ -36,4 +34,14 @@ public class Place {
     @Column
     private LocalDateTime availableTime;
 
+    public Place(Long id, String name, Long location, Category category, Long tagId, Long cost,
+                 LocalDateTime availableTime) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+        this.category = category;
+        this.tagId = tagId;
+        this.cost = cost;
+        this.availableTime = availableTime;
+    }
 }

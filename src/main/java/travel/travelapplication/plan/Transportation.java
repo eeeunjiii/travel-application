@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class Transportation {
     @Id
@@ -19,5 +18,10 @@ public class Transportation {
     @Column
     @Enumerated(EnumType.STRING)
     private TransportationType type;
-    
+
+    public Transportation(Long id, String name, TransportationType type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
 }

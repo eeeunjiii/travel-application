@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class ProvCity {
     @Id
@@ -14,4 +13,9 @@ public class ProvCity {
 
     @Column
     private String name;
+
+    public ProvCity(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
