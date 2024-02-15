@@ -1,11 +1,7 @@
-package com.example.demo.plan;
+package travel.travelapplication.plan;
 
-import com.example.demo.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import travel.travelapplication.common.BaseEntity;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

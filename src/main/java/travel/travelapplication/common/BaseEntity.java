@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package travel.travelapplication.common;
 
 import jakarta.persistence.Column;
 import java.time.LocalDateTime;

@@ -1,16 +1,8 @@
-package com.example.demo.user;
+package travel.travelapplication.user;
 
-import com.example.demo.common.BaseEntity;
-import com.example.demo.plan.enums.Status;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import travel.travelapplication.common.BaseEntity;
+import travel.travelapplication.plan.enums.Status;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

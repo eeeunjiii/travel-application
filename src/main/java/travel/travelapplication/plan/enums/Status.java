@@ -1,4 +1,4 @@
-package com.example.demo.plan.enums;
+package travel.travelapplication.plan.enums;
 
 public enum Status {
     PUBLIC,
