@@ -1,4 +1,4 @@
-package travel.travelapplication.plan.place;
+package travel.travelapplication.place;
 
 import jakarta.persistence.*;
 import lombok.Getter;

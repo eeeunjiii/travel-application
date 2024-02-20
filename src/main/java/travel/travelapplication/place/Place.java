@@ -1,4 +1,4 @@
-package travel.travelapplication.plan.place;
+package travel.travelapplication.place;
 
 import travel.travelapplication.plan.enums.Category;
 import jakarta.persistence.*;
