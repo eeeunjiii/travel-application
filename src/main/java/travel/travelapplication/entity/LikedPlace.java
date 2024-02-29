@@ -2,17 +2,16 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
-@RequiredArgsConstructor
-@ToString
+@Document("LikedPlace")
 @Getter
 public class LikedPlace {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     @DBRef
     private Place place;

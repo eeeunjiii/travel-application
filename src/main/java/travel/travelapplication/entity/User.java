@@ -2,6 +2,7 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -11,15 +12,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document
-@RequiredArgsConstructor
-@ToString
+@Document("User")
 @Getter
 public class User {
 
     @Id
     @Setter // MemoryUserRepository 테스트용
-    private Long id;
+    private ObjectId id;
 
     @Column(unique = true) // 물어보기
     private String name;
@@ -44,7 +43,6 @@ public class User {
     @DBRef
     private List<SavedPlan> savedPlans = new ArrayList<>();
 
-    @Builder
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
                 List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans) {
         this.name = name;

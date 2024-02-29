@@ -2,17 +2,16 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
-@RequiredArgsConstructor
-@ToString
+@Document("SavedPlan")
 @Getter
 public class SavedPlan {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     @DBRef
     private Plan plan;
@@ -20,4 +19,5 @@ public class SavedPlan {
     public SavedPlan(Plan plan) {
         this.plan = plan;
     }
+
 }

@@ -2,17 +2,16 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.TransportationType;
 
-@Document
-@RequiredArgsConstructor
-@ToString
+@Document("Transportation")
 @Getter
 public class Transportation {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     private String name;
 

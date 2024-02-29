@@ -2,6 +2,7 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -12,14 +13,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document
-@RequiredArgsConstructor
-@ToString
+@Document("UserPlan")
 @Getter
 public class UserPlan {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     private String name;
 
@@ -46,7 +45,6 @@ public class UserPlan {
     @DBRef
     private List<Route> routes = new ArrayList<>();
 
-    @Builder
     public UserPlan(String name, Date startDate, Date endDate, Long budget, Status status,
                     List<Place> places, List<Route> routes) {
         this.name = name;
