@@ -20,7 +20,6 @@ public class User {
     @Setter // MemoryUserRepository 테스트용
     private ObjectId id;
 
-    @Column(unique = true) // 물어보기
     private String name;
 
     private String email;

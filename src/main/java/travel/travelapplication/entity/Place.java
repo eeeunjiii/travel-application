@@ -25,7 +25,6 @@ public class Place {
 
     private Long cost;
 
-    @Temporal(TemporalType.TIME)
     private Date availableTime;
 
     @DBRef

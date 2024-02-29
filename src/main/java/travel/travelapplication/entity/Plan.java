@@ -17,7 +17,7 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     @Id
     private ObjectId id;
     private String name;
-    private String update; // 어떤 필드인지
+    private String update;
 
     @CreatedDate
     private Date createdAt;

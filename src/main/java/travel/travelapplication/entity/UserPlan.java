@@ -22,10 +22,7 @@ public class UserPlan {
 
     private String name;
 
-    @Temporal(TemporalType.DATE)
     private Date startDate;
-
-    @Temporal(TemporalType.DATE)
     private Date endDate;
 
     private Long budget;
