@@ -2,18 +2,16 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.TransportationType;
 
-import java.util.List;
-
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transportation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -21,7 +19,6 @@ public class Transportation {
     @Enumerated(EnumType.STRING)
     private TransportationType type;
 
-    @Builder
     public Transportation(String name, TransportationType type) {
         this.name = name;
         this.type = type;

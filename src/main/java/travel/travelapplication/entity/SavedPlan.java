@@ -2,30 +2,22 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SavedPlan { // 저장된 Plan의 집합
+public class SavedPlan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToOne
-    @JoinColumn(name = "plan_id")
+    @DBRef
     private Plan plan;
 
-    @Builder
-    public SavedPlan(User user, Plan plan) {
-        this.user = user;
+    public SavedPlan(Plan plan) {
         this.plan = plan;
     }
 }

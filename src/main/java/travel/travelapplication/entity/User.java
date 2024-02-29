@@ -2,39 +2,56 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.ListableBeanFactoryExtensionsKt;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter // MemoryUserRepository 테스트용
     private Long id;
 
+    @Column(unique = true) // 물어보기
     private String name;
 
-//    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    @Temporal(TemporalType.DATE)
-    private LocalDate createdAt;
+    private String email;
 
-    @Temporal(TemporalType.DATE)
-    private LocalDate updatedAt;
+    @CreatedDate
+    private Date createdAt;
+
+    @LastModifiedDate
+    private Date updatedAt;
+
+    @DBRef
+    private List<UserPlan> userPlans = new ArrayList<>();
+
+    @DBRef
+    private List<Tag> tags = new ArrayList<>();
+
+    @DBRef
+    private List<LikedPlace> likedPlaces = new ArrayList<>();
+
+    @DBRef
+    private List<SavedPlan> savedPlans = new ArrayList<>();
 
     @Builder
-    public User(String name, LocalDate createdAt, LocalDate updatedAt) {
+    public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
+                List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans) {
         this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public void updateUser(String name){
-        this.name=name;
+        this.email = email;
+        this.userPlans = userPlans;
+        this.tags = tags;
+        this.likedPlaces = likedPlaces;
+        this.savedPlans = savedPlans;
     }
 }

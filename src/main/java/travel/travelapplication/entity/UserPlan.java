@@ -2,58 +2,59 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.Status;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserPlan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate startDate;
+    private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate endDate;
+    private Date endDate;
+
     private Long budget;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status; // public, private
 
-    @Temporal(TemporalType.DATE)
-    private LocalDate createdAt;
+    @CreatedDate
+    private Date createdAt;
 
-    @Temporal(TemporalType.DATE)
-    private LocalDate updatedAt;
+    @LastModifiedDate
+    private Date updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @DBRef
+    private List<Place> places = new ArrayList<>();
+
+    @DBRef
+    private List<Route> routes = new ArrayList<>();
 
     @Builder
-    public UserPlan(String name, LocalDate startDate, LocalDate endDate, Long budget,
-                    Status status, LocalDate createdAt, LocalDate updatedAt, User user) {
+    public UserPlan(String name, Date startDate, Date endDate, Long budget, Status status,
+                    List<Place> places, List<Route> routes) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.budget = budget;
         this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.user = user;
-    }
-
-    public void updatePlanName(String name) {
-        this.name=name;
+        this.places = places;
+        this.routes = routes;
     }
 }

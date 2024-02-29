@@ -1,26 +1,21 @@
 package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class CityCountyDistrict {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-//    @OneToMany(mappedBy = "city")
-//    private List<ProvCity> provCityList;
+    public CityCountyDistrict(String name) {
+        this.name = name;
+    }
 }

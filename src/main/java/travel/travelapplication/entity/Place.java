@@ -2,20 +2,21 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.Category;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -25,33 +26,23 @@ public class Place {
 
     private Long cost;
 
-//    @DateTimeFormat(pattern = "yyyy-mm-dd")
     @Temporal(TemporalType.TIME)
-    private LocalDate availableTime; // ??
+    private Date availableTime;
 
-    @OneToOne
-    @JoinColumn(name = "city_id")
+    @DBRef
     private CityCountyDistrict city; // location
 
-    @ManyToOne
-    @JoinColumn(name = "plan_id")
-    private Plan plan;
-
-    @ManyToMany
-    @JoinTable(name = "PLACE_TAG",
-        joinColumns = @JoinColumn(name = "PLACE_ID"),
-        inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
-    private List<Tag> tagList;
+    @DBRef
+    private List<Tag> tags = new ArrayList<>();
 
     @Builder
-    public Place(String name, Category category, Long cost, LocalDate availableTime,
-                 CityCountyDistrict city, Plan plan, List<Tag> tagList) {
+    public Place(String name, Category category, Long cost, Date availableTime,
+                 CityCountyDistrict city, List<Tag> tags) {
         this.name = name;
         this.category = category;
         this.cost = cost;
         this.availableTime = availableTime;
         this.city = city;
-        this.plan = plan;
-        this.tagList = tagList;
+        this.tags = tags;
     }
 }

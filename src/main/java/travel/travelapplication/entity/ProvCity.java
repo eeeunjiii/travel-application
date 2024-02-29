@@ -2,26 +2,29 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table
+import java.util.ArrayList;
+import java.util.List;
+
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProvCity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    private CityCountyDistrict city;
+    @DBRef
+    private List<CityCountyDistrict> citys = new ArrayList<>();
 
     @Builder
-    public ProvCity(String name, CityCountyDistrict city) {
+    public ProvCity(String name, List<CityCountyDistrict> citys) {
         this.name = name;
-        this.city = city;
+        this.citys = citys;
     }
 }

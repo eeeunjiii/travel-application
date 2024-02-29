@@ -2,41 +2,37 @@ package travel.travelapplication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
 
-@Entity
-@Table
+@Document
+@RequiredArgsConstructor
+@ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Plan { // 커뮤니티에 올라오는 public 처리된 userplan
+public class Plan { // 커뮤니티 public 처리된 UserPlan
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+    private String update; // 어떤 필드인지
 
-    private String update;
+    @CreatedDate
+    private Date createdAt;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createdAt;
+    @LastModifiedDate
+    private Date updatedAt;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate updatedAt;
-
-    @OneToOne
-    @JoinColumn(name = "userPlan_id")
+    @DBRef
     private UserPlan userPlan;
 
     @Builder
-    public Plan(String name, String update, LocalDate createdAt, LocalDate updatedAt, UserPlan userPlan) {
+    public Plan(String name, String update, UserPlan userPlan) {
         this.name = name;
         this.update = update;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.userPlan = userPlan;
     }
 }
