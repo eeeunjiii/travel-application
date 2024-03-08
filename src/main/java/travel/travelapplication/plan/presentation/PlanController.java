@@ -26,7 +26,6 @@ public class PlanController {
 
     @DeleteMapping("/{id}")
     public void deletePlan(@RequestParam(name = "id") Long id){
-
     }
 
 

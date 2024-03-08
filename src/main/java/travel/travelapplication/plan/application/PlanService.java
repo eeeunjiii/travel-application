@@ -14,4 +14,5 @@ public class PlanService {
         return planRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found:"+id));
     }
+
 }

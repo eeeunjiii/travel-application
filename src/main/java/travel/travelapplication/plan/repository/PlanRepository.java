@@ -8,5 +8,4 @@ import travel.travelapplication.plan.domain.Plan;
 
 @Repository
 public interface PlanRepository extends MongoRepository<Plan, Long> {
-
 }
