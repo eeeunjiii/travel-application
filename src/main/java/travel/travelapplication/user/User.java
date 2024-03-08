@@ -1,4 +1,4 @@
-package travel.travelapplication.entity;
+package travel.travelapplication.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import travel.travelapplication.place.domain.LikedPlace;
+import travel.travelapplication.place.domain.Tag;
+import travel.travelapplication.plan.domain.SavedPlan;
 
 @Document("User")
 @Getter

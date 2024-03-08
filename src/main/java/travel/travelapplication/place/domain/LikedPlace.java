@@ -1,4 +1,4 @@
-package travel.travelapplication.entity;
+package travel.travelapplication.place.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,18 +6,17 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("SavedPlan")
+@Document("LikedPlace")
 @Getter
-public class SavedPlan {
+public class LikedPlace {
 
     @Id
     private ObjectId id;
 
     @DBRef
-    private Plan plan;
+    private Place place;
 
-    public SavedPlan(Plan plan) {
-        this.plan = plan;
+    public LikedPlace(Place place) {
+        this.place = place;
     }
-
 }

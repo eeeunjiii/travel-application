@@ -1,4 +1,4 @@
-package travel.travelapplication.entity;
+package travel.travelapplication.plan.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import travel.travelapplication.user.UserPlan;
 
 @Document("Plan")
 @Getter

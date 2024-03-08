@@ -1,4 +1,4 @@
-package travel.travelapplication.entity;
+package travel.travelapplication.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +12,8 @@ import travel.travelapplication.constant.Status;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.plan.domain.Route;
 
 @Document("UserPlan")
 @Getter
