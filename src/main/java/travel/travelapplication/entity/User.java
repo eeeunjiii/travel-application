@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import travel.travelapplication.constant.Role;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,8 @@ public class User {
     private String name;
 
     private String email;
+
+    private String role;
 
     @CreatedDate
     private Date createdAt;
@@ -42,6 +45,10 @@ public class User {
     @DBRef
     private List<SavedPlan> savedPlans = new ArrayList<>();
 
+    private String refreshToken;
+
+    private String accessToken;
+
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
                 List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans) {
         this.name = name;
@@ -50,5 +57,44 @@ public class User {
         this.tags = tags;
         this.likedPlaces = likedPlaces;
         this.savedPlans = savedPlans;
+    }
+
+    public User(String name, String email, String role) {
+        this.name=name;
+        this.email=email;
+        this.role=role;
+    }
+
+    public User updateUserName(String name) {
+        this.name=name;
+        return this;
+    }
+
+    public void addUserPlan(UserPlan userPlan) {
+        this.userPlans.add(userPlan);
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void addLikedPlace(LikedPlace likedPlace) {
+        this.likedPlaces.add(likedPlace);
+    }
+
+    public void addSavedPlan(SavedPlan savedPlan) {
+        this.savedPlans.add(savedPlan);
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken=accessToken;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken=refreshToken;
+    }
+
+    public void destroyRefreshToken() {
+        this.refreshToken=null;
     }
 }
