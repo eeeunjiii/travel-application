@@ -1,4 +1,4 @@
-package travel.travelapplication.config.auth.dto;
+package travel.travelapplication.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package travel.travelapplication.config.auth;
+package travel.travelapplication.auth;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

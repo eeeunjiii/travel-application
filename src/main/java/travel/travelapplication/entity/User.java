@@ -7,7 +7,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import travel.travelapplication.constant.Role;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,10 +58,11 @@ public class User {
         this.savedPlans = savedPlans;
     }
 
-    public User(String name, String email, String role) {
+    public User(String name, String email, String role, String accessToken) {
         this.name=name;
         this.email=email;
         this.role=role;
+        this.accessToken=accessToken;
     }
 
     public User updateUserName(String name) {
@@ -86,15 +86,9 @@ public class User {
         this.savedPlans.add(savedPlan);
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken=accessToken;
-    }
+    public void updateAccessToken(String accessToken) { this.accessToken=accessToken; }
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken=refreshToken;
-    }
-
-    public void destroyRefreshToken() {
-        this.refreshToken=null;
     }
 }

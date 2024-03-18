@@ -1,10 +1,9 @@
-package travel.travelapplication.config.auth.dto;
+package travel.travelapplication.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import travel.travelapplication.entity.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -54,7 +53,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public User toEntity(String name, String email, String role, String accessToken) { // 수정하기
-        return new User(name, email, role);
+    public User toEntity(String role, String accessToken) { // 수정하기
+        return new User(name, email, role, accessToken);
     }
 }
