@@ -3,17 +3,15 @@ package travel.travelapplication.auth;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
 @Getter
 public class CustomOAuth2User extends DefaultOAuth2User {
 
-    private String email;
-    private String role;
+    private final String email;
+    private final String role;
 
     /**
      * Constructs a {@code DefaultOAuth2User} using the provided parameters.
