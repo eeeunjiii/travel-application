@@ -1,4 +1,4 @@
-package travel.travelapplication.entity;
+package travel.travelapplication.plan.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import travel.travelapplication.place.domain.Place;
 
 @Document("Route")
 @Getter
