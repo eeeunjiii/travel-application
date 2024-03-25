@@ -1,4 +1,4 @@
-package travel.travelapplication.user;
+package travel.travelapplication.user.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,15 +22,15 @@ public class UserPlan {
     @Id
     private ObjectId id;
 
-    private String name;
+    private final String name;
 
-    private Date startDate;
-    private Date endDate;
+    private final Date startDate;
+    private final Date endDate;
 
-    private Long budget;
+    private final Long budget;
 
     @Enumerated(EnumType.STRING)
-    private Status status; // public, private
+    private final Status status; // public, private
 
     @CreatedDate
     private Date createdAt;

@@ -19,11 +19,11 @@ import travel.travelapplication.user.domain.SavedPlan;
 @RestController
 @RequestMapping("/plans")
 public class PlanController {
-    private final PlanService planService;
+    private PlanService planService;
     @GetMapping("/{id}")
     public ResponseEntity<Plan> findPlan(@RequestParam(name = "id") ObjectId id){
         Plan plan = planService.findById(id);
-        return ResponseEntity.ok(new Plan(plan.getUserPlan()));
+        return ResponseEntity.ok(plan);
     }
 
     @DeleteMapping("/{id}")

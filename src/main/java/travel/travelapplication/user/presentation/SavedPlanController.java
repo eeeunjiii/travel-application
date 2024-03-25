@@ -12,7 +12,7 @@ import travel.travelapplication.user.domain.SavedPlan;
 @RestController
 @RequestMapping("/saved-plan")
 public class SavedPlanController {
-    SavedPlanService service;
+    private SavedPlanService service;
     @GetMapping("/{id}")
     public List<SavedPlan> getSavedPlan(){
         return service.findAllSavedPlan();

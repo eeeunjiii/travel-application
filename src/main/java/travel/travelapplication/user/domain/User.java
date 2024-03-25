@@ -1,4 +1,4 @@
-package travel.travelapplication.user;
+package travel.travelapplication.user.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import travel.travelapplication.place.domain.LikedPlace;
 import travel.travelapplication.place.domain.Tag;
-import travel.travelapplication.plan.domain.SavedPlan;
 
 @Document("User")
 @Getter
@@ -23,9 +22,9 @@ public class User {
     @Setter // MemoryUserRepository 테스트용
     private ObjectId id;
 
-    private String name;
+    private final String name;
 
-    private String email;
+    private final String email;
 
     @CreatedDate
     private Date createdAt;

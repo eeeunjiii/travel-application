@@ -7,7 +7,6 @@ import travel.travelapplication.user.application.UserPlanService;
 @RestController
 @RequiredArgsConstructor
 public class UserPlanController {
-    private final UserPlanService userPlanService;
-
+    private UserPlanService service;
 
 }
