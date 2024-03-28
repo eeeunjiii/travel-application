@@ -52,4 +52,14 @@ public class UserPlan {
         this.places = places;
         this.routes = routes;
     }
+
+    public void addPlaces(Place place) {
+        this.places.add(place);
+    }
+
+    public UserPlan updateUserPlan(String name, Status status) {
+        this.name=name;
+        this.status=status;
+        return this;
+    }
 }
