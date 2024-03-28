@@ -1,6 +1,6 @@
 package travel.travelapplication.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
@@ -49,13 +49,15 @@ public class User {
     private String accessToken;
 
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
-                List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans) {
+                List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans, String role, String accessToken) {
         this.name = name;
         this.email = email;
         this.userPlans = userPlans;
         this.tags = tags;
         this.likedPlaces = likedPlaces;
         this.savedPlans = savedPlans;
+        this.role=role;
+        this.accessToken=accessToken;
     }
 
     public User(String name, String email, String role, String accessToken) {

@@ -17,7 +17,6 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     @Id
     private ObjectId id;
     private String name;
-    private String update;
 
     @CreatedDate
     private Date createdAt;
@@ -28,9 +27,8 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     @DBRef
     private UserPlan userPlan;
 
-    public Plan(String name, String update, UserPlan userPlan) {
+    public Plan(String name, UserPlan userPlan) {
         this.name = name;
-        this.update = update;
         this.userPlan = userPlan;
     }
 }
