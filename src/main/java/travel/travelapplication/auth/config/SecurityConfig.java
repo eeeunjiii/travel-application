@@ -1,4 +1,4 @@
-package travel.travelapplication.auth;
+package travel.travelapplication.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +21,8 @@ import travel.travelapplication.repository.UserRepository;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
+    private final JwtService jwtService;// TODO; userReposioty dependency injection error
+    private final UserRepository userRepository; // TODO: mongoDBRepository @EnableMongoRepositories error 이 문제를 해결해야 다른 문제도 해결될 듯
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2FailureHandler oAuth2FailureHandler;
@@ -35,8 +35,8 @@ public class SecurityConfig {
                         headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
                 .authorizeHttpRequests((authorizeRequests) ->
-                        authorizeRequests
-                                .requestMatchers("/home", "/login/**").permitAll()
+                        authorizeRequests // TODO: 경로 다시 설정
+                                .requestMatchers("/", "/home", "/login/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login((oauth2Login) ->

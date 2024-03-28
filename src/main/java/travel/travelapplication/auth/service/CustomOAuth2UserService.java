@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.auth.dto.OAuthAttributes;
 import travel.travelapplication.entity.User;
@@ -17,6 +18,7 @@ import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
@@ -41,7 +43,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String role="ROLE_USER";
 
-        User user=saveUser(attributes, role, oAuth2AccessToken); // CustomOAuth2User 만들어야 할 듯
+        User user=saveUser(attributes, role, oAuth2AccessToken);
 
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole())),

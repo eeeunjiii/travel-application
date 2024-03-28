@@ -54,6 +54,6 @@ public class OAuthAttributes {
     }
 
     public User toEntity(String role, String accessToken) { // 수정하기
-        return new User(name, email, role, accessToken);
+        return new User(name, email, null, null, null, null, role, accessToken);
     }
 }

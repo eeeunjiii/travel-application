@@ -10,12 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import travel.travelapplication.entity.User;
 import travel.travelapplication.repository.UserRepository;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,7 +23,7 @@ import java.util.Optional;
 public class JwtService {
 
     // jwt.yml에서 설정된 값 가져오기
-    @Value("${jwt.secret}")
+    @Value("${jwt.secretKey}")
     private String secret;
 
     @Value("${jwt.access.expiration}")
@@ -62,7 +59,7 @@ public class JwtService {
                 .sign(Algorithm.HMAC512(secret));
     }
 
-    public void updateRefreshToken(String email, String refreshToken) {
+    public void updateRefreshToken(String email, String refreshToken){
         userRepository.findByEmail(email)
                 .ifPresentOrElse(user -> user.updateRefreshToken(refreshToken),
                         () -> new Exception("회원 조회 실패")

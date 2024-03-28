@@ -1,14 +1,10 @@
 package travel.travelapplication.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import travel.travelapplication.auth.dto.ResponseDto;
 import travel.travelapplication.auth.jwt.JwtService;
 import travel.travelapplication.entity.User;
 import travel.travelapplication.repository.UserRepository;
@@ -16,18 +12,24 @@ import travel.travelapplication.repository.UserRepository;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class RevokeService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
-    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private final String naverClientId;
-
-    @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
     private final String naverClientSecret;
+
+    @Autowired
+    public RevokeService(UserRepository userRepository, JwtService jwtService,
+                         @Value("${spring.security.oauth2.client.registration.naver.client-id}") String naverClientId,
+                         @Value("${spring.security.oauth2.client.registration.naver.client-secret}") String naverClientSecret) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.naverClientId = naverClientId;
+        this.naverClientSecret = naverClientSecret;
+    }
 
     public void deleteGoogleAccount(String accessToken) {
         User user=extractUserFromAccessToken(accessToken);
