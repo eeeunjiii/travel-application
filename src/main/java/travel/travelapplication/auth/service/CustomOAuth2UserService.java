@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.auth.dto.OAuthAttributes;
+import travel.travelapplication.constant.Role;
 import travel.travelapplication.entity.User;
 import travel.travelapplication.repository.UserRepository;
 
@@ -41,12 +42,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String oAuth2AccessToken=userRequest.getAccessToken().getTokenValue();
 
-        String role="ROLE_USER";
+        Role role=Role.USER;
 
         User user=saveUser(attributes, role, oAuth2AccessToken);
 
         return new CustomOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole())),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().toString())),
                 oAuth2User.getAttributes(),
                 attributes.getNameAttributeKey(),
                 user.getEmail(),
@@ -54,7 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         );
     }
 
-    private User saveUser(OAuthAttributes attributes, String role, String accessToken) {
+    private User saveUser(OAuthAttributes attributes, Role role, String accessToken) {
         User findUser=userRepository.findByEmail(attributes.getEmail())
                 .orElse(null);
 

@@ -36,7 +36,6 @@ public class JwtService {
     @Value("${jwt.refresh.header}")
     private String refreshHeader;
 
-    //== 1 ==//
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private static final String USERNAME_CLAIM = "email";
@@ -73,13 +72,6 @@ public class JwtService {
         setAccessTokenHeader(resp, accessToken);
         setRefreshTokenHeader(resp, refreshToken);
         log.info("access token, refresh token 헤더 설정 완료");
-    }
-
-    public void sendAccessToken(HttpServletResponse resp, String accessToken) { // 삭제
-        resp.setStatus(HttpServletResponse.SC_OK);
-
-        setAccessTokenHeader(resp, accessToken);
-        log.info("재발급된 access token: {}", accessToken);
     }
 
     // request.header를 통해 전달받은 토큰 추출

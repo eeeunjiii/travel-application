@@ -2,6 +2,7 @@ package travel.travelapplication.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import travel.travelapplication.constant.Role;
 import travel.travelapplication.entity.*;
 
 import java.util.Map;
@@ -13,12 +14,12 @@ public class OAuthAttributes {
     private String nameAttributeKey;
     private String name;
     private String email;
-    private String role;
+    private Role role;
     private String accessToken;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
-                           String name, String email, String role, String accessToken) {
+                           String name, String email, Role role, String accessToken) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
@@ -53,7 +54,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public User toEntity(String role, String accessToken) { // 수정하기
+    public User toEntity(Role role, String accessToken) { // 수정하기
         return new User(name, email, null, null, null, null, role, accessToken);
     }
 }

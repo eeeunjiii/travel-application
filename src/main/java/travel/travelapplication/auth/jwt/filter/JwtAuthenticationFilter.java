@@ -46,10 +46,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(refreshToken!=null) {
             checkRefreshTokenAndReIssueAccessToken(resp, refreshToken);
+            return;
         }
-
         if(refreshToken==null) {
-            // TODO: access token 확인, 인증 처리
+            checkAccessTokenAndAuthentication(req, resp, filterChain);
         }
     }
 
@@ -89,7 +89,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UserDetails userDetails= org.springframework.security.core.userdetails.User.builder()
                 .username(user.getName())
                 .password(password)
-                .roles(user.getRole())
+                .roles(String.valueOf(user.getRole()))
                 .build();
 
         Authentication authentication=new UsernamePasswordAuthenticationToken(userDetails, null,
