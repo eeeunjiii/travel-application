@@ -12,6 +12,4 @@ import travel.travelapplication.user.repository.UserPlanRepository;
 public class UserPlanService {
     private UserPlanRepository repository;
 
-    private UserPlan userPlan;
-
 }
