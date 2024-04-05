@@ -15,7 +15,7 @@ import travel.travelapplication.auth.handler.OAuth2FailureHandler;
 import travel.travelapplication.auth.jwt.JwtService;
 import travel.travelapplication.auth.service.CustomOAuth2UserService;
 import travel.travelapplication.auth.handler.OAuth2SuccessHandler;
-import travel.travelapplication.repository.UserRepository;
+import travel.travelapplication.user.repository.UserRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeRequests) ->
-                        authorizeRequests // TODO: 경로 다시 설정
+                        authorizeRequests
                                 .requestMatchers( "/login", "/home", "/", "/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                 )

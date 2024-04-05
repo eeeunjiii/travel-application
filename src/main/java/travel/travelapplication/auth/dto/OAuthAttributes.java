@@ -3,7 +3,7 @@ package travel.travelapplication.auth.dto;
 import lombok.Builder;
 import lombok.Getter;
 import travel.travelapplication.constant.Role;
-import travel.travelapplication.entity.*;
+import travel.travelapplication.user.domain.User;
 
 import java.util.Map;
 

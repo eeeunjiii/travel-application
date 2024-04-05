@@ -15,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 import travel.travelapplication.auth.jwt.JwtService;
 import travel.travelapplication.auth.jwt.util.PasswordUtil;
-import travel.travelapplication.entity.User;
-import travel.travelapplication.repository.UserRepository;
+import travel.travelapplication.user.domain.User;
+import travel.travelapplication.user.repository.UserRepository;
 
 import java.io.IOException;
 

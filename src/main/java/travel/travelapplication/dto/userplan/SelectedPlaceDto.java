@@ -1,7 +1,7 @@
 package travel.travelapplication.dto.userplan;
 
 import lombok.Getter;
-import travel.travelapplication.entity.Place;
+import travel.travelapplication.place.domain.Place;
 
 import java.util.List;
 
