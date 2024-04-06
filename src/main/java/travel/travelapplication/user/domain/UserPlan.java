@@ -8,12 +8,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.Status;
+import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.plan.domain.Route;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import travel.travelapplication.place.domain.Place;
-import travel.travelapplication.plan.domain.Route;
 
 @Document("UserPlan")
 @Getter
@@ -22,15 +22,14 @@ public class UserPlan {
     @Id
     private ObjectId id;
 
-    private final String name;
+    private String name;
 
-    private final Date startDate;
-    private final Date endDate;
+    private Date startDate;
+    private Date endDate;
 
-    private final Long budget;
-
-    @Enumerated(EnumType.STRING)
-    private final Status status; // public, private
+    private Long budget;
+  
+    private Status status; // public, private
 
     @CreatedDate
     private Date createdAt;
@@ -53,5 +52,15 @@ public class UserPlan {
         this.status = status;
         this.places = places;
         this.routes = routes;
+    }
+
+    public void addPlaces(Place place) {
+        this.places.add(place);
+    }
+
+    public UserPlan updateUserPlan(String name, Status status) {
+        this.name=name;
+        this.status=status;
+        return this;
     }
 }

@@ -5,10 +5,10 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import travel.travelapplication.place.domain.Place;
 
 import java.util.ArrayList;
 import java.util.List;
-import travel.travelapplication.place.domain.Place;
 
 @Document("Route")
 @Getter

@@ -2,10 +2,12 @@ package travel.travelapplication.user.repository;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 import travel.travelapplication.user.domain.User;
 
-@Repository
-public interface UserRepository extends MongoRepository<User, ObjectId> {
+import java.util.Optional;
 
+public interface UserRepository extends MongoRepository<User, ObjectId> {
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByRefreshToken(String refreshToken);
 }
