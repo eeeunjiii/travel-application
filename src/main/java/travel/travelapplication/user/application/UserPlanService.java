@@ -1,7 +1,8 @@
 package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;  
+import travel.travelapplication.user.repository.SavedPlanRepository;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import travel.travelapplication.constant.Status;
@@ -18,10 +19,9 @@ import java.util.List;
 import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class UserPlanService {
-
+  
     private final UserRepository userRepository;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;

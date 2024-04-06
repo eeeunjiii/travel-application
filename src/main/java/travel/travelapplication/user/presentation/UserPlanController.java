@@ -50,5 +50,4 @@ public class UserPlanController {
         if(userPlan.getStatus()==Status.PUBLIC) return true;
         return false;
     }
-
 }

@@ -1,6 +1,6 @@
 package travel.travelapplication.user.domain;
 
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;

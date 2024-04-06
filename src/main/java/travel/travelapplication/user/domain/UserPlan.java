@@ -28,8 +28,7 @@ public class UserPlan {
     private Date endDate;
 
     private Long budget;
-
-    @Enumerated(EnumType.STRING)
+  
     private Status status; // public, private
 
     @CreatedDate

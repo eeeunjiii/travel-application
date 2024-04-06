@@ -1,23 +1,25 @@
 package travel.travelapplication.plan.application;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.plan.domain.Plan;
-import travel.travelapplication.user.domain.UserPlan;
+import travel.travelapplication.user.domain.UserPlan;  
 import travel.travelapplication.plan.repository.PlanRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@AllArgsConstructor
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class PlanService {
+    private PlanRepository planRepository;
 
-    private final PlanRepository planRepository;
-
+    public Plan findById(ObjectId id){
+        return planRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found:"+id));
+    }
+  
     public List<Plan> searchByPlace(String keyword) {
         List<Plan> plans = planRepository.findAll();
         List<Plan> findPlans=new ArrayList<>();
