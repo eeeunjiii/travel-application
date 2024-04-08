@@ -5,7 +5,6 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.Role;
@@ -52,7 +51,6 @@ public class User {
 
     private String accessToken;
 
-    @PersistenceCreator
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
                 List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans, Role role, String accessToken) {
         this.name = name;
@@ -61,12 +59,29 @@ public class User {
         this.tags = tags;
         this.likedPlaces = likedPlaces;
         this.savedPlans = savedPlans;
-        this.role = role;
-        this.accessToken = accessToken;
+        this.role=role;
+        this.accessToken=accessToken;
+    }
+  
+    public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
+                List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans) {
+        this.name = name;
+        this.email = email;
+        this.userPlans = userPlans;
+        this.tags = tags;
+        this.likedPlaces = likedPlaces;
+        this.savedPlans = savedPlans;
+    }
+
+    public User(String name, String email, Role role, String accessToken) {
+        this.name=name;
+        this.email=email;
+        this.role=role;
+        this.accessToken=accessToken;
     }
 
     public User updateUserName(String name) {
-        this.name = name;
+        this.name=name;
         return this;
     }
 
@@ -86,11 +101,9 @@ public class User {
         this.savedPlans.add(savedPlan);
     }
 
-    public void updateAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
+    public void updateAccessToken(String accessToken) { this.accessToken=accessToken; }
 
     public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+        this.refreshToken=refreshToken;
     }
 }
