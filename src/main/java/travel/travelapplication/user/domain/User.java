@@ -21,20 +21,14 @@ import java.util.List;
 public class User {
 
     @Id
-    @Setter
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ObjectId id;
 
     private String name;
 
     private String email;
 
-    private Role role;
-
-    @CreatedDate
-    private Date createdAt;
-
-    @LastModifiedDate
-    private Date updatedAt;
+    private String role;
 
     @DBRef
     private List<UserPlan> userPlans = new ArrayList<>();
@@ -53,8 +47,13 @@ public class User {
     private String accessToken;
 
     @PersistenceCreator
+    public User() {
+    }
+
+    @PersistenceCreator
+    @Builder
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
-                List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans, Role role, String accessToken) {
+                List<LikedPlace> likedPlaces, List<SavedPlan> savedPlans, String role, String accessToken) {
         this.name = name;
         this.email = email;
         this.userPlans = userPlans;

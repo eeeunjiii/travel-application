@@ -30,7 +30,7 @@ public class OAuthAttributes {
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         if("naver".equals(registrationId)) {
-            return ofNaver("id", attributes);
+            return ofNaver(userNameAttributeName, attributes);
         }
         return ofGoogle(userNameAttributeName, attributes);
     }
@@ -54,7 +54,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public User toEntity(Role role, String accessToken) { // 수정하기
+    public User toEntity(String role, String accessToken) { // 수정하기
         return new User(name, email, null, null, null, null, role, accessToken);
     }
 }
