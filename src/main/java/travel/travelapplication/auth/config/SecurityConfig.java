@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import travel.travelapplication.auth.jwt.filter.JwtAuthenticationFilter;
@@ -31,42 +29,41 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // 예외 처리 핸들러 추가해야 함
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .headers((headerConfig) ->
-                        headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
-                )
-                .sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers( "/login", "/home", "/", "/h2-console/**").permitAll()
-                                .anyRequest().authenticated()
+                               .requestMatchers("/user/**").authenticated()
+                                .requestMatchers("/manager/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                                .anyRequest().permitAll()
                 )
                 .oauth2Login((oauth2Login) ->
                         oauth2Login
+                                .loginPage("/loginForm")
                                 .userInfoEndpoint((userInfo) ->
                                         userInfo
                                                 .userService(customOAuth2UserService))
-                                .successHandler(oAuth2SuccessHandler)
-                                .failureHandler(oAuth2FailureHandler)
-                                .defaultSuccessUrl("/home")
+//                                .successHandler(oAuth2SuccessHandler)
+//                                .failureHandler(oAuth2FailureHandler)
+//                                .defaultSuccessUrl("/")
                 )
                 .logout((logout) ->
                         logout
+                                .logoutUrl("/logout") // logout url 다시 확인
                                 .clearAuthentication(true)
                                 .invalidateHttpSession(true)
                                 .deleteCookies("JSESSIONID")
-                                .logoutUrl("/logout") // logout url 다시 확인
-                                .logoutSuccessUrl("/home")
+                                .logoutSuccessUrl("/")
                 );
 
-        http.addFilterAfter(jwtAuthenticationFilter(), LogoutFilter.class);
+//        http.addFilterAfter(jwtAuthenticationFilter(), LogoutFilter.class);
 
         return http.build();
     }
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtService, userRepository);
-    }
+//    @Bean
+//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+//        return new JwtAuthenticationFilter(jwtService, userRepository);
+//    }
 }
+
