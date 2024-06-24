@@ -7,12 +7,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import travel.travelapplication.user.domain.UserPlan;
-
 import java.util.Date;
+import travel.travelapplication.user.domain.UserPlan;
 
 @Document("Plan")
 @Getter
+@AllArgsConstructor
 public class Plan { // 커뮤니티 public 처리된 UserPlan
 
     @Id
@@ -28,8 +28,4 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     @DBRef
     private UserPlan userPlan;
 
-    public Plan(String name, UserPlan userPlan) {
-        this.name = name;
-        this.userPlan = userPlan;
-    }
 }
