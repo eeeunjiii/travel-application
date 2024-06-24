@@ -5,6 +5,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import travel.travelapplication.plan.domain.Plan;
 
-public interface PlanRepository extends MongoRepository<Plan, Long> {
+public interface PlanRepository extends MongoRepository<Plan, ObjectId> {
     Optional<Plan> findById(ObjectId id);
 }

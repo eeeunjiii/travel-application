@@ -36,6 +36,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("OAuth2 로그인 요청 진입");
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
+        log.info("registrationId: {}", registrationId);
+
         String userNameAttributeName = userRequest
                 .getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
@@ -51,7 +54,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 oAuth2User.getAttributes(),
                 attributes.getNameAttributeKey(),
                 findUser.getEmail(),
-                findUser.getRole()
+                findUser.getName(),
+                findUser.getRole(),
+                registrationId
         );
     }
 

@@ -5,63 +5,69 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-//import travel.travelapplication.auth.CustomOAuth2User;
+import org.springframework.web.reactive.function.client.WebClient;
+import travel.travelapplication.auth.CustomOAuth2User;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
 @Slf4j
 public class HomeController {
 
-//    @GetMapping("/home")
-//    public String home(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2UserPrincipal) {
-//        if(oAuth2UserPrincipal != null) {
-//            model.addAttribute("username", oAuth2UserPrincipal.getName());
-//        }
-//        return "index"; // return "home";
-//    }
+    @GetMapping("/")
+    public String home(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+
+        if(oAuth2User==null) {
+            return "home";
+        }
+
+        String provider= oAuth2User.getRegistrationId();
+
+        if(provider.equals("google")) {
+            model.addAttribute("username", oAuth2User.getAttribute("name"));
+            model.addAttribute("email", oAuth2User.getAttribute("email"));
+            return "home";
+        } else { // naver
+            Map<Object, String> response=(Map<Object, String>) oAuth2User.getAttribute("response");
+            model.addAttribute("username", response.get("name"));
+            model.addAttribute("email", response.get("email"));
+            return "home";
+        }
+    }
 
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication,
-                                          @AuthenticationPrincipal OAuth2User oAuth2) {
+                                          @AuthenticationPrincipal CustomOAuth2User oAuth2) {
+
+        String registrationId = oAuth2.getRegistrationId();
+
         log.info("/test/login: {}", authentication.getPrincipal());
         OAuth2User oAuth2User=(OAuth2User) authentication.getPrincipal();
         log.info("authentication: {}", oAuth2User.getAttributes());
-        log.info("email: {}", Optional.ofNullable(oAuth2User.getAttribute("email")));
-        log.info("name: {}", Optional.ofNullable(oAuth2User.getAttribute("name")));
+        log.info("email: {}", Optional.ofNullable(oAuth2.getEmail()));
+        log.info("name: {}", Optional.ofNullable(oAuth2.getAttribute("name")));
+        log.info("registrationId: {}", registrationId);
+
+        if(registrationId.equals("naver")) {
+            log.info("response: {}", Optional.ofNullable(oAuth2.getAttribute("response")));
+        }
+
         log.info("oauth2: {}", oAuth2.getAttributes());
-        log.info("oauth2 email: {}", Optional.ofNullable(oAuth2.getAttribute("email")));
         return "세션 정보 확인하기";
-    }
-
-    @GetMapping("/")
-    @ResponseBody
-    public String index() {
-        return "index";
-    }
-
-    @GetMapping("/login")
-    @ResponseBody
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/admin")
-    @ResponseBody
-    public String admin() {
-        return "admin";
-    }
-
-    @GetMapping("/user")
-    @ResponseBody
-    public String user() {
-        return "user";
     }
 
     @GetMapping("/loginForm")
     public String loginForm() {
-        return "index";
+        return "loginForm";
     }
+
+    @GetMapping("/map-test1")
+    public String showMap() {
+        return "map-test";
+    }
+
 }

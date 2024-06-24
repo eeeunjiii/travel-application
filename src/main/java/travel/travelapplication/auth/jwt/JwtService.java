@@ -58,7 +58,7 @@ public class JwtService {
                 .sign(Algorithm.HMAC512(secret));
     }
 
-    public void updateRefreshToken(String email, String refreshToken){
+    public void updateRefreshToken(String email, String refreshToken) {
         userRepository.findByEmail(email)
                 .ifPresentOrElse(user -> user.updateRefreshToken(refreshToken),
                         () -> new Exception("회원 조회 실패")

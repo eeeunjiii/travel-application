@@ -15,6 +15,7 @@ import travel.travelapplication.place.domain.Tag;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Document("User")
 @Getter
@@ -64,9 +65,15 @@ public class User {
         this.accessToken = accessToken;
     }
 
-    public User updateUserName(String name) {
-        this.name = name;
-        return this;
+    public void update(User updatedUser) {
+        Optional.ofNullable(updatedUser.getName()).ifPresent(none -> this.name=updatedUser.getName());
+        Optional.ofNullable(updatedUser.getEmail()).ifPresent(none -> this.email= updatedUser.getEmail());
+        Optional.ofNullable(updatedUser.getUserPlans()).ifPresent(none -> this.userPlans=updatedUser.getUserPlans());
+        Optional.ofNullable(updatedUser.getTags()).ifPresent(none -> this.tags=updatedUser.getTags());
+        Optional.ofNullable(updatedUser.getLikedPlaces()).ifPresent(none -> this.likedPlaces=updatedUser.getLikedPlaces());
+        Optional.ofNullable(updatedUser.getSavedPlans()).ifPresent(none -> this.savedPlans=updatedUser.getSavedPlans());
+        Optional.ofNullable(updatedUser.role).ifPresent(none -> this.role= updatedUser.getRole());
+        Optional.ofNullable(updatedUser.accessToken).ifPresent(none -> this.role= updatedUser.getRole());
     }
 
     public void addUserPlan(UserPlan userPlan) {

@@ -36,6 +36,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         resp.addHeader(jwtService.getRefreshHeader(), PREFIX+refreshToken);
 
         jwtService.sendAccessAndRefreshToken(resp, accessToken, refreshToken);
-        jwtService.updateRefreshToken(email, refreshToken);
+        try {
+            jwtService.updateRefreshToken(email, refreshToken);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
