@@ -14,6 +14,7 @@ import travel.travelapplication.place.application.KakaoMapService;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.response.ApiResponse;
+import travel.travelapplication.place.response.LocationDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,8 @@ public class PlaceController {
         return 112L; // 로그인한 사용자의 user_id 반환하기
     }
 
+    /*추천 알고리즘 결과*/
+
     @PostMapping("/get-result")
     @ResponseBody
     public String getRecommendationResult(@RequestBody List<Map<String, Object>> datas) {
@@ -71,5 +74,19 @@ public class PlaceController {
         model.addAttribute("list", list);
 
         return "map-data";
+    }
+
+    @GetMapping("/map-marker")
+    public String showMapWithMarker(Model model) {
+        List<LocationDto> locList=new ArrayList<>();
+
+        for(ApiResponse response:list) {
+            locList.add(new LocationDto(response.getPlaceName(), response.getY(), response.getX())); // X, Y 방향 유의
+        }
+
+        log.info("locList: {}", locList.get(0).getTitle());
+        model.addAttribute("locList", locList);
+
+        return "map-marker";
     }
 }
