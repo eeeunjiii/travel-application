@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Username</title>
+</head>
+<body>
+<div>
+    이전 이름: <span th:text="${oldName}">변경하기 전 이름</span><br>
+
+    <form action="editUsername.html" th:action method="post">
+        변경할 이름: <input type="text" name="editedName" value=""/>
+        <input type="hidden" name="email" th:value="${userEmail}" />
+        <input type="submit" value="이름 변경" />
+    </form>
+</div>
+</body>
+</html>
