@@ -40,8 +40,10 @@ public class PlanController {
         return ResponseEntity.ok(savedPlan);
     }
   
-    @GetMapping("/search")
-    public String planView(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
+    @GetMapping("/search") // 특정 장소가 포함된 지도 조회 (키워드가 없으면 모두 출력)
+    public String planView(Model model,
+                           @RequestParam(value = "keyword", required = false) String keyword,
+                           @RequestParam(value = "target", required = false) String target) { // target: map, place 구분 (select)
 
         if(keyword!=null) {
             List<Plan> findPlans = planService.searchByPlace(keyword);

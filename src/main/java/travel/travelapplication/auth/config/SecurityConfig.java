@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                               .requestMatchers("/user/**").authenticated()
+                               .requestMatchers("/user/**", "/tag", "/profile/*").authenticated()
                                 .requestMatchers("/manager/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()

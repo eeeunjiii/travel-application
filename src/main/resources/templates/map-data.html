@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Map Data</h1>
+<ul>
+    <li th:each="item : ${list}">
+        <span th:text="${item.id}"></span>
+        <span th:text="${item.placeName}"></span>
+        <span th:text="${item.phone}"></span>
+        <span th:text="${item.x}"></span>
+        <span th:text="${item.y}"></span>
+        <span th:text="${item.address}"></span>
+        <a th:href="${item.link}">길찾기 바로가기</a>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
     <title>Home</title>
 </head>
 <body>
 <h1>Home</h1>
-<a href="/loginPage" class="btn btn-success active" role="button">Login</a>
+<th:block sec:authorize="isAnonymous()">
+    <a href="/loginForm" class="btn btn-success active" role="button">Login</a>
+</th:block>
+
+<th:block sec:authorize="isAuthenticated()">
+    <div>
+        <a href="/logout" class="icons me-2 ms-2">Logout</a><br><br>
+        <span th:text="${username}">username</span><br>
+        <span th:text="${email}">email</span><br><br>
+        <a href="/profile/username" class="btn btn-success active" role="button">이름 변경</a><br>
+    </div>
+</th:block>
 </body>
 </html>
