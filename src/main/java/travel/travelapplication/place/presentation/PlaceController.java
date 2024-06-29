@@ -27,9 +27,6 @@ import java.util.Map;
 @Slf4j
 public class PlaceController {
     private final PlaceService placeService;
-    private final KakaoMapService kakaoMapService;
-
-    private List<ApiResponse> list;
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -49,44 +46,5 @@ public class PlaceController {
     @GetMapping("/user-id-data")
     public Long sendUserId() {
         return 112L; // 로그인한 사용자의 user_id 반환하기
-    }
-
-    /*추천 알고리즘 결과*/
-
-    @PostMapping("/get-result")
-    @ResponseBody
-    public String getRecommendationResult(@RequestBody List<Map<String, Object>> datas) {
-        List<String> places = new ArrayList<>();
-
-        for(Map<String, Object> data : datas) {
-            log.info("destination name: {}", data.get("name"));
-            places.add((String) data.get("name"));
-        }
-
-        Mono<List<ApiResponse>> listMono = kakaoMapService.callKakaoMapApi(places);
-        list = listMono.block();
-
-        return "ok";
-    }
-
-    @GetMapping("/recommend-details")
-    public String getRecommendationDetails(Model model) {
-        model.addAttribute("list", list);
-
-        return "map-data";
-    }
-
-    @GetMapping("/map-marker")
-    public String showMapWithMarker(Model model) {
-        List<LocationDto> locList=new ArrayList<>();
-
-        for(ApiResponse response:list) {
-            locList.add(new LocationDto(response.getPlaceName(), response.getY(), response.getX())); // X, Y 방향 유의
-        }
-
-        log.info("locList: {}", locList.get(0).getTitle());
-        model.addAttribute("locList", locList);
-
-        return "map-marker";
     }
 }

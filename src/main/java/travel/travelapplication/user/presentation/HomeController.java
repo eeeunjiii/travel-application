@@ -39,27 +39,6 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/test/login")
-    public @ResponseBody String testLogin(Authentication authentication,
-                                          @AuthenticationPrincipal CustomOAuth2User oAuth2) {
-
-        String registrationId = oAuth2.getRegistrationId();
-
-        log.info("/test/login: {}", authentication.getPrincipal());
-        OAuth2User oAuth2User=(OAuth2User) authentication.getPrincipal();
-        log.info("authentication: {}", oAuth2User.getAttributes());
-        log.info("email: {}", Optional.ofNullable(oAuth2.getEmail()));
-        log.info("name: {}", Optional.ofNullable(oAuth2.getAttribute("name")));
-        log.info("registrationId: {}", registrationId);
-
-        if(registrationId.equals("naver")) {
-            log.info("response: {}", Optional.ofNullable(oAuth2.getAttribute("response")));
-        }
-
-        log.info("oauth2: {}", oAuth2.getAttributes());
-        return "세션 정보 확인하기";
-    }
-
     @GetMapping("/loginForm")
     public String loginForm() {
         return "loginForm";
