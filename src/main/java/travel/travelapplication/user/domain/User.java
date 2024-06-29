@@ -3,14 +3,17 @@ package travel.travelapplication.user.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import travel.travelapplication.constant.Role;
 import travel.travelapplication.place.domain.LikedPlace;
 import travel.travelapplication.place.domain.Tag;
-import travel.travelapplication.plan.domain.SavedPlan;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document("User")
