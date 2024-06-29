@@ -11,9 +11,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.auth.dto.OAuthAttributes;
-import java.util.Collections;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.repository.UserRepository;
+
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +41,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         String role = "ROLE_USER";
-        String accessToken = userRequest.getAccessToken().getTokenValue();
+        String accessToken=userRequest.getAccessToken().getTokenValue();
 
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName,
-                oAuth2User.getAttributes());
+        OAuthAttributes attributes=OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         User findUser = saveUser(attributes, role, accessToken);
 
@@ -59,7 +59,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User findUser = getUser(attributes);
 
-        if (findUser == null) {
+        if (findUser==null) {
             User user = User.builder()
                     .name(attributes.getName())
                     .email(attributes.getEmail())
