@@ -28,7 +28,7 @@ public class UserPlan {
     private Date endDate;
 
     private Long budget;
-  
+
     private Status status; // public, private
 
     @CreatedDate
@@ -59,8 +59,8 @@ public class UserPlan {
     }
 
     public UserPlan updateUserPlan(String name, Status status) {
-        this.name=name;
-        this.status=status;
+        this.name = name;
+        this.status = status;
         return this;
     }
 }

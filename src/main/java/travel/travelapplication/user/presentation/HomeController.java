@@ -15,19 +15,11 @@ import java.util.Optional;
 @Slf4j
 public class HomeController {
 
-//    @GetMapping("/home")
-//    public String home(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2UserPrincipal) {
-//        if(oAuth2UserPrincipal != null) {
-//            model.addAttribute("username", oAuth2UserPrincipal.getName());
-//        }
-//        return "index"; // return "home";
-//    }
-
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication,
                                           @AuthenticationPrincipal OAuth2User oAuth2) {
         log.info("/test/login: {}", authentication.getPrincipal());
-        OAuth2User oAuth2User=(OAuth2User) authentication.getPrincipal();
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         log.info("authentication: {}", oAuth2User.getAttributes());
         log.info("email: {}", Optional.ofNullable(oAuth2User.getAttribute("email")));
         log.info("name: {}", Optional.ofNullable(oAuth2User.getAttribute("name")));
@@ -63,5 +55,10 @@ public class HomeController {
     @GetMapping("/loginForm")
     public String loginForm() {
         return "index";
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
     }
 }

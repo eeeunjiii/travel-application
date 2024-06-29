@@ -12,12 +12,12 @@ import travel.travelapplication.place.domain.Place;
 
 @RestController
 @Transactional
-@RequestMapping("/plans")
+@RequestMapping("/places")
 public class PlaceController {
     private PlaceService placeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Place> findPlaceByName(@RequestParam(name = "id") ObjectId id) {
+    public ResponseEntity<Place> findPlaceById(@RequestParam(name = "id") ObjectId id) {
         Place place = placeService.findById(id);
         return ResponseEntity.ok(place);
     }
