@@ -686,8 +686,8 @@ body.down .header-default.clone, body.down .header-personal nav.clone, body.down
   color: #FFF;
   border-radius: 25px;
   background: #75BC00;
-  background: -webkit-linear-gradient(left, #75BC00 0%, #FFA387 100%);
-  background: linear-gradient(to right, #75BC00 0%, #FFA387 100%);
+  background: -webkit-linear-gradient(left, #75BC00 0%, #D2E5A8 100%);
+  background: linear-gradient(to right, #75BC00 0%, #D2E5A8 100%);
 }
 
 .navbar-brand {
@@ -1101,8 +1101,8 @@ section {
   top: 20px;
   z-index: 1;
   background: #75BC00;
-  background: -webkit-linear-gradient(left, #75BC00 0%, #FFA387 51%, #75BC00 100%);
-  background: linear-gradient(to right, #75BC00 0%, #FFA387 51%, #75BC00 100%);
+  background: -webkit-linear-gradient(left, #75BC00 0%, #D2E5A8 51%, #75BC00 100%);
+  background: linear-gradient(to right, #75BC00 0%, #D2E5A8 51%, #75BC00 100%);
   background-size: 200% auto;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
@@ -1131,8 +1131,8 @@ section {
   -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   background: #75BC00;
-  background: -webkit-linear-gradient(bottom, #75BC00 0%, #FFA387 100%);
-  background: linear-gradient(to top, #75BC00 0%, #FFA387 100%);
+  background: -webkit-linear-gradient(bottom, #75BC00 0%, #D2E5A8 100%);
+  background: linear-gradient(to top, #75BC00 0%, #D2E5A8 100%);
   z-index: 1;
 }
 .post .post-format-sm {
@@ -1151,8 +1151,8 @@ section {
   -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   background: #75BC00;
-  background: -webkit-linear-gradient(bottom, #75BC00 0%, #FFA387 100%);
-  background: linear-gradient(to top, #75BC00 0%, #FFA387 100%);
+  background: -webkit-linear-gradient(bottom, #75BC00 0%, #D2E5A8 100%);
+  background: linear-gradient(to top, #75BC00 0%, #D2E5A8 100%);
   z-index: 1;
 }
 .post .thumb {
@@ -1327,8 +1327,8 @@ section {
   -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   background: #75BC00;
-  background: -webkit-linear-gradient(bottom, #75BC00 0%, #FFA387 100%);
-  background: linear-gradient(to top, #75BC00 0%, #FFA387 100%);
+  background: -webkit-linear-gradient(bottom, #75BC00 0%, #D2E5A8 100%);
+  background: linear-gradient(to top, #75BC00 0%, #D2E5A8 100%);
   z-index: 1;
 }
 .post.post-list-sm .post-title {
@@ -2029,8 +2029,8 @@ section {
   text-align: center;
   width: 50px;
   background: #75BC00;
-  background: -webkit-linear-gradient(left, #75BC00 0%, #FFA387 100%);
-  background: linear-gradient(to right, #75BC00 0%, #FFA387 100%);
+  background: -webkit-linear-gradient(left, #75BC00 0%, #D2E5A8 100%);
+  background: linear-gradient(to right, #75BC00 0%, #D2E5A8 100%);
 }
 .contact-item .details {
   margin-left: 20px;
@@ -2362,8 +2362,8 @@ button:focus {
   color: #FFF;
   padding: 9.5px 36px;
   background: #75BC00;
-  background: -webkit-linear-gradient(left, #75BC00 0%, #FFA387 51%, #75BC00 100%);
-  background: linear-gradient(to right, #75BC00 0%, #FFA387 51%, #75BC00 100%);
+  background: -webkit-linear-gradient(left, #75BC00 0%, #D2E5A8 51%, #75BC00 100%);
+  background: linear-gradient(to right, #75BC00 0%, #D2E5A8 51%, #75BC00 100%);
   background-size: 200% auto;
 }
 .btn-default:hover {
@@ -2417,9 +2417,9 @@ button:focus {
   color: #FFF;
   border: 0;
   border-radius: 50%;
-  background: #FFA387;
-  background: -webkit-linear-gradient(bottom, #FFA387 0%, #75BC00 51%, #FFA387 100%);
-  background: linear-gradient(to top, #FFA387 0%, #75BC00 51%, #FFA387 100%);
+  background: #D2E5A8;
+  background: -webkit-linear-gradient(bottom, #D2E5A8 0%, #75BC00 51%, #D2E5A8 100%);
+  background: linear-gradient(to top, #D2E5A8 0%, #75BC00 51%, #D2E5A8 100%);
   background-size: auto 200%;
   display: inline-flex;
   justify-content: center;
@@ -2622,8 +2622,8 @@ button:focus {
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff !important;
   background: #75BC00;
-  background: -webkit-linear-gradient(left, #75BC00 0%, #FFA387 51%, #75BC00 100%);
-  background: linear-gradient(to right, #75BC00 0%, #FFA387 51%, #75BC00 100%);
+  background: -webkit-linear-gradient(left, #75BC00 0%, #D2E5A8 51%, #75BC00 100%);
+  background: linear-gradient(to right, #75BC00 0%, #D2E5A8 51%, #75BC00 100%);
   border-color: transparent;
   background-size: 200% auto;
 }
@@ -2650,9 +2650,9 @@ button:focus {
   z-index: 3;
   color: #FFF;
   border-color: transparent;
-  background: #FFA387;
-  background: -webkit-linear-gradient(bottom, #FFA387 0%, #75BC00 51%, #FFA387 100%);
-  background: linear-gradient(to top, #FFA387 0%, #75BC00 51%, #FFA387 100%);
+  background: #D2E5A8;
+  background: -webkit-linear-gradient(bottom, #D2E5A8 0%, #75BC00 51%, #D2E5A8 100%);
+  background: linear-gradient(to top, #D2E5A8 0%, #75BC00 51%, #D2E5A8 100%);
   background-size: auto 200%;
   -webkit-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
@@ -2681,9 +2681,9 @@ button:focus {
 .page-link:hover {
   z-index: 2;
   color: #FFF;
-  background: #FFA387;
-  background: -webkit-linear-gradient(bottom, #FFA387 0%, #75BC00 51%, #FFA387 100%);
-  background: linear-gradient(to top, #FFA387 0%, #75BC00 51%, #FFA387 100%);
+  background: #D2E5A8;
+  background: -webkit-linear-gradient(bottom, #D2E5A8 0%, #75BC00 51%, #D2E5A8 100%);
+  background: linear-gradient(to top, #D2E5A8 0%, #75BC00 51%, #D2E5A8 100%);
   background-size: auto 200%;
   border-color: transparent;
 }
@@ -2787,7 +2787,7 @@ button:focus {
   border-color: #EBEBEB;
 }
 .slick-next:hover:before, .slick-next:focus:before, .slick-prev:hover:before, .slick-prev:focus:before {
-  color: #FFA387;
+  color: #D2E5A8;
 }
 
 .slick-prev {
@@ -2856,8 +2856,8 @@ button:focus {
 
 .slick-dots li.slick-active button:before {
   background: #75BC00;
-  background: -webkit-linear-gradient(left, #75BC00 0%, #FFA387 100%);
-  background: linear-gradient(to right, #75BC00 0%, #FFA387 100%);
+  background: -webkit-linear-gradient(left, #75BC00 0%, #D2E5A8 100%);
+  background: linear-gradient(to right, #75BC00 0%, #D2E5A8 100%);
   border-radius: 5px;
   opacity: 1;
   width: 25px;
