@@ -19,10 +19,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void save(User user) {
-        userRepository.insert(user);
+        userRepository.save(user);
     }
 
-    public User updateUserName(String email, String username) throws IllegalAccessException{
+    public User updateUserName(String email, String username) throws IllegalAccessException {
         User user=userRepository.findByEmail(email)
                 .orElse(null);
 
