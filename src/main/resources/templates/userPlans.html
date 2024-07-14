@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Plan List</title>
+</head>
+<body>
+
+    <div style="max-width: 600px">
+        <div>
+            <h2>여행 일정 목록</h2>
+        </div>
+
+        <div>
+            <div>
+                <button th:onclick="|location.href='@{/user-plans/plan-info}'|"
+                        type="button">여행 일정 추가</button>
+            </div>
+        </div>
+
+        <hr>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>여행명&nbsp;&nbsp;</th>
+                    <th>여행 시작일&nbsp;&nbsp;</th>
+                    <th>여행 종료일&nbsp;&nbsp;</th>
+                    <th>여행 예산&nbsp;&nbsp;</th>
+                    <th>시 · 도&nbsp;&nbsp;</th>
+                    <th>시 · 군 · 구</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="userPlan : ${userPlans}">
+                    <td><a href="userPlan.html" th:href="@{/user-plans/{userPlanId}(userPlanId=${userPlan.id})}" th:text="${userPlan.name}">여행명&nbsp;&nbsp;</a></td>
+                    <td th:text="${userPlan.startDate}">여행 시작일&nbsp;&nbsp;</td>
+                    <td th:text="${userPlan.endDate}">여행 종료일&nbsp;&nbsp;</td>
+                    <td th:text="${userPlan.budget}">여행 예산&nbsp;&nbsp;</td>
+                    <td th:text="${userPlan.city}">시 · 도&nbsp;&nbsp;</td>
+                    <td th:text="${userPlan.district}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

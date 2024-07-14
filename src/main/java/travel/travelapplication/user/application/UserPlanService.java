@@ -1,11 +1,9 @@
 package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;  
-import travel.travelapplication.user.repository.SavedPlanRepository;
+import travel.travelapplication.user.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import travel.travelapplication.constant.Status;
 import travel.travelapplication.dto.userplan.SelectedPlaceDto;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.plan.domain.Plan;
@@ -15,6 +13,7 @@ import travel.travelapplication.user.repository.UserPlanRepository;
 import travel.travelapplication.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 
@@ -22,19 +21,25 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 @RequiredArgsConstructor
 public class UserPlanService {
   
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
 
-    public void saveUserPlan(String email, SelectedPlaceDto selectedPlaceDto, UserPlanInfoDto userPlanInfoDto) { // Userplan
-        userRepository.findByEmail(email)
-                .ifPresent(user ->
-                {
-                    UserPlan createdUserPlan=createNewUserPlan(userPlanInfoDto);
-                    UserPlan userPlan = savePlaceToUserPlan(createdUserPlan, selectedPlaceDto);
-                    user.addUserPlan(userPlan);
-                    userPlanRepository.save(userPlan);
-                });
+    // 1. 여행 사전정보(초기 일정 생성) 2. 추천 여행 장소 중 선택하여 일정 생성(기존 일정 업데이트)
+    public void createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
+        UserPlan userPlan = userPlanInfoDto.toEntity();
+
+        UserPlan savedUserPlan = userPlanRepository.insert(userPlan);
+
+        List<UserPlan> userPlans = user.getUserPlans();
+        userPlans.add(savedUserPlan);
+
+        user.update(user);
+        userService.save(user);
+    }
+
+    public List<UserPlan> findAllUserPlan(User user) {
+        return user.getUserPlans();
     }
 
     public void updateUserPlan(ObjectId userPlanId, UpdateUserPlanInfoDto userPlanInfoDto) {
@@ -43,14 +48,20 @@ public class UserPlanService {
                         userPlan.updateUserPlan(userPlanInfoDto.getName(), userPlanInfoDto.getStatus()));
     }
 
-    public void shareUserPlan(UserPlan userPlan) {
-        Plan plan=new Plan(userPlan.getName(), userPlan);
-        planRepository.save(plan);
+    public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
+        UserPlan userPlan = userPlanRepository.findById(userPlanId)
+                .orElse(null);
+
+        if(userPlan!=null) {
+            return userPlan;
+        } else {
+            throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+        }
     }
 
-    private UserPlan createNewUserPlan(UserPlanInfoDto userPlanInfoDto) {
-        return new UserPlan(userPlanInfoDto.getName(), userPlanInfoDto.getStartDate(),
-                userPlanInfoDto.getEndDate(), userPlanInfoDto.getBudget(), Status.PRIVATE, null, null);
+    public void shareUserPlan(UserPlan userPlan) { // 공개 처리 -> 커뮤니티 공유
+        Plan plan=new Plan(userPlan.getName(), userPlan);
+        planRepository.insert(plan);
     }
 
     private UserPlan savePlaceToUserPlan(UserPlan userPlans, SelectedPlaceDto selectedPlaceDto) {

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <div>
+        <div>
+            <h2>여행 정보 입력</h2>
+        </div>
+
+        <form action="getPlanInfoForm.html" th:action th:object="${userPlan}" th:method="post">
+            <div>
+                <div>여행명</div>
+                <input type="text" th:field="*{name}" />
+            </div>
+
+            <div>
+                <div>여행 시작일</div>
+                <input type="date" th:field="*{startDate}" />
+            </div>
+
+
+            <div>
+                <div>여행 종료일</div>
+                <input type="date" th:field="*{endDate}" />
+            </div>
+
+
+            <div>
+                <div>여행 예산</div>
+                <input type="range" th:field="*{budget}" min="1" max="100" value="50" />
+                <span id="rangeValue"> 50</span>
+
+                <script>
+                    const rangeSlider = document.getElementById('budget');
+                    const rangeValue = document.getElementById('rangeValue');
+
+                    rangeSlider.addEventListener('input', function() {
+                        rangeValue.textContent = rangeSlider.value;
+                    });
+                </script>
+            </div>
+
+
+            <div>
+                <div>시 · 도</div>
+                <select id="city" name="city" onchange="loadSubregions()">
+                    <option value="">==시 · 도 선택==</option>
+                    <option th:each="city : ${cities}" th:value="${city.key}"
+                             th:text="${city.value}">서울</option>
+                </select>
+            </div>
+
+
+            <div>
+                <div>시 · 군 · 구</div>
+                <select id="district" name="district">
+                    <option value="">==시 · 군 · 구 선택==</option>
+                </select>
+            </div>
+
+            <script>
+                function loadSubregions() {
+                    var city = $('#city').val();
+                    $.ajax({
+                        url: '/user-plans/districts',
+                        type: 'GET',
+                        data: { city: city },
+                        success: function(data) {
+                            $('#district').empty();
+                            $('#district').append('<option value="">==시 · 군 · 구 선택==</option>');
+                            data.forEach(function(district) {
+                                $('#district').append('<option value="' + district + '">' + district + '</option>');
+                            });
+                        }
+                    });
+                }
+            </script>
+
+            <div>
+                <div th:each="status : ${statuses}">
+                    <input type="radio" th:field="*{status}" th:value="${status.name()}">
+                    <label th:for="${#ids.prev('status')}" th:text="${status.description}">PUBLIC</label>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit">여행 정보 등록</button>
+            </div>
+        </form>
+
+        <button th:onclick="|location.href='@{/user-plans/places}'|"
+                type="button">여행 일정 생성하기</button>
+    </div>
+</body>
+</html>

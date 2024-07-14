@@ -1,28 +1,56 @@
 package travel.travelapplication.dto.userplan;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import travel.travelapplication.constant.Status;
+import travel.travelapplication.user.domain.UserPlan;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class UserPlanDto {
 
     @Getter
-    public static class UserPlanInfoDto { // TODO: 여행하고자 하는 지역 추가
+    @Setter
+    @NoArgsConstructor
+    public static class UserPlanInfoDto {
         private String name;
-        private Date startDate;
-        private Date endDate;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private Long budget;
+        private String city;
+        private String district;
+        private Status status;
 
-        public UserPlanInfoDto(String name, Date startDate, Date endDate, Long budget) {
+        @Builder
+        public UserPlanInfoDto(String name, LocalDate startDate, LocalDate endDate, Long budget,
+                               String city, String district, Status status) {
             this.name=name;
             this.startDate = startDate;
             this.endDate = endDate;
             this.budget = budget;
+            this.city=city;
+            this.district=district;
+            this.status=status;
+        }
+
+        public UserPlan toEntity() {
+            return UserPlan.builder()
+                    .name(name)
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .budget(budget)
+                    .city(city)
+                    .district(district)
+                    .status(status)
+                    .build();
         }
     }
 
     @Getter
+    @Setter
+    @NoArgsConstructor
     public static class UpdateUserPlanInfoDto {
         private String name;
         private Status status;
