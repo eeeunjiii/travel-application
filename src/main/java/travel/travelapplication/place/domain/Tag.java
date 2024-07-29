@@ -5,12 +5,12 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("Tag")
+@Document(collection = "Tag")
 @Getter
+@NoArgsConstructor
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ObjectId id;
 
     private String name;

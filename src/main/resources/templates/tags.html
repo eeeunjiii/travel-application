@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Tag List</title>
+</head>
+<body>
+
+<div>
+    <div>
+        <h2>선택 태그 목록 확인</h2>
+    </div>
+
+    <hr>
+    <div>
+        <ul th:each="tag : ${tagList}">
+            <li th:text="${tag.name}">리뷰 키워드</li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
