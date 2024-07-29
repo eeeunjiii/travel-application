@@ -6,9 +6,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import travel.travelapplication.auth.CustomOAuth2User;
-import travel.travelapplication.dto.tag.TagDto;
+import travel.travelapplication.dto.tag.TagDtoList;
+import travel.travelapplication.place.application.TagService;
 import travel.travelapplication.place.domain.Tag;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
@@ -21,51 +21,47 @@ import java.util.*;
 public class TagController {
 
     private final UserService userService;
+    private final TagService tagService;
 
-    @ModelAttribute("tagList")
-    public List<Tag> tags() {
-        List<Tag> tags=new ArrayList<>();
-        tags.add(new Tag("KEYWORD1"));
-        tags.add(new Tag("KEYWORD2"));
-        tags.add(new Tag("KEYWORD3"));
-        tags.add(new Tag("KEYWORD4"));
-        return tags;
+    @ModelAttribute("tags")
+    public Map<String, String> tags() {
+        return tagService.findAllTag();
     }
 
     @GetMapping("/tag")
-    public String tagForm(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
-        User user=userService.findUserByEmail(oAuth2User);
-        model.addAttribute("user", user);
-
-        return "tag";
+    public String tagForm(Model model) throws IllegalAccessException {
+        TagDtoList tagDtoList = new TagDtoList();
+        model.addAttribute("tagDtoList", tagDtoList);
+        return "tagForm";
     }
 
     @PostMapping("/tag")
-    @ResponseBody
-    public String addTag(@ModelAttribute User user,
-                         @RequestParam("tags") List<String> selectedTags) throws IllegalAccessException {
-        List<Tag> userTag=new ArrayList<>();
-
-        for(String tagName: selectedTags) {
-            Tag tag=new Tag(tagName);
-            userTag.add(tag);
+    public String addTag(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+                         @ModelAttribute TagDtoList tagDtoList, Model model) throws IllegalAccessException {
+        if(tagDtoList.getTagList().size() < 3) {
+            model.addAttribute("errorMessage", "3개 이상의 태그를 선택하세요.");
+            return "tagForm";
         }
-        userService.addTag(user, userTag);
-        userService.save(user);
 
-        log.info("user.name: {}, user.tags: {}", user.getName(), user.getTags());
+        User user = userService.findUserByEmail(oAuth2User);
 
-        return "ok";
+        userService.addTag(user, tagDtoList.getTagList());
+
+        return "redirect:/";
     }
 
     @GetMapping("/myroom/member/taglist")
-    public String userTagList(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User)
-            throws IllegalAccessException {
+    public String userTagList(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
         List<Tag> tagList = userService.findAllTag(user);
         model.addAttribute("tagList", tagList);
 
-        return null; // return "tagList";
+        return "tags";
+    }
+
+    @GetMapping("/register/tag")
+    public String registerTag() {
+        return "newTag";
     }
 
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div>
+    <div>
+        <h2>리뷰 키워드 선택</h2>
+    </div>
+    <div th:if="${errorMessage}" style="color: red;" th:text="${errorMessage}"></div><br>
+    <form action="tagForm.html" th:action th:object="${tagDtoList}" method="post">
+        <div th:each="tag : ${tags}">
+            <input type="checkbox" th:field="*{tagList}" th:value="${tag.key}">
+            <label th:for="${#ids.prev('tagList')}" th:text="${tag.value}">리뷰 키워드1</label>
+        </div>
+
+        <div>
+            <button type="submit">태그 선택 완료</button><br>
+        </div>
+    </form>
+
+    <button th:onclick="|location.href='@{/myroom/member/taglist}'|"
+            type="button">태그 리스트</button>
+
+</div>
+
+</body>
+</html>
