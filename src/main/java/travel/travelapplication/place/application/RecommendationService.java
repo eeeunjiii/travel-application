@@ -1,14 +1,16 @@
 package travel.travelapplication.place.application;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Recommendation;
 
 @Service
@@ -23,7 +25,8 @@ public class RecommendationService {
         this.restTemplate = restTemplate;
     }
 
-    public List<Recommendation> fetchData() {
+    @Async
+    public CompletableFuture<List<Recommendation>> fetchData() {
         ResponseEntity<List<Recommendation>> response = restTemplate.exchange(
                 "http://127.0.0.1:5000/data",
                 HttpMethod.GET,
@@ -31,7 +34,8 @@ public class RecommendationService {
                 new ParameterizedTypeReference<List<Recommendation>>() {
                 }
         );
-        return response.getBody();
+        List<Recommendation> recommendations= response.getBody();
+        return CompletableFuture.completedFuture(recommendations);
     }
 
 }

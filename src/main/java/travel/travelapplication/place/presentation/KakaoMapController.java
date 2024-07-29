@@ -1,5 +1,7 @@
 package travel.travelapplication.place.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,13 +28,10 @@ public class KakaoMapController {
 
     @PostMapping("/get-result")
     @ResponseBody
-    public String getRecommendationResult(@RequestBody List<Map<String, Object>> datas) {
-        List<String> places = new ArrayList<>();
-
-        for(Map<String, Object> data : datas) {
-            log.info("destination name: {}", data.get("name"));
-            places.add((String) data.get("name"));
-        }
+    public String getRecommendationResult(@RequestBody List<Map<String, Object>> datas,
+                                          HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        List<String> places = (ArrayList) session.getAttribute("recommendation-result");
 
         Mono<List<ApiResponse>> listMono = kakaoMapService.callKakaoMapApi(places);
         list = listMono.block();
