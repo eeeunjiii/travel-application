@@ -1,4 +1,4 @@
-package travel.travelapplication.place.application;
+package travel.travelapplication.place.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

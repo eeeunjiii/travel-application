@@ -5,29 +5,40 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 import travel.travelapplication.constant.Status;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.plan.domain.Route;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Document("UserPlan")
 @Getter
+@Setter
 public class UserPlan {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ObjectId id;
 
     private String name;
 
-    private Date startDate;
-    private Date endDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
 
     private Long budget;
+
+    private String city;
+    private String district;
   
     private Status status; // public, private
 
@@ -43,12 +54,21 @@ public class UserPlan {
     @DBRef
     private List<Route> routes = new ArrayList<>();
 
-    public UserPlan(String name, Date startDate, Date endDate, Long budget, Status status,
-                    List<Place> places, List<Route> routes) {
+    @PersistenceCreator
+    public UserPlan() {
+
+    }
+
+    @PersistenceCreator
+    @Builder
+    public UserPlan(String name, LocalDate startDate, LocalDate endDate, Long budget, String city, String district,
+                    Status status, List<Place> places, List<Route> routes) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.budget = budget;
+        this.city=city;
+        this.district=district;
         this.status = status;
         this.places = places;
         this.routes = routes;
