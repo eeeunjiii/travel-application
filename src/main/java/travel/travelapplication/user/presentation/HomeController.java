@@ -14,7 +14,6 @@ import travel.travelapplication.user.domain.User;
 @RequiredArgsConstructor
 @Slf4j
 public class HomeController {
-
     private final UserService userService;
 
     @GetMapping("/")
