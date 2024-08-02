@@ -43,9 +43,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("attribute: {}", oAuth2User.getAttributes());
         log.info("OAuth2 로그인 요청 진입");
 
+        CompletableFuture<List<Recommendation>> recommendationFuture = recommendationService.fetchData();
+
         // 추천 서비스 호출 (Session 저장)
         try {
-            CompletableFuture<List<Recommendation>> recommendationFuture = recommendationService.fetchData();
 
             List<Recommendation> recommendations = recommendationFuture.get();
             httpSession.setAttribute("recommendation-result", recommendations);
@@ -63,9 +64,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         String role = "ROLE_USER";
-        String accessToken=userRequest.getAccessToken().getTokenValue();
+        String accessToken = userRequest.getAccessToken().getTokenValue();
 
-        OAuthAttributes attributes=OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName,
+                oAuth2User.getAttributes());
 
         User findUser = saveUser(attributes, role, accessToken);
 
@@ -83,7 +85,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User findUser = getUser(attributes);
 
-        if (findUser==null) {
+        if (findUser == null) {
             User user = User.builder()
                     .name(attributes.getName())
                     .email(attributes.getEmail())
