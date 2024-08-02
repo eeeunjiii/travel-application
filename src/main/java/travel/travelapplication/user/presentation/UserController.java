@@ -2,6 +2,8 @@ package travel.travelapplication.user.presentation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -24,10 +26,18 @@ public class UserController {
 
     private final UserService userService;
     private final UserPlanService userPlanService;
+    private final ResourceLoader resourceLoader;
+
+    @GetMapping("/profile")
+    @ResponseBody
+    public Resource profile() {
+        return resourceLoader.getResource("classpath:/templates/html/profile.html");
+    }
 
     @GetMapping("/profile/username")
     public String updateUsernameForm(Model model,
-                                     @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
+                                     @AuthenticationPrincipal CustomOAuth2User oAuth2User)
+            throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
 
         model.addAttribute("oldName", user.getName());
@@ -51,7 +61,8 @@ public class UserController {
     }
 
     @GetMapping("/user-plans")
-    public String userPlans(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
+    public String userPlans(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User)
+            throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
         List<UserPlan> userPlans = userPlanService.findAllUserPlan(user);
 

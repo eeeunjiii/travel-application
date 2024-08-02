@@ -34,8 +34,8 @@ public class RecommendationService {
                 new ParameterizedTypeReference<List<Recommendation>>() {
                 }
         );
-        List<Recommendation> recommendations= response.getBody();
-        return CompletableFuture.completedFuture(recommendations);
+        List<Recommendation> recommendations = response.getBody();
+        return (CompletableFuture<List<Recommendation>>) CompletableFuture.completedFuture(recommendations);
     }
 
 }
