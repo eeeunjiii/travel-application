@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import travel.travelapplication.auth.jwt.filter.JwtAuthenticationFilter;
 import travel.travelapplication.auth.handler.OAuth2FailureHandler;
 import travel.travelapplication.auth.jwt.JwtService;
 import travel.travelapplication.auth.service.CustomOAuth2UserService;
@@ -45,7 +43,7 @@ public class SecurityConfig {
                                                 .userService(customOAuth2UserService))
 //                                .successHandler(oAuth2SuccessHandler)
 //                                .failureHandler(oAuth2FailureHandler)
-//                                .defaultSuccessUrl("/")
+                                .defaultSuccessUrl("/home")
                 )
                 .logout((logout) ->
                         logout
@@ -53,7 +51,7 @@ public class SecurityConfig {
                                 .clearAuthentication(true)
                                 .invalidateHttpSession(true)
                                 .deleteCookies("JSESSIONID")
-                                .logoutSuccessUrl("/")
+                                .logoutSuccessUrl("/home")
                 );
 
 //        http.addFilterAfter(jwtAuthenticationFilter(), LogoutFilter.class);
