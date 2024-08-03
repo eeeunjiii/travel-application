@@ -71,7 +71,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User findUser = saveUser(attributes, role, accessToken);
 
-        return new CustomOAuth2User(Collections.singleton(new SimpleGrantedAuthority(findUser.getRole())),
+        String principalName = findUser.getEmail();
+        log.info("principalName: {}", principalName);
+        if (principalName == null || principalName.isEmpty()) {
+            throw new IllegalArgumentException("principalName cannot be empty");
+        }
+
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority(findUser.getRole())),
                 oAuth2User.getAttributes(),
                 attributes.getNameAttributeKey(),
                 findUser.getEmail(),
@@ -79,15 +86,24 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 findUser.getRole(),
                 registrationId
         );
+
+        log.info("customOAuth2User created: {}", customOAuth2User);
+
+        return customOAuth2User;
     }
 
     private User saveUser(OAuthAttributes attributes, String role, String accessToken) {
 
         User findUser = getUser(attributes);
+        String name = attributes.getName();
+        if (name == null) {
+            name = "anonymous";
+        }
 
         if (findUser == null) {
+
             User user = User.builder()
-                    .name(attributes.getName())
+                    .name(name)
                     .email(attributes.getEmail())
                     .role(role)
                     .accessToken(accessToken)
@@ -98,12 +114,20 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     .build();
             userRepository.insert(user);
             return user;
+        } else {
+            // 기존 유저 이름이 null인 경우 anonymous로 이름 변경
+            findUser.setName(name);
+            findUser.setAccessToken(accessToken);
+            userRepository.save(findUser);
+            return findUser;
         }
-        return findUser;
+
     }
 
     private User getUser(OAuthAttributes attributes) {
         return userRepository.findByEmail(attributes.getEmail())
                 .orElse(null);
     }
+
+
 }
