@@ -23,11 +23,16 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/user-plans")
+@RequestMapping("/user-plan")
 public class UserPlanController {
 
     private final UserPlanService userPlanService;
     private final UserService userService;
+
+    @GetMapping
+    public String userPlan() {
+        return "html/user-plan";
+    }
 
     @ModelAttribute("statuses")
     public Status[] statuses() {
@@ -36,7 +41,7 @@ public class UserPlanController {
 
     @ModelAttribute("cities")
     public Map<String, String> cities() {
-        Map<String, String> cities=new LinkedHashMap<>();
+        Map<String, String> cities = new LinkedHashMap<>();
         cities.put("SEOUL", "서울");
         cities.put("GYEONGGI", "경기");
         cities.put("INCHEON", "인천");
@@ -60,21 +65,21 @@ public class UserPlanController {
     @GetMapping("/districts")
     @ResponseBody
     public List<String> getDistricts(@RequestParam("city") String city) {
-        List<String> districts=new ArrayList<>();
+        List<String> districts = new ArrayList<>();
 
-        if("SEOUL".equals(city)) {
+        if ("SEOUL".equals(city)) {
             districts.add("강남구");
             districts.add("강동구");
             districts.add("강북구");
             districts.add("강서구");
             districts.add("관악구");
-        } else if("GYEONGGI".equals(city)) {
+        } else if ("GYEONGGI".equals(city)) {
             districts.add("광명시");
             districts.add("광주시");
             districts.add("과천시");
             districts.add("구리시");
             districts.add("군포시");
-        } else if("INCHEON".equals(city)) {
+        } else if ("INCHEON".equals(city)) {
             districts.add("연수구");
             districts.add("중구");
             districts.add("부평구");
@@ -114,6 +119,8 @@ public class UserPlanController {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
-        return "userPlan";
+        return "user-plan";
     }
+
+
 }
