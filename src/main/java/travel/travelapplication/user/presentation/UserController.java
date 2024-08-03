@@ -28,10 +28,9 @@ public class UserController {
     private final UserPlanService userPlanService;
     private final ResourceLoader resourceLoader;
 
-    @GetMapping("/profile")
-    @ResponseBody
-    public Resource profile() {
-        return resourceLoader.getResource("classpath:/templates/html/profile.html");
+    @GetMapping
+    public String profile() {
+        return "html/profile";
     }
 
     @GetMapping("/profile/username")
@@ -60,7 +59,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/user-plans")
+    @GetMapping("/user-plan")
     public String userPlans(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
@@ -68,7 +67,7 @@ public class UserController {
 
         model.addAttribute("userPlans", userPlans);
 
-        return "userPlans";
+        return "user-plan";
     }
 
     @GetMapping("/{userPlanId}")
