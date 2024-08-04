@@ -4,21 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import travel.travelapplication.constant.Role;
 import travel.travelapplication.place.domain.LikedPlace;
 import travel.travelapplication.place.domain.Tag;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Document("User")
+@Document(collection = "User")
 @Getter
 @Setter
 public class User {
@@ -78,26 +74,6 @@ public class User {
                 .ifPresent(none -> this.savedPlans = updatedUser.getSavedPlans());
         Optional.ofNullable(updatedUser.role).ifPresent(none -> this.role = updatedUser.getRole());
         Optional.ofNullable(updatedUser.accessToken).ifPresent(none -> this.role = updatedUser.getRole());
-    }
-
-    public void addUserPlan(UserPlan userPlan) {
-        this.userPlans.add(userPlan);
-    }
-
-    public void addTag(Tag tag) {
-        this.tags.add(tag);
-    }
-
-    public void addLikedPlace(LikedPlace likedPlace) {
-        this.likedPlaces.add(likedPlace);
-    }
-
-    public void addSavedPlan(SavedPlan savedPlan) {
-        this.savedPlans.add(savedPlan);
-    }
-
-    public void updateAccessToken(String accessToken) {
-        this.accessToken = accessToken;
     }
 
     public void updateRefreshToken(String refreshToken) {

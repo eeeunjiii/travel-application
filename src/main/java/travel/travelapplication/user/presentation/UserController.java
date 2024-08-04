@@ -5,12 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
-import travel.travelapplication.dto.user.UserDto;
 import travel.travelapplication.user.application.UserPlanService;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
@@ -69,10 +67,4 @@ public class UserController {
 
         return "user-plan";
     }
-
-    @GetMapping("/{userPlanId}")
-    public String userPlan() {
-        return null;
-    }
-
 }

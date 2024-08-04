@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.place.repository.PlaceRepository;
 import travel.travelapplication.place.response.ApiResponse;
 
@@ -32,7 +33,13 @@ public class KakaoMapService {
                 .build();
     }
 
-    public Mono<List<ApiResponse>> callKakaoMapApi(List<String> places) {
+    public Mono<List<ApiResponse>> callKakaoMapApi(List<SessionUser> sessions) {
+        List<String> places = new ArrayList<>();
+
+        for(SessionUser session : sessions) {
+            String place = session.getName();
+            places.add(place);
+        }
         Flux<String> placeData = Flux.fromIterable(places);
         Mono<List<ApiResponse>> searchResult = getMapSearchResult(placeData);
         return searchResult;
