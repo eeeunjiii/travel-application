@@ -35,7 +35,7 @@ public class RecommendationService {
                 }
         );
         List<Recommendation> recommendations = response.getBody();
-        return (CompletableFuture<List<Recommendation>>) CompletableFuture.completedFuture(recommendations);
+        return CompletableFuture.completedFuture(recommendations);
     }
 
 }
