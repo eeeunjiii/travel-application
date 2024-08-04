@@ -3,6 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        function toggleInput() {
+            var budgetInput = document.getElementById('budgetInput');
+            var budgetNoLimit = document.getElementById('budgetNoLimit');
+            var budgetDirectInput = document.getElementById('budgetDirectInput');
+            var budgetHidden = document.getElementById('budgetHidden');
+
+            if(budgetDirectInput.checked) {
+                budgetInput.style.display='inline';
+                budgetHidden.value='';
+            } else if(budgetNoLimit.checked) {
+                budgetInput.style.display='none';
+                budgetHidden.value=9999999;
+            }
+        }
+
+        function updateRangeValue() {
+            var rangeSlider = document.getElementById('budget');
+            var rangeValue = document.getElementById('rangeValue');
+            var budgetHidden = document.getElementById('budgetHidden');
+
+            rangeValue.textContent = rangeSlider.value;
+            budgetHidden.value = rangeSlider.value;
+        }
+
+        window.onload = function() {
+            toggleInput();
+        }
+    </script>
+
+    <script>
+        function loadSubregions() {
+            var city = $('#city').val();
+            $.ajax({
+                url: '/user-plan/districts',
+                type: 'GET',
+                data: { city: city },
+                success: function(data) {
+                    $('#district').empty();
+                    $('#district').append('<option value="">==시 · 군 · 구 선택==</option>');
+                    data.forEach(function(district) {
+                        $('#district').append('<option value="' + district + '">' + district + '</option>');
+                    });
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -35,20 +82,23 @@
 
             <div>
                 <div>여행 예산</div>
-                <input type="range" th:field="*{budget}" min="1" max="100" value="50" />
-                <span id="rangeValue"> 50</span>
+                <label>
+                    <input type="radio" name="budgetOption" value="noBudget" id="budgetNoLimit" onclick="toggleInput()" checked>
+                    예산 상관 없음
+                </label>
 
-                <script>
-                    const rangeSlider = document.getElementById('budget');
-                    const rangeValue = document.getElementById('rangeValue');
-
-                    rangeSlider.addEventListener('input', function() {
-                        rangeValue.textContent = rangeSlider.value;
-                    });
-                </script>
+                <label>
+                    <input type="radio" name="budgetOption" value="customBudget" id="budgetDirectInput" onclick="toggleInput()">
+                    예산 직접 입력
+                </label>
+                <div id="budgetInput" style="display:none;">
+                    <input type="range" id="budget" min="1" max="100" value="50" oninput="updateRangeValue()"/>
+                    <span id="rangeValue">50</span>
+                </div>
+                <input type="hidden" id="budgetHidden" th:field="*{budget}" />
             </div>
 
-
+            <div>
             <div>
                 <div>시 · 도</div>
                 <select id="city" name="city" onchange="loadSubregions()">
@@ -58,31 +108,13 @@
                 </select>
             </div>
 
-
             <div>
                 <div>시 · 군 · 구</div>
                 <select id="district" name="district">
                     <option value="">==시 · 군 · 구 선택==</option>
                 </select>
             </div>
-
-            <script>
-                function loadSubregions() {
-                    var city = $('#city').val();
-                    $.ajax({
-                        url: '/user-plans/districts',
-                        type: 'GET',
-                        data: { city: city },
-                        success: function(data) {
-                            $('#district').empty();
-                            $('#district').append('<option value="">==시 · 군 · 구 선택==</option>');
-                            data.forEach(function(district) {
-                                $('#district').append('<option value="' + district + '">' + district + '</option>');
-                            });
-                        }
-                    });
-                }
-            </script>
+            </div>
 
             <div>
                 <div th:each="status : ${statuses}">

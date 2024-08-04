@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.constant.Status;
-import travel.travelapplication.dto.userplan.SelectedPlaceDto;
-import travel.travelapplication.dto.userplan.UserPlanDto;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
@@ -92,7 +90,7 @@ public class UserPlanController {
     @GetMapping("/plan-info")
     public String userPlanInfoForm(Model model) {
         model.addAttribute("userPlan", new UserPlanInfoDto());
-        return "getPlanInfoForm";
+        return "test/getPlanInfoForm";
     }
 
     @PostMapping("/plan-info")
@@ -111,7 +109,7 @@ public class UserPlanController {
 
         userPlanService.createNewUserPlan(user, userPlan);
 
-        return "redirect:/"; // url 매핑
+        return "redirect:/home"; // url 매핑
     }
 
     @GetMapping("/{userPlanId}")
