@@ -12,11 +12,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.auth.dto.OAuthAttributes;
+import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.place.application.RecommendationService;
 import travel.travelapplication.place.domain.Recommendation;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -44,13 +46,24 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("OAuth2 로그인 요청 진입");
 
         CompletableFuture<List<Recommendation>> recommendationFuture = recommendationService.fetchData();
+        CompletableFuture<List<Recommendation>> results = recommendationFuture.thenApply(recommendation -> {
+            List<Recommendation> list = new ArrayList<>(recommendation);
+            return list;
+        });
 
         // 추천 서비스 호출 (Session 저장)
         try {
+            List<Recommendation> recommendations = results.get();
+            List<SessionUser> sessions = (List<SessionUser>) httpSession.getAttribute("recommendation-result");
+            if(sessions == null) {
+                sessions = new ArrayList<>();
+            }
 
-            List<Recommendation> recommendations = recommendationFuture.get();
-            httpSession.setAttribute("recommendation-result", recommendations);
-
+            for(Recommendation recommendation:recommendations) {
+                SessionUser sessionUser = recommendation.toSessionUser();
+                sessions.add(sessionUser);
+            }
+            httpSession.setAttribute("recommendation-result", sessions);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
