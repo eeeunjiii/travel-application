@@ -1565,7 +1565,7 @@ section {
   font-size: 36px;
 }
 .post-single .featured-image {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .post-single .featured-image img {
   border-radius: 10px;
@@ -1587,8 +1587,11 @@ section {
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  height: 600px;
+  height: 300px;
   position: relative;
+
+  min-height: 200px; /* 요소의 최소 높이를 300픽셀로 설정 */
+  padding: 20px; /* 요소에 패딩을 추가하여 내부 콘텐츠가 너무 붙지 않도록 설정 */
 }
 .single-cover:after {
   content: "";
@@ -1602,7 +1605,7 @@ section {
   width: 100%;
 }
 .single-cover .cover-content {
-  bottom: 60px;
+  bottom: 40px;
   max-width: 720px;
   position: absolute;
   z-index: 1;
@@ -2944,7 +2947,7 @@ button:focus {
 
   .single-cover {
     background-attachment: unset;
-    height: 400px;
+    height: 300px;
   }
   .single-cover .cover-content .title {
     font-size: 26px;
