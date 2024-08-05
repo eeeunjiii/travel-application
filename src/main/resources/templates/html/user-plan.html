@@ -108,12 +108,16 @@
                     <!-- social icons -->
                     <ul class="social-icons list-unstyled list-inline mb-0">
                         <th:block sec:authorize="isAnonymous()">
-                            <a href="/loginForm" class="btn btn-success active" role="button">Login</a>
+                            <script type="text/javascript">
+                                window.location.href = "/loginForm";
+
+                            </script>
                         </th:block>
 
                         <th:block sec:authorize="isAuthenticated()">
                             <div th:object="${user}">
-                                <a href="/logout" class="icons me-2 ms-2" role="button">Logout</a></div>
+                                <a href="/logout" class="icons me-2 ms-2" role="button">Logout</a>
+                            </div>
 
                         </th:block>
                         <!--                        <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>-->
