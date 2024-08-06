@@ -16,11 +16,11 @@ import travel.travelapplication.plan.domain.Route;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Document("UserPlan")
 @Getter
-@Setter
 public class UserPlan {
 
     @Id
@@ -38,7 +38,7 @@ public class UserPlan {
     private Long budget;
 
     private String city;
-    private String district;
+    private String district; // 여행 지역 (여행 정보 입력)
   
     private Status status; // public, private
 
@@ -49,7 +49,7 @@ public class UserPlan {
     private Date updatedAt;
 
     @DBRef
-    private List<Place> places = new ArrayList<>();
+    private List<Place> places = new LinkedList<>();
 
     @DBRef
     private List<Route> routes = new ArrayList<>();
@@ -77,6 +77,7 @@ public class UserPlan {
     public void addPlaces(Place place) {
         this.places.add(place);
     }
+
 
     public UserPlan updateUserPlan(String name, Status status) {
         this.name=name;

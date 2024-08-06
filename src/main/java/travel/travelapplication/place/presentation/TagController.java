@@ -59,9 +59,4 @@ public class TagController {
         return "tags";
     }
 
-    @GetMapping("/register/tag")
-    public String registerTag() {
-        return "newTag";
-    }
-
 }

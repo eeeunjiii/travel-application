@@ -1,19 +1,18 @@
 package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
+import travel.travelapplication.place.application.PlaceService;
+import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import travel.travelapplication.dto.userplan.SelectedPlaceDto;
-import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.plan.repository.PlanRepository;
 import travel.travelapplication.user.repository.UserPlanRepository;
-import travel.travelapplication.user.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 
@@ -22,6 +21,7 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 public class UserPlanService {
   
     private final UserService userService;
+    private final PlaceService placeService;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
 
@@ -64,11 +64,17 @@ public class UserPlanService {
         planRepository.insert(plan);
     }
 
-    private UserPlan savePlaceToUserPlan(UserPlan userPlans, SelectedPlaceDto selectedPlaceDto) {
-        List<Place> places=selectedPlaceDto.getSelectedPlaces();
-        for(Place place : places) {
-            userPlans.addPlaces(place);
+    public void savePlaceToUserPlan(User user, UserPlan userPlan,
+                                    LikedPlaceList likedPlaceList) throws IllegalAccessException {
+        List<Place> likedPlaces = user.getLikedPlaces();
+
+        for(Long likedPlaceId : likedPlaceList.getLikedPlaces()) {
+            Place place = placeService.findById(likedPlaceId);
+            userPlan.addPlaces(place);
+            likedPlaces.add(place);
         }
-        return userPlans;
+
+        UserPlan savedUserPlan = userPlanRepository.save(userPlan);
+        userService.updateUserPlan(user, savedUserPlan, likedPlaces);
     }
 }

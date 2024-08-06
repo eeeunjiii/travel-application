@@ -3,22 +3,11 @@ package travel.travelapplication.place.presentation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import travel.travelapplication.place.application.KakaoMapService;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
-import travel.travelapplication.place.response.ApiResponse;
-import travel.travelapplication.place.response.LocationDto;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Transactional
 @Controller
@@ -27,10 +16,9 @@ import java.util.Map;
 @Slf4j
 public class PlaceController {
     private final PlaceService placeService;
-
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Place> findPlaceById(@RequestParam(name = "id") ObjectId id) {
+    public ResponseEntity<Place> findPlaceById(@RequestParam(name = "id") Long id) {
         Place place = placeService.findById(id);
         return ResponseEntity.ok(place);
     }

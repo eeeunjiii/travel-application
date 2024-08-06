@@ -11,35 +11,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document("Place")
+@Document(collection = "Place")
 @Getter
+@NoArgsConstructor
 public class Place {
 
     @Id
-    private ObjectId id;
+    private Long id;
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private Long cost;
-
-    private Date availableTime;
+    @DBRef
+    private ProvCity provCity;
 
     @DBRef
-    private CityCountyDistrict city; // location
+    private CityCountyDistrict district;
 
     @DBRef
     private List<Tag> tags = new ArrayList<>();
 
-    public Place(String name, Category category, Long cost, Date availableTime,
-                 CityCountyDistrict city, List<Tag> tags) {
+    public Place(String name, Category category, ProvCity provCity, CityCountyDistrict district, List<Tag> tags) {
         this.name = name;
         this.category = category;
-        this.cost = cost;
-        this.availableTime = availableTime;
-        this.city = city;
+        this.provCity = provCity;
+        this.district = district;
         this.tags = tags;
     }
 }
