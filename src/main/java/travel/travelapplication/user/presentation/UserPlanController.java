@@ -29,9 +29,14 @@ public class UserPlanController {
     private final UserPlanService userPlanService;
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/single")
     public String userPlan() {
         return "html/user-plan";
+    }
+
+    @GetMapping("/list")
+    public String userPlanList() {
+        return "html/user-plan-list";
     }
 
     @ModelAttribute("statuses")
