@@ -108,22 +108,12 @@
                     <!-- social icons -->
                     <ul class="social-icons list-unstyled list-inline mb-0">
                         <th:block sec:authorize="isAnonymous()">
-                            <script type="text/javascript">
-                                window.location.href = "/loginForm";
-
-
-
-
-
-
-
-                            </script>
+                            <a href="/loginForm" class="btn btn-success active" role="button">Login</a>
                         </th:block>
 
                         <th:block sec:authorize="isAuthenticated()">
                             <div th:object="${user}">
-                                <a href="/logout" class="icons me-2 ms-2" role="button">Logout</a>
-                            </div>
+                                <a href="/logout" class="icons me-2 ms-2" role="button">Logout</a></div>
 
                         </th:block>
                         <!--                        <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>-->
@@ -218,18 +208,8 @@
                                 map.relayout();
                                 });
 
-
-
-
-
                         </script>
 
-
-                        <!--                            <figure class="figure">-->
-                        <!--                                <img src="images/posts/post-lg-2.jpg" class="figure-img img-fluid rounded" alt="...">-->
-                        <!--                                <figcaption class="figure-caption text-center">A caption for the above image.-->
-                        <!--                                </figcaption>-->
-                        <!--                            </figure>-->
 
                         <p>The languages only differ in their grammar, their pronunciation and their most common
                             words. Everyone realizes why a new common language would be desirable.</p>

@@ -20,6 +20,7 @@ Description: Minimal Blog and Magazine HTML Template
 10. Contact
 11. Widgets
 12. Instagram feed
+12-1. Trip Item
 13. Footer
 14. Search Popup
 15. Helpers
@@ -2144,6 +2145,119 @@ section {
 }
 
 /*=================================================================*/
+/*                      User Plan ITEM
+/*=================================================================*/
+.trip-container {
+  overflow-x: auto; /* 수평 스크롤 활성화 */
+  white-space: nowrap; /* 자식 요소들이 한 줄에 나란히 배치되도록 설정 */
+  padding: 10px; /* 컨테이너에 여백 추가 (선택 사항) */
+}
+
+.trip-item {
+  display: inline-block; /* trip-item을 인라인 블록으로 설정 */
+  position: relative;
+  border: 1px solid #EBEBEB;
+  padding: 15px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.trip-item img {
+  max-width: 100%;
+  height: auto;
+}
+.trip-item h5 {
+  margin-top: 10px;
+}
+.trip-item p {
+  margin: 10px 0;
+}
+.trip-item .heart-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.trip-item.selected {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.widget-content div div {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: black; /* Green color for labels */
+}
+
+.widget-content input[type="date"],
+.widget-content select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333; /* Dark gray text color */
+}
+
+.widget-content input[type="range"] {
+  -webkit-appearance: none;
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 1px;
+  font-size: 16px;
+  color: #333; /* Dark gray text color */
+  appearance: none;
+  height: 2px;
+  background: #ccc; /* Light gray track */
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.widget-content input[type="range"]:hover {
+  opacity: 1;
+}
+
+.widget-content input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #75BC00; /* Green thumb */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.widget-content input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #75BC00; /* Green thumb */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.widget-content span#rangeValue {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #75BC00; /* Green color for range value */
+}
+
+.widget-content input[type="radio"] {
+  margin-right: 10px;
+}
+
+.widget-content label {
+  color: #333; /* Dark gray text color */
+}
+
+/*=================================================================*/
 /*                      FOOTER                              
 /*=================================================================*/
 footer {
@@ -3221,5 +3335,37 @@ button:focus {
     display: block;
   }
 }
+
+
+.title input {
+    border: none;
+    background: transparent;
+    font-size: 2rem; /* h1의 기본 크기와 맞춤 */
+    font-weight: bold;
+    color: inherit; /* 부모 h1 요소의 색상 상속 */
+    width: 100%; /* 입력 필드가 제목의 너비를 채우도록 설정 */
+    box-sizing: border-box; /* 패딩과 테두리가 전체 너비에 포함되도록 설정 */
+}
+
+/* 포커스 시 스타일 추가 (선택 사항) */
+.title input:focus {
+    outline: none; /* 기본 포커스 테두리 제거 */
+}
+
+#saveButton {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #75BC00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#saveButton:hover {
+  background-color: #E4F7BA;
+}
+
 
 /*# sourceMappingURL=style.css.map */
