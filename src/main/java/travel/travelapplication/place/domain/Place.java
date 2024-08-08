@@ -17,7 +17,9 @@ import java.util.List;
 public class Place {
 
     @Id
-    private Long id;
+    private ObjectId id;
+
+    private String placeId;
 
     private String name;
 

@@ -32,14 +32,16 @@
                             <td th:text="${place.address}">여행지 주소</td>
                             <td>
                                 <input type="checkbox" th:field="*{likedPlaces}" th:value="${place.placeId}">
-                                <label th:for="${#ids.prev('likedPlaces')}"></label>
+                                <label th:for="${#ids.prev('likedPlaces')}" th:text="${place.name}"></label>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <button type="submit">여행지 좋아요 완료</button>
+            <div>
+                <button type="submit">여행지 좋아요 완료</button>
+            </div>
         </form>
     </div>
 

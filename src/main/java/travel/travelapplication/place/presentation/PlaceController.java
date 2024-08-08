@@ -3,6 +3,7 @@ package travel.travelapplication.place.presentation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class PlaceController {
     private final PlaceService placeService;
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Place> findPlaceById(@RequestParam(name = "id") Long id) {
+    public ResponseEntity<Place> findPlaceById(@RequestParam(name = "id") ObjectId id) {
         Place place = placeService.findById(id);
         return ResponseEntity.ok(place);
     }

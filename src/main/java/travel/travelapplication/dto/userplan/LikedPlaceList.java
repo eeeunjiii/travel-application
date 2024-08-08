@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 public class LikedPlaceList {
 
-    private List<Long> likedPlaces=new LinkedList<>();
+    private List<String> likedPlaces=new LinkedList<>();
 }

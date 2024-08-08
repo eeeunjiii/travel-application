@@ -14,10 +14,7 @@ import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.plan.domain.Route;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Document("UserPlan")
 @Getter
@@ -74,14 +71,19 @@ public class UserPlan {
         this.routes = routes;
     }
 
-    public void addPlaces(Place place) {
+    public void addPlace(Place place) {
         this.places.add(place);
     }
 
-
-    public UserPlan updateUserPlan(String name, Status status) {
-        this.name=name;
-        this.status=status;
-        return this;
+    public void update(UserPlan updatedUserPlan) {
+        Optional.ofNullable(updatedUserPlan.getName()).ifPresent(none -> this.name = updatedUserPlan.getName());
+        Optional.ofNullable(updatedUserPlan.getStartDate()).ifPresent(none -> this.startDate = updatedUserPlan.getStartDate());
+        Optional.ofNullable(updatedUserPlan.getEndDate()).ifPresent(none -> this.endDate = updatedUserPlan.getEndDate());
+        Optional.ofNullable(updatedUserPlan.getBudget()).ifPresent(none -> this.budget = updatedUserPlan.getBudget());
+        Optional.ofNullable(updatedUserPlan.getCity()).ifPresent(none -> this.city = updatedUserPlan.getCity());
+        Optional.ofNullable(updatedUserPlan.getDistrict()).ifPresent(none -> this.district = updatedUserPlan.getDistrict());
+        Optional.ofNullable(updatedUserPlan.getStatus()).ifPresent(none -> this.status = updatedUserPlan.getStatus());
+        Optional.ofNullable(updatedUserPlan.getPlaces()).ifPresent(none -> this.places = updatedUserPlan.getPlaces());
+        Optional.ofNullable(updatedUserPlan.getRoutes()).ifPresent(none -> this.routes = updatedUserPlan.getRoutes());
     }
 }

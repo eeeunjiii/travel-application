@@ -1,6 +1,7 @@
 package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.domain.User;
@@ -12,12 +13,14 @@ import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.plan.repository.PlanRepository;
 import travel.travelapplication.user.repository.UserPlanRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserPlanService {
   
     private final UserService userService;
@@ -42,12 +45,6 @@ public class UserPlanService {
         return user.getUserPlans();
     }
 
-    public void updateUserPlan(ObjectId userPlanId, UpdateUserPlanInfoDto userPlanInfoDto) {
-        userPlanRepository.findById(userPlanId)
-                .ifPresent(userPlan ->
-                        userPlan.updateUserPlan(userPlanInfoDto.getName(), userPlanInfoDto.getStatus()));
-    }
-
     public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
         UserPlan userPlan = userPlanRepository.findById(userPlanId)
                 .orElse(null);
@@ -66,15 +63,39 @@ public class UserPlanService {
 
     public void savePlaceToUserPlan(User user, UserPlan userPlan,
                                     LikedPlaceList likedPlaceList) throws IllegalAccessException {
-        List<Place> likedPlaces = user.getLikedPlaces();
+        List<Place> likedPlaces = new LinkedList<>();
+        List<Place> userPlanPlaces = new LinkedList<>();
 
-        for(Long likedPlaceId : likedPlaceList.getLikedPlaces()) {
-            Place place = placeService.findById(likedPlaceId);
-            userPlan.addPlaces(place);
+        for(String likedPlaceId : likedPlaceList.getLikedPlaces()) {
+            Place place = placeService.findByPlaceId(likedPlaceId);
+
+            userPlanPlaces.add(place);
             likedPlaces.add(place);
         }
 
-        UserPlan savedUserPlan = userPlanRepository.save(userPlan);
-        userService.updateUserPlan(user, savedUserPlan, likedPlaces);
+        UserPlan savedUserPlan = updateUserPlanPlaces(userPlan, userPlanPlaces);
+        userService.updateUserPlan(user, savedUserPlan, userPlanPlaces, likedPlaces);
+    }
+
+    private UserPlan updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
+        UserPlan updatedUserPlan = UserPlan.builder()
+                .name(userPlan.getName())
+                .startDate(userPlan.getStartDate())
+                .endDate(userPlan.getEndDate())
+                .budget(userPlan.getBudget())
+                .city(userPlan.getCity())
+                .district(userPlan.getDistrict())
+                .status(userPlan.getStatus())
+                .places(places)
+                .routes(userPlan.getRoutes())
+                .build();
+
+        userPlan.update(updatedUserPlan);
+        save(userPlan);
+        return userPlan;
+    }
+
+    public void save(UserPlan userPlan) {
+        userPlanRepository.save(userPlan);
     }
 }
