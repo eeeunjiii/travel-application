@@ -256,3 +256,56 @@ $(function(){
     }
 
 });
+
+/*=========================================================================
+        USER PLAN 제작 관련
+ =========================================================================*/
+function toggleHeart(element) {
+  if (element.textContent === '🩶') {
+    element.textContent = '❤️'; // 채운 하트로 변경
+
+  } else {
+    element.textContent = '🩶'; // 빈 하트로 변경
+
+  }
+}
+
+document.querySelectorAll('.trip-item').forEach(item => {
+  item.addEventListener('click', function() {
+    // 현재 선택된 요소
+    const selected = document.querySelector('.trip-item.selected');
+
+    // 이미 선택된 요소가 있고, 현재 클릭된 요소가 선택된 요소가 아닌 경우
+    if (selected && selected !== this) {
+      selected.classList.remove('selected');
+    }
+
+    // 현재 클릭된 요소를 선택된 상태로 설정
+    this.classList.toggle('selected', !this.classList.contains('selected'));
+  });
+});
+
+//예산 조정 바
+const rangeSlider = document.getElementById('budget');
+const rangeValue = document.getElementById('rangeValue');
+
+rangeSlider.addEventListener('input', function() {
+    rangeValue.textContent = rangeSlider.value;
+});
+
+//지역
+function loadSubregions() {
+    var city = $('#city').val();
+    $.ajax({
+        url: '/user-plans/districts',
+        type: 'GET',
+        data: { city: city },
+        success: function(data) {
+            $('#district').empty();
+            $('#district').append('<option value="">==시 · 군 · 구 선택==</option>');
+            data.forEach(function(district) {
+                $('#district').append('<option value="' + district + '">' + district + '</option>');
+            });
+        }
+    });
+}

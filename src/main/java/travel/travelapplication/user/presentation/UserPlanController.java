@@ -39,6 +39,12 @@ public class UserPlanController {
         return "html/user-plan-list";
     }
 
+    @GetMapping("/new")
+    public String createUserPlan(Model model) {
+        model.addAttribute("userPlan", new UserPlanInfoDto());
+        return "html/new-user-plan";
+    }
+
     @ModelAttribute("statuses")
     public Status[] statuses() {
         return Status.values();
@@ -97,7 +103,7 @@ public class UserPlanController {
     @GetMapping("/plan-info")
     public String userPlanInfoForm(Model model) {
         model.addAttribute("userPlan", new UserPlanInfoDto());
-        return "getPlanInfoForm";
+        return "test/getPlanInfoForm";
     }
 
     @PostMapping("/plan-info")
