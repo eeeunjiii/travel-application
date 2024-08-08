@@ -1025,6 +1025,12 @@ section {
   margin-bottom: 140px;
 }
 
+.plan-list {
+    display: relative;
+    justify-content: center;
+}
+
+
 .container-minimal {
   max-width: 900px;
   margin: auto;
@@ -2956,12 +2962,12 @@ button:focus {
 /************************************************************************************/
 
 @media (min-width: 1200px) {
-  .container, .container-lg, .container-md, .container-sm, .container-xl {
+  .container, .container-lg, .container-md, .container-sm, .container-xl, .plan-list{
     max-width: 1140px;
   }
 }
 @media (min-width: 1400px) {
-  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl{
+  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl, .plan-list {
     max-width: 1140px;
   }
 }
