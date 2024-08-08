@@ -7,4 +7,6 @@ import travel.travelapplication.place.domain.Place;
 
 public interface PlaceRepository extends MongoRepository<Place, ObjectId> {
     Optional<Place> findByName(String name);
+
+    Optional<Place> findByPlaceId(String placeId);
 }

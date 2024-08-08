@@ -1,10 +1,14 @@
 package travel.travelapplication.constant;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Category {
-    RESTAURANT,
-    CAFE,
-    HOSPITAL,
-    PHARMACY,
-    PARKING,
-    ETC
+    RESTAURANT("RESTAURANT"), CAFE("CAFE"),
+    HOSPITAL("HOSPITAL"), PHARMACY("PHARMACY"),
+    PARKING("PARKING"), ETC("ETC");
+
+    private final String key;
 }

@@ -3,10 +3,11 @@ package travel.travelapplication.place.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("LikedPlace")
+@Document(collection = "LikedPlace")
 @Getter
 public class LikedPlace {
 
@@ -14,9 +15,14 @@ public class LikedPlace {
     private ObjectId id;
 
     @DBRef
-    private Place place;
+    private Place likedPlace;
 
-    public LikedPlace(Place place) {
-        this.place = place;
+    @PersistenceCreator
+    public LikedPlace() {
+    }
+
+    @PersistenceCreator
+    public LikedPlace(Place likedPlace) {
+        this.likedPlace = likedPlace;
     }
 }

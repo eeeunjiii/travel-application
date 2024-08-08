@@ -5,9 +5,12 @@ import org.bson.types.ObjectId;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import travel.travelapplication.auth.CustomOAuth2User;
+import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
 import travel.travelapplication.place.repository.TagRepository;
 import travel.travelapplication.user.domain.User;
+import travel.travelapplication.user.domain.UserPlan;
+import travel.travelapplication.user.repository.UserPlanRepository;
 import travel.travelapplication.user.repository.UserRepository;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
+    private final UserPlanRepository userPlanRepository;
 
     public void save(User user) {
         userRepository.save(user);
@@ -64,6 +68,44 @@ public class UserService {
                     .savedPlans(user.getSavedPlans())
                     .tags(tags)
                     .likedPlaces(user.getLikedPlaces())
+                    .role(user.getRole())
+                    .build();
+
+            user.update(updatedUser);
+            save(user);
+        } else {
+            throw new IllegalAccessException("존재하지 않는 사용자입니다.");
+        }
+    }
+
+    public void updateUserPlan(User user, UserPlan userPlan,
+                               List<Place> userPlanPlaces, List<Place> likedPlaces) throws IllegalAccessException {
+        if(userPlan!=null) {
+            UserPlan updatedUserPlan = UserPlan.builder()
+                    .name(userPlan.getName())
+                    .startDate(userPlan.getStartDate())
+                    .endDate(userPlan.getEndDate())
+                    .budget(userPlan.getBudget())
+                    .city(userPlan.getCity())
+                    .district(userPlan.getDistrict())
+                    .status(userPlan.getStatus())
+                    .places(userPlanPlaces)
+                    .routes(userPlan.getRoutes())
+                    .build();
+
+            userPlan.update(updatedUserPlan);
+            userPlanRepository.save(userPlan);
+        }
+
+        if(user!=null) {
+            User updatedUser = User.builder()
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .accessToken(user.getAccessToken())
+                    .userPlans(user.getUserPlans())
+                    .savedPlans(user.getSavedPlans())
+                    .tags(user.getTags())
+                    .likedPlaces(likedPlaces)
                     .role(user.getRole())
                     .build();
 

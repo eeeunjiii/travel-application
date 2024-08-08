@@ -34,7 +34,7 @@
 
                 <tbody>
                 <tr th:each="userPlan : ${userPlans}">
-                    <td><a href="userPlan.html" th:href="@{/user-plans/{userPlanId}(userPlanId=${userPlan.id})}" th:text="${userPlan.name}">여행명&nbsp;&nbsp;</a></td>
+                    <td><a href="userPlan.html" th:href="@{/user-plan/{userPlanId}(userPlanId=${userPlan.id})}" th:text="${userPlan.name}">여행명&nbsp;&nbsp;</a></td>
                     <td th:text="${userPlan.startDate}">여행 시작일&nbsp;&nbsp;</td>
                     <td th:text="${userPlan.endDate}">여행 종료일&nbsp;&nbsp;</td>
                     <td th:text="${userPlan.budget}">여행 예산&nbsp;&nbsp;</td>
