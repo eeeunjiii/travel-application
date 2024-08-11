@@ -309,3 +309,37 @@ function loadSubregions() {
         }
     });
 }
+
+//추천 장소 데이터 가져오기
+async function fetchRecommendations() {
+    try {
+        const response = await fetch('/recommendations'); // Spring 엔드포인트 호출
+        const recommendations = await response.json(); // JSON 형태로 파싱
+
+        // 장소 목록의 상위 클래스
+        const container = document.getElementById('list');
+
+        // 가져온 추천 결과를 반복하면서 trip-item 요소를 생성
+        recommendations.forEach((recommendation, index) => {
+            // trip-item 요소 생성
+            const tripItem = document.createElement('div');
+            tripItem.className = 'trip-item';
+            tripItem.innerHTML = `
+                <a>
+                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
+                    <img src="" alt="여행지 사진">
+                    <h5>${recommendation.name}</h5>
+                    <p><a href="/${recommendation.id}">상세 설명 보기</a></p>
+                </a>
+            `;
+
+            // 생성된 trip-item을 컨테이너에 추가
+            container.appendChild(tripItem);
+        });
+    } catch (error) {
+        console.error('Error fetching recommendations:', error);
+    }
+}
+
+// 페이지 로드 시 추천 데이터 가져오기
+document.addEventListener('DOMContentLoaded', fetchRecommendations);
