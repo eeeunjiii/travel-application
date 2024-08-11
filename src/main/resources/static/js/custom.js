@@ -260,31 +260,6 @@ $(function(){
 /*=========================================================================
         USER PLAN 제작 관련
  =========================================================================*/
-function toggleHeart(element) {
-  if (element.textContent === '🩶') {
-    element.textContent = '❤️'; // 채운 하트로 변경
-
-  } else {
-    element.textContent = '🩶'; // 빈 하트로 변경
-
-  }
-}
-
-document.querySelectorAll('.trip-item').forEach(item => {
-  item.addEventListener('click', function() {
-    // 현재 선택된 요소
-    const selected = document.querySelector('.trip-item.selected');
-
-    // 이미 선택된 요소가 있고, 현재 클릭된 요소가 선택된 요소가 아닌 경우
-    if (selected && selected !== this) {
-      selected.classList.remove('selected');
-    }
-
-    // 현재 클릭된 요소를 선택된 상태로 설정
-    this.classList.toggle('selected', !this.classList.contains('selected'));
-  });
-});
-
 //예산 조정 바
 const rangeSlider = document.getElementById('budget');
 const rangeValue = document.getElementById('rangeValue');
@@ -312,34 +287,48 @@ function loadSubregions() {
 
 //추천 장소 데이터 가져오기
 async function fetchRecommendations() {
-    try {
-        const response = await fetch('/recommendations'); // Spring 엔드포인트 호출
-        const recommendations = await response.json(); // JSON 형태로 파싱
+    const response = await fetch('/recommendations');
+    const recommendations = await response.json();
 
-        // 장소 목록의 상위 클래스
-        const container = document.getElementById('list');
+    const container = document.getElementById('list');
+    container.innerHTML = ''; // 기존 요소들을 지우고 새로운 것들로 대체
 
-        // 가져온 추천 결과를 반복하면서 trip-item 요소를 생성
-        recommendations.forEach((recommendation, index) => {
-            // trip-item 요소 생성
-            const tripItem = document.createElement('div');
-            tripItem.className = 'trip-item';
-            tripItem.innerHTML = `
-                <a>
-                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                    <img src="" alt="여행지 사진">
-                    <h5>${recommendation.name}</h5>
-                    <p><a href="/${recommendation.id}">상세 설명 보기</a></p>
-                </a>
-            `;
+    recommendations.forEach((recommendation, index) => {
+        const tripItem = document.createElement('div');
+        tripItem.className = 'trip-item';
+        tripItem.innerHTML = `
+            <a>
+                <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
+                <img src="카카오맵에서 가져온 사진" alt="여행지 사진">
+                <h5>${recommendation.name}</h5>
+                <p><a href="카카오맵 장소 설명으로 이동/${recommendation.id}">상세 설명 보기</a></p>
+            </a>
+        `;
+        container.appendChild(tripItem);
+    });
 
-            // 생성된 trip-item을 컨테이너에 추가
-            container.appendChild(tripItem);
+    // 추천 결과도 선택 가능하도록 수정
+    document.querySelectorAll('.trip-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const selected = document.querySelector('.trip-item.selected');
+            if (selected && selected !== this) {
+                selected.classList.remove('selected');
+            }
+            this.classList.toggle('selected', !this.classList.contains('selected'));
         });
-    } catch (error) {
-        console.error('Error fetching recommendations:', error);
-    }
+    });
 }
 
 // 페이지 로드 시 추천 데이터 가져오기
 document.addEventListener('DOMContentLoaded', fetchRecommendations);
+
+function toggleHeart(element) {
+  if (element.textContent === '🩶') {
+    element.textContent = '❤️'; // 채운 하트로 변경
+
+  } else {
+    element.textContent = '🩶'; // 빈 하트로 변경
+
+  }
+}
+
