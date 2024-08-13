@@ -42,6 +42,11 @@
     </div>
 
     <div>
+        <label for="status">공개 / 비공개</label>
+        <input type="text" id="status" name="status" value="공개" th:value="${userPlan.status}" readonly>
+    </div>
+
+    <div>
         <div>
             <button onclick="location.href='editUserPlanInfoForm.html'"
                     th:onclick="|location.href='@{/user-plans/{userPlanId}/edit(userPlanId=${userPlan.id})}'|"

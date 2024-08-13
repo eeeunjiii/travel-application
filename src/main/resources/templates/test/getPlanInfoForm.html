@@ -50,6 +50,18 @@
             });
         }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').setAttribute('min', today);
+
+            document.getElementById('startDate').addEventListener('change', function() {
+                var startDate = this.value;
+                document.getElementById('endDate').setAttribute('min', startDate);
+            });
+        });
+    </script>
 </head>
 <body>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -70,7 +82,7 @@
 
             <div>
                 <div>여행 시작일</div>
-                <input type="date" th:field="*{startDate}" />
+                <input type="date" th:field="*{startDate}" min="[[${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}]]"/>
             </div>
 
 
