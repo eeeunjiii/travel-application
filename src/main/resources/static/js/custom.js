@@ -295,7 +295,7 @@ async function fetchRecommendations() {
 
     recommendations.forEach((recommendation, index) => {
         const tripItem = document.createElement('div');
-        tripItem.className = 'trip-item';
+        tripItem.className = 'place-item';
         tripItem.innerHTML = `
             <a>
                 <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
@@ -308,9 +308,9 @@ async function fetchRecommendations() {
     });
 
     // 추천 결과도 선택 가능하도록 수정
-    document.querySelectorAll('.trip-item').forEach(item => {
+    document.querySelectorAll('.place-item').forEach(item => {
         item.addEventListener('click', function() {
-            const selected = document.querySelector('.trip-item.selected');
+            const selected = document.querySelector('.place-item.selected');
             if (selected && selected !== this) {
                 selected.classList.remove('selected');
             }

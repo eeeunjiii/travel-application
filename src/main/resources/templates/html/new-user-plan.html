@@ -182,49 +182,38 @@
                                 <h3 class="widget-title">Plan Information</h3>
                             </div>
                             <div class="widget-content">
-                                <form action="#" th:action="@{/plan-info}" th:object="${userPlan}" th:method="post">
+                                <form action="#" th:action="@{/user-plan/plan-info}" th:object="${userPlan}"
+                                      th:method="post">
 
-                                    <div>
-                                        <div>여행 시작일</div>
-                                        <input type="date" th:field="*{startDate}"/>
+                                    <div>여행 시작일</div>
+                                    <input type="date" th:field="*{startDate}"/>
+
+                                    <div>여행 종료일</div>
+                                    <input type="date" th:field="*{endDate}"/>
+
+                                    <div>여행 예산</div>
+                                    <input type="range" th:field="*{budget}" min="1" max="100" value="50"/>
+                                    <span id="rangeValue"> 50 </span>
+
+                                    <div>시 · 도</div>
+                                    <select id="city" name="city" onchange="loadSubregions()">
+                                        <option value="">==시 · 도 선택==</option>
+                                        <option th:each="city : ${cities}" th:value="${city.key}"
+                                                th:text="${city.value}">서울
+                                        </option>
+                                    </select>
+
+                                    <div>시 · 군 · 구</div>
+                                    <select id="district" name="district">
+                                        <option value="">==시 · 군 · 구 선택==</option>
+                                    </select>
+
+                                    <div th:each="status : ${statuses}">
+                                        <input type="radio" th:field="*{status}" th:value="${status.name()}">
+                                        <label th:for="${#ids.prev('status')}"
+                                               th:text="${status.description}">PUBLIC</label>
                                     </div>
-
-                                    <div>
-                                        <div>여행 종료일</div>
-                                        <input type="date" th:field="*{endDate}"/>
-                                    </div>
-
-                                    <div>
-                                        <div>여행 예산</div>
-                                        <input type="range" th:field="*{budget}" min="1" max="100" value="50"/>
-                                        <span id="rangeValue"> 50 </span>
-                                    </div>
-
-                                    <div>
-                                        <div>시 · 도</div>
-                                        <select id="city" name="city" onchange="loadSubregions()">
-                                            <option value="">==시 · 도 선택==</option>
-                                            <option th:each="city : ${cities}" th:value="${city.key}"
-                                                    th:text="${city.value}">서울
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <div>시 · 군 · 구</div>
-                                        <select id="district" name="district">
-                                            <option value="">==시 · 군 · 구 선택==</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <div th:each="status : ${statuses}">
-                                            <input type="radio" th:field="*{status}" th:value="${status.name()}">
-                                            <label th:for="${#ids.prev('status')}"
-                                                   th:text="${status.description}">PUBLIC</label>
-                                        </div>
-                                    </div>
-
+                                    <button type="submit" id="saveInfoButton">저장</button>
                                 </form>
 
                             </div>
@@ -261,7 +250,7 @@
                         <!-- post content -->
                         <div class="instagram">
                             <div class="container-xl">
-                                <div class="trip-container" id="place-list">
+                                <div class="place-container" id="place-list">
                                     <h3>추천 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
@@ -270,12 +259,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="trip-container">
+                                <div class="place-container">
                                     <h3>다른 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
                                         <div class="col-md-4">
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -283,7 +272,7 @@
                                                     <p>상세 설명</p>
                                                 </a>
                                             </div>
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -291,7 +280,7 @@
                                                     <p>상세 설명</p>
                                                 </a>
                                             </div>
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -299,31 +288,7 @@
                                                     <p>상세 설명</p>
                                                 </a>
                                             </div>
-                                            <div class="trip-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="trip-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="trip-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -334,12 +299,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="trip-container">
+                                <div class="place-container">
                                     <h3>좋아요 누른 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
                                         <div class="col-md-4">
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -347,7 +312,7 @@
                                                     <p>상세 설명</p>
                                                 </a>
                                             </div>
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -355,7 +320,7 @@
                                                     <p>상세 설명</p>
                                                 </a>
                                             </div>
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
@@ -363,31 +328,7 @@
                                                     <p>상세 설명</p>
                                                 </a>
                                             </div>
-                                            <div class="trip-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="trip-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="trip-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="trip-item">
+                                            <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">

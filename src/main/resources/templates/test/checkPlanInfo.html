@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>plan info 확인</title>
+</head>
+<body>
+<h1>Plan Info</h1>
+
+<p>Start Date: <span th:text="${userPlan.startDate}"></span></p>
+<p>End Date: <span th:text="${userPlan.endDate}"></span></p>
+<p>Budget: <span th:text="${userPlan.budget}"></span></p>
+<p>City: <span th:text="${userPlan.city}"></span></p>
+<p>District: <span th:text="${userPlan.district}"></span></p>
+<p>Status: <span th:text="${userPlan.status}"></span></p>
+</body>
+</html>
