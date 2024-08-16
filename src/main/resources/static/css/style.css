@@ -20,7 +20,7 @@ Description: Minimal Blog and Magazine HTML Template
 10. Contact
 11. Widgets
 12. Instagram feed
-12-1. Trip Item
+12-1. Plan Item
 13. Footer
 14. Search Popup
 15. Helpers
@@ -2147,14 +2147,14 @@ section {
 /*=================================================================*/
 /*                      User Plan ITEM
 /*=================================================================*/
-.trip-container {
+.place-container {
   overflow-x: auto; /* 수평 스크롤 활성화 */
   white-space: nowrap; /* 자식 요소들이 한 줄에 나란히 배치되도록 설정 */
   padding: 10px; /* 컨테이너에 여백 추가 (선택 사항) */
 }
 
-.trip-item {
-  display: inline-block; /* trip-item을 인라인 블록으로 설정 */
+.place-item {
+  display: inline-block; /* place-item을 인라인 블록으로 설정 */
   position: relative;
   border: 1px solid #EBEBEB;
   padding: 15px;
@@ -2164,17 +2164,17 @@ section {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.trip-item img {
+.place-item img {
   max-width: 100%;
   height: auto;
 }
-.trip-item h5 {
+.place-item h5 {
   margin-top: 10px;
 }
-.trip-item p {
+.place-item p {
   margin: 10px 0;
 }
-.trip-item .heart-icon {
+.place-item .heart-icon {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -2182,7 +2182,7 @@ section {
   cursor: pointer;
   transition: color 0.3s ease;
 }
-.trip-item.selected {
+.place-item.selected {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
 }
@@ -2206,7 +2206,7 @@ section {
 
 .widget-content input[type="range"] {
   -webkit-appearance: none;
-  width: 90%;
+  width: 88%;
   padding: 10px;
   border: 1px solid #ccc; /* Light gray border */
   border-radius: 1px;
@@ -2573,6 +2573,25 @@ button:focus {
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   z-index: 1;
+}
+
+.btn-add {
+  color: #FFF;
+  border: none;
+  outline: none;
+  padding-left: 10px;padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: relative;
+  margin-bottom: 5px;
+  border-radius: 25px;
+  background: #75BC00;
+}
+
+.btn-add:hover {
+  color: #75BC00;
+  background: transparent;
+  transition: all 0.15s ease-in-out;
 }
 
 /*=================================================================*/
