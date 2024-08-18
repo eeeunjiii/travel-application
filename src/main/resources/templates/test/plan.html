@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan</title>
+</head>
+<body>
+    <div>
+        <h2>공개 일정 확인</h2> &nbsp
+
+    </div>
+
+    <div>
+        <label for="name">여행명</label>
+        <input type="text" id="name" name="name" th:value="${plan.name}" readonly>
+    </div>
+
+    <div>
+        <label for="startDate">여행 시작일</label>
+        <input type="text" id="startDate" name="startDate" th:value="${plan.userPlan.startDate}" readonly>
+    </div>
+
+    <div>
+        <label for="endDate">여행 종료일</label>
+        <input type="text" id="endDate" name="endDate" th:value="${plan.userPlan.endDate}" readonly>
+    </div>
+
+    <div>
+        <label for="budget">여행 예산</label>
+        <input type="text" id="budget" name="budget" th:value="${plan.userPlan.budget}" readonly>
+    </div>
+
+    <div>
+        <label for="city">시 · 도</label>
+        <input type="text" id="city" name="city" th:value="${plan.userPlan.city}" readonly>
+    </div>
+
+    <div>
+        <label for="district">시 · 군 · 구</label>
+        <input type="text" id="district" name="district" th:value="${plan.userPlan.district}" readonly>
+    </div>
+
+    <div>
+        <button onclick="location.href='communityList.html'"
+                th:onclick="|location.href='@{/plans/community}'|" type="button">커뮤니티 목록</button>
+    </div>
+</body>
+</html>

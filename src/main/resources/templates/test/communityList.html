@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Community List</title>
+</head>
+<body>
+    <div>
+        <h2>커뮤니티 목록</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>여행명&nbsp;&nbsp;</th>
+                <th>여행 시작일&nbsp;&nbsp;</th>
+                <th>여행 종료일&nbsp;&nbsp;</th>
+                <th>여행 예산&nbsp;&nbsp;</th>
+                <th>시 · 도&nbsp;&nbsp;</th>
+                <th>시 · 군 · 구</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="plan : ${plans}">
+                <td><a href="plan.html" th:href="@{/plans/community/{planId}(planId=${plan.id})}"
+                       th:text="${plan.userPlan.name}">여행명</a></td>
+                <td th:text="${plan.userPlan.startDate}">여행 시작일</td>
+                <td th:text="${plan.userPlan.endDate}">여행 종료일</td>
+                <td th:text="${plan.userPlan.budget}">여행 예산</td>
+                <td th:text="${plan.userPlan.city}">시 · 도</td>
+                <td th:text="${plan.userPlan.district}">시 · 군 · 구</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

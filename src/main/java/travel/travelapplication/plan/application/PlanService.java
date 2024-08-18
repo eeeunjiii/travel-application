@@ -2,7 +2,7 @@ package travel.travelapplication.plan.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -11,15 +11,19 @@ import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.plan.repository.PlanRepository;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class PlanService {
-    private PlanRepository planRepository;
+    private final PlanRepository planRepository;
 
     public Plan findById(ObjectId id) {
         return planRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found:" + id));
+    }
+
+    public List<Plan> findAll() {
+        return planRepository.findAll();
     }
 
     public List<Plan> searchByPlace(String keyword) {
@@ -44,9 +48,5 @@ public class PlanService {
             }
         }
         return false;
-    }
-
-    public List<Plan> findAll() {
-        return planRepository.findAll();
     }
 }

@@ -2,6 +2,7 @@ package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import travel.travelapplication.constant.Status;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.domain.User;
@@ -28,7 +29,6 @@ public class UserPlanService {
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
 
-    // 1. 여행 사전정보(초기 일정 생성) 2. 추천 여행 장소 중 선택하여 일정 생성(기존 일정 업데이트)
     public void createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
         UserPlan userPlan = userPlanInfoDto.toEntity();
 
@@ -39,6 +39,10 @@ public class UserPlanService {
 
         user.update(user);
         userService.save(user);
+
+        if(isPublic(userPlan.getStatus())) {
+            shareUserPlan(savedUserPlan);
+        }
     }
 
     public List<UserPlan> findAllUserPlan(User user) {
@@ -59,6 +63,10 @@ public class UserPlanService {
     public void shareUserPlan(UserPlan userPlan) { // 공개 처리 -> 커뮤니티 공유
         Plan plan=new Plan(userPlan.getName(), userPlan);
         planRepository.insert(plan);
+    }
+
+    private boolean isPublic(Status status) {
+        return status.equals(Status.PUBLIC);
     }
 
     public void savePlaceToUserPlan(User user, UserPlan userPlan,
