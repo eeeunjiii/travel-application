@@ -71,14 +71,16 @@ public class UserPlanService {
 
     public void savePlaceToUserPlan(User user, UserPlan userPlan,
                                     LikedPlaceList likedPlaceList) throws IllegalAccessException {
-        List<Place> likedPlaces = new LinkedList<>();
+        List<Place> likedPlaces = user.getLikedPlaces();
         List<Place> userPlanPlaces = new LinkedList<>();
 
         for(String likedPlaceId : likedPlaceList.getLikedPlaces()) {
             Place place = placeService.findByPlaceId(likedPlaceId);
 
             userPlanPlaces.add(place);
-            likedPlaces.add(place);
+            if(!likedPlaces.contains(place)) {
+                likedPlaces.add(place);
+            }
         }
 
         UserPlan savedUserPlan = updateUserPlanPlaces(userPlan, userPlanPlaces);
