@@ -17,6 +17,10 @@ import travel.travelapplication.plan.repository.PlanRepository;
 public class PlanService {
     private final PlanRepository planRepository;
 
+    public void save(Plan plan) {
+        planRepository.save(plan);
+    }
+
     public Plan findById(ObjectId id) {
         return planRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found:" + id));
@@ -48,5 +52,15 @@ public class PlanService {
             }
         }
         return false;
+    }
+
+    public void updatePlanFromUserPlanInfo(Plan plan, UserPlan userPlan) {
+        Plan updatedPlan=Plan.builder()
+                .name(userPlan.getName())
+                .userPlan(userPlan)
+                .build();
+
+        plan.update(updatedPlan);
+        save(plan);
     }
 }

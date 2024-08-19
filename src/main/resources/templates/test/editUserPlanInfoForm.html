@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        <div>
+            <h2>여행 정보 수정</h2>
+        </div>
+
+        <form action="editUserPlanInfoForm.html" th:object="${userPlanInfo}" th:action method="post">
+            <div>
+                <label for="name">여행명</label>
+                <input type="text" id="name" name="name" th:field="*{name}" th:value="${userPlan.name}">
+            </div>
+
+            <div>
+                <div>
+                    <div th:each="status : ${statuses}">
+                        <input type="radio" th:field="*{status}" th:value="${status.name()}"
+                               th:checked="${userPlan.status} == ${status.name()}">
+                        <label th:for="${#ids.prev('status')}" th:text="${status.description}">PUBLIC</label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="startDate">여행 시작일</label>
+                <input type="text" id="startDate" name="startDate" value="여행 시작일" th:value="${userPlan.startDate}" readonly>
+            </div>
+
+            <div>
+                <label for="endDate">여행 종료일</label>
+                <input type="text" id="endDate" name="endDate" value="여행 종료일" th:value="${userPlan.endDate}" readonly>
+            </div>
+
+            <div>
+                <label for="budget">여행 예산</label>
+                <input type="text" id="budget" name="budget" value="100" th:value="${userPlan.budget}" readonly>
+            </div>
+
+            <div>
+                <label for="city">시 · 도</label>
+                <input type="text" id="city" name="city" value="서울" th:value="${userPlan.city}" readonly>
+            </div>
+
+            <div>
+                <label for="district">시 · 군 · 구</label>
+                <input type="text" id="district" name="district" value="강남구" th:value="${userPlan.district}" readonly>
+            </div>
+
+            <button type="submit">여행 정보 수정</button>
+        </form>
+</body>
+</html>

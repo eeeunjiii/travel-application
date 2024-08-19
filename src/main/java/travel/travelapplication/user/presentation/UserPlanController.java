@@ -151,4 +151,26 @@ public class UserPlanController {
         return "redirect:/home";
     }
 
+    @GetMapping("/{userPlanId}/user-plan-info")
+    public String updateUserPlanNameAndStatusForm(@PathVariable("userPlanId") ObjectId userPlanId,
+                                                  Model model) throws IllegalAccessException {
+        UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
+
+        model.addAttribute("userPlan", userPlan);
+        model.addAttribute("userPlanInfo", new UpdateUserPlanInfoDto());
+
+        return "test/editUserPlanInfoForm";
+    }
+
+    @PostMapping("/{userPlanId}/user-plan-info")
+    public String updateUserPlanNameAndStatus(@PathVariable("userPlanId") ObjectId userPlanId,
+                                              @ModelAttribute("updateUserPlan") UpdateUserPlanInfoDto userPlanInfo,
+                                              @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
+        User user=userService.findUserByEmail(oAuth2User);
+        UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
+
+        userPlanService.updateUserPlanInfo(user, userPlan, userPlanInfo);
+
+        return "redirect:/home";
+    }
 }
