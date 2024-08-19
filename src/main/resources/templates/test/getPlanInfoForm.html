@@ -12,7 +12,7 @@
 
             if(budgetDirectInput.checked) {
                 budgetInput.style.display='inline';
-                budgetHidden.value='';
+                budgetHidden.value=50;
             } else if(budgetNoLimit.checked) {
                 budgetInput.style.display='none';
                 budgetHidden.value=9999999;
@@ -140,7 +140,7 @@
             </div>
         </form>
 
-        <button th:onclick="|location.href='@{/user-plans/places}'|"
+        <button th:onclick="|location.href='@{/user-plan/places}'|"
                 type="button">여행 일정 생성하기</button>
     </div>
 </body>
