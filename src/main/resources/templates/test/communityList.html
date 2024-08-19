@@ -17,6 +17,9 @@
                 <th>여행 예산&nbsp;&nbsp;</th>
                 <th>시 · 도&nbsp;&nbsp;</th>
                 <th>시 · 군 · 구</th>
+                <th>작성자 이메일</th>
+                <th>작성일</th>
+                <th>수정일</th>
             </tr>
             </thead>
 
@@ -29,6 +32,9 @@
                 <td th:text="${plan.userPlan.budget}">여행 예산</td>
                 <td th:text="${plan.userPlan.city}">시 · 도</td>
                 <td th:text="${plan.userPlan.district}">시 · 군 · 구</td>
+                <td th:text="${plan.userEmail}">작성자 이메일</td>
+                <td th:text="${plan.createdAt}">작성일</td>
+                <td th:text="${plan.updatedAt}">최종 수정일</td>
             </tr>
             </tbody>
         </table>

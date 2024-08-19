@@ -41,6 +41,21 @@
     </div>
 
     <div>
+        <label for="userEmail">작성자 이메일</label>
+        <input type="text" id="userEmail" name="userEmail" th:value="${plan.userEmail}" readonly>
+    </div>
+
+    <div>
+        <label for="createdAt">작성일</label>
+        <input type="text" id="createdAt" name="createdAt" th:value="${plan.createdAt}" readonly>
+    </div>
+
+    <div>
+        <label for="updatedAt">최종 수정일</label>
+        <input type="text" id="updatedAt" name="updatedAt" th:value="${plan.updatedAt}" readonly>
+    </div>
+
+    <div>
         <button onclick="location.href='communityList.html'"
                 th:onclick="|location.href='@{/plans/community}'|" type="button">커뮤니티 목록</button>
     </div>
