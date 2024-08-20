@@ -256,3 +256,97 @@ $(function(){
     }
 
 });
+
+/*=========================================================================
+        USER PLAN 제작 관련
+ =========================================================================*/
+//오늘 날짜 가져오기
+document.addEventListener('DOMContentLoaded', function() {
+    const dateElement = document.getElementById('current-date');
+    const today = new Date();
+
+    // 29 March 2021
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString('en-US', options);
+
+    dateElement.textContent = formattedDate;
+    fetchRecommendations();
+});
+
+
+//예산 조정 바
+const rangeSlider = document.getElementById('budget');
+const rangeValue = document.getElementById('rangeValue');
+
+rangeSlider.addEventListener('input', function() {
+    rangeValue.textContent = rangeSlider.value;
+});
+
+//지역
+function loadSubregions() {
+    var city = $('#city').val();
+    $.ajax({
+        url: '/user-plans/districts',
+        type: 'GET',
+        data: { city: city },
+        success: function(data) {
+            $('#district').empty();
+            $('#district').append('<option value="">==시 · 군 · 구 선택==</option>');
+            data.forEach(function(district) {
+                $('#district').append('<option value="' + district + '">' + district + '</option>');
+            });
+        }
+    });
+}
+
+
+//추천 장소 데이터 가져오기
+async function fetchRecommendations() {
+    const response = await fetch('/recommendations');
+    const recommendations = await response.json();
+    console.log('Fetched recommendations:', recommendations);
+
+
+    const container = document.getElementById('recom-list');
+    container.innerHTML = ''; // 기존 요소들을 지우고 새로운 것들로 대체
+
+    recommendations.forEach((recommendation, index) => {
+        const placeItem = document.createElement('div');
+        placeItem.className = 'place-item';
+        placeItem.innerHTML = `
+            <a>
+                <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
+                <img src="카카오맵에서 가져온 사진" alt="여행지 사진">
+                <h5>${recommendation.name}</h5>
+                <p><a href="카카오맵 장소 설명으로 이동">상세 설명 보기</a></p>
+            </a>
+        `;
+        container.appendChild(placeItem);
+    });
+
+    // 추천 결과도 선택 가능하도록 수정
+    document.querySelectorAll('.place-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const selected = document.querySelector('.place-item.selected');
+            if (selected && selected !== this) {
+                selected.classList.remove('selected');
+            }
+            this.classList.toggle('selected', !this.classList.contains('selected'));
+        });
+    });
+}
+
+// 여행정보 제출 시 추천 데이터 가져오기
+//document.addEventListener('DOMContentLoaded', initializePage);
+
+
+
+function toggleHeart(element) {
+  if (element.textContent === '🩶') {
+    element.textContent = '❤️'; // 채운 하트로 변경
+  } else {
+    element.textContent = '🩶'; // 빈 하트로 변경
+  }
+}
+
+
