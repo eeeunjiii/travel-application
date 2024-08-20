@@ -1239,6 +1239,7 @@ section {
 }
 .post .meta li img.author {
   margin-right: 12px;
+  border-radius: 50%;
   vertical-align: middle;
 }
 .post .post-bottom .social-share .toggle-button {
@@ -1570,6 +1571,18 @@ section {
 }
 .post-single .post-header .title {
   font-size: 36px;
+}
+.post-single .post-header .author {
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
 }
 .post-single .featured-image {
   margin-bottom: 10px;
@@ -2148,13 +2161,13 @@ section {
 /*                      User Plan ITEM
 /*=================================================================*/
 .place-container {
-  overflow-x: auto; /* 수평 스크롤 활성화 */
-  white-space: nowrap; /* 자식 요소들이 한 줄에 나란히 배치되도록 설정 */
-  padding: 10px; /* 컨테이너에 여백 추가 (선택 사항) */
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
 }
 
 .place-item {
-  display: inline-block; /* place-item을 인라인 블록으로 설정 */
+  display: inline-block;
   position: relative;
   border: 1px solid #EBEBEB;
   padding: 15px;
@@ -3388,3 +3401,4 @@ button:focus {
 
 
 /*# sourceMappingURL=style.css.map */
+
