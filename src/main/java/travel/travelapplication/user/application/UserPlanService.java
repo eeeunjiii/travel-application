@@ -2,8 +2,10 @@ package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import travel.travelapplication.constant.Status;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.plan.application.PlanService;
 import travel.travelapplication.user.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,8 @@ public class UserPlanService {
     private final PlaceService placeService;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
+    private final PlanService planService;
 
-    // 1. 여행 사전정보(초기 일정 생성) 2. 추천 여행 장소 중 선택하여 일정 생성(기존 일정 업데이트)
     public void createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
         UserPlan userPlan = userPlanInfoDto.toEntity();
 
@@ -39,6 +41,10 @@ public class UserPlanService {
 
         user.update(user);
         userService.save(user);
+
+        if(isPublic(userPlan.getStatus())) {
+            shareUserPlan(savedUserPlan, user);
+        }
     }
 
     public List<UserPlan> findAllUserPlan(User user) {
@@ -56,21 +62,33 @@ public class UserPlanService {
         }
     }
 
-    public void shareUserPlan(UserPlan userPlan) { // 공개 처리 -> 커뮤니티 공유
-        Plan plan=new Plan(userPlan.getName(), userPlan);
-        planRepository.insert(plan);
+    public void shareUserPlan(UserPlan userPlan, User user) { // 공개 처리 -> 커뮤니티 공유
+        Plan existingPlan=planRepository.findByUserPlan(userPlan);
+
+        if(existingPlan!=null) {
+            planService.updatePlanFromUserPlanInfo(existingPlan, userPlan);
+        } else {
+            Plan plan=new Plan(userPlan.getName(), userPlan,  user.getEmail());
+            planRepository.insert(plan);
+        }
+    }
+
+    private boolean isPublic(Status status) {
+        return status.equals(Status.PUBLIC);
     }
 
     public void savePlaceToUserPlan(User user, UserPlan userPlan,
                                     LikedPlaceList likedPlaceList) throws IllegalAccessException {
-        List<Place> likedPlaces = new LinkedList<>();
+        List<Place> likedPlaces = user.getLikedPlaces();
         List<Place> userPlanPlaces = new LinkedList<>();
 
         for(String likedPlaceId : likedPlaceList.getLikedPlaces()) {
             Place place = placeService.findByPlaceId(likedPlaceId);
 
             userPlanPlaces.add(place);
-            likedPlaces.add(place);
+            if(!likedPlaces.contains(place)) {
+                likedPlaces.add(place);
+            }
         }
 
         UserPlan savedUserPlan = updateUserPlanPlaces(userPlan, userPlanPlaces);
@@ -97,5 +115,43 @@ public class UserPlanService {
 
     public void save(UserPlan userPlan) {
         userPlanRepository.save(userPlan);
+    }
+
+    public void updateUserPlanInfo(User user, UserPlan userPlan, UpdateUserPlanInfoDto userPlanInfoDto) {
+        UserPlan updatedUserPlan=updateNameAndStatus(userPlan, userPlanInfoDto);
+
+        user.update(user);
+        userService.save(user);
+
+        if(isPublic(userPlan.getStatus())) {
+            shareUserPlan(updatedUserPlan, user); // 만약 공개로 그대로 두고, 이름을 게속 바꾸면 이름만 다른 동일한 일정이 계속 저장되는 문제 발생
+        } else {
+            removePlanByUserPlan(updatedUserPlan);
+        }
+    }
+
+    private UserPlan updateNameAndStatus(UserPlan userPlan, UpdateUserPlanInfoDto userPlanInfoDto) {
+        UserPlan updatedUserPlan=UserPlan.builder()
+                .name(userPlanInfoDto.getName())
+                .startDate(userPlan.getStartDate())
+                .endDate(userPlan.getEndDate())
+                .budget(userPlan.getBudget())
+                .city(userPlan.getCity())
+                .district(userPlan.getDistrict())
+                .status(userPlanInfoDto.getStatus())
+                .places(userPlan.getPlaces())
+                .routes(userPlan.getRoutes())
+                .build();
+
+        userPlan.update(updatedUserPlan);
+        save(userPlan);
+        return userPlan;
+    }
+
+    private void removePlanByUserPlan(UserPlan userPlan) {
+        Plan planToRemove=planRepository.findByUserPlan(userPlan);
+        if(planToRemove!=null) {
+            planRepository.delete(planToRemove);
+        }
     }
 }

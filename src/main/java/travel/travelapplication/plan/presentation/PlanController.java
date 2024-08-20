@@ -1,15 +1,11 @@
 package travel.travelapplication.plan.presentation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.plan.application.PlanService;
@@ -17,13 +13,28 @@ import travel.travelapplication.user.domain.SavedPlan;
       
 import java.util.List;      
 
-@Transactional
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/plans")
+@Slf4j
 public class PlanController {
-    private PlanService planService;
-  
+    private final PlanService planService;
+
+    @GetMapping("/community")
+    public String allPlans(Model model) {
+        List<Plan> plans = planService.findAll();
+        model.addAttribute("plans", plans);
+
+        return "test/communityList";
+    }
+
+    @GetMapping("/community/{planId}")
+    public String plan(@PathVariable("planId") ObjectId planId, Model model) {
+        Plan plan=planService.findById(planId);
+        model.addAttribute("plan", plan);
+        return "test/plan";
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Plan> findPlan(@RequestParam(name = "id") ObjectId id){
         Plan plan = planService.findById(id);

@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.constant.Category;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "Place")
 @Getter
@@ -41,5 +41,18 @@ public class Place {
         this.provCity = provCity;
         this.district = district;
         this.tags = tags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this==o) return true;
+        if(o==null || getClass()!=o.getClass()) return false;
+        Place place=(Place) o;
+        return Objects.equals(placeId, place.placeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(placeId);
     }
 }
