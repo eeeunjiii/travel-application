@@ -2,7 +2,6 @@ package travel.travelapplication.user.presentation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -54,7 +53,7 @@ public class UserController {
 
         log.info("new username: {}", newName);
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @GetMapping("/user-plan")
@@ -65,6 +64,6 @@ public class UserController {
 
         model.addAttribute("userPlans", userPlans);
 
-        return "user-plan";
+        return "test/userPlans";
     }
 }

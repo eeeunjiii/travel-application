@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Liked Places</title>
+</head>
+<body>
+
+    <div>
+        <h2>추천 여행지 좋아요</h2>
+
+        <form action="selectLikedPlacesForm.html" th:action="@{/user-plan/{userPlanId}/places(userPlanId=${userPlan.id})}" th:object="${likedPlaceList}" method="post">
+            <div>
+                <div>추천 여행지</div>
+
+                <hr>
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>여행지 ID</th>
+                            <th>여행지 명</th>
+                            <th>여행지 주소</th>
+                            <th>여행지 좋아요 선택</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="place : ${places}">
+                            <td th:text="${place.placeId}">여행지 ID</td>
+                            <td th:text="${place.name}">여행지 명</td>
+                            <td th:text="${place.address}">여행지 주소</td>
+                            <td>
+                                <input type="checkbox" th:field="*{likedPlaces}" th:value="${place.placeId}">
+                                <label th:for="${#ids.prev('likedPlaces')}" th:text="${place.name}"></label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <button type="submit">여행지 좋아요 완료</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <button th:onclick="|location.href='@{/liked-places}'|" type="button">좋아요 여행지 리스트</button>
+    </div>
+
+</body>
+</html>
