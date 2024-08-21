@@ -1,7 +1,6 @@
 package travel.travelapplication.user.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -10,9 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
-import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.constant.Status;
-import travel.travelapplication.dto.userplan.LikedPlaceList;
+import travel.travelapplication.dto.user.UserDto;
+import travel.travelapplication.dto.userplan.SelectedPlaceDto;
+import travel.travelapplication.dto.userplan.UserPlanDto;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
@@ -44,6 +44,8 @@ public class UserPlanController {
     @GetMapping("/new")
     public String createUserPlan(Model model) {
         model.addAttribute("userPlan", new UserPlanInfoDto());
+        model.addAttribute("infoSubmitted", false);
+
         return "html/new-user-plan";
     }
 
@@ -102,29 +104,36 @@ public class UserPlanController {
         return districts;
     }
 
-    @GetMapping("/plan-info")
-    public String userPlanInfoForm(Model model) {
-        model.addAttribute("userPlan", new UserPlanInfoDto());
-        return "test/getPlanInfoForm";
-    }
+//    @GetMapping("/plan-info")
+//    public String userPlanInfoForm(Model model) {
+//        model.addAttribute("userPlan", new UserPlanInfoDto());
+//        return "test/getPlanInfoForm";
+//    }
 
     @PostMapping("/plan-info")
     public String saveUserPlan(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-                               @ModelAttribute("userPlan") UserPlanInfoDto userPlan) throws IllegalAccessException {
-        User user = userService.findUserByEmail(oAuth2User);
+                               @ModelAttribute("userPlan") UserPlanInfoDto userPlan,
+                               @ModelAttribute("user") UserDto user, Model model,
+                               HttpServletRequest request)
+            throws IllegalAccessException {
+        User userInfo = userService.findUserByEmail(oAuth2User);
 
-        log.info("user.name: {}", user.getName());
-        log.info("user.email: {}", user.getEmail());
+        log.info("user.name: {}", userInfo.getName());
+        log.info("user.email: {}", userInfo.getEmail());
 
         log.info("userPlan.startDate: {}", userPlan.getStartDate());
         log.info("userPlan.endDate: {}", userPlan.getEndDate());
         log.info("userPlan.budget: {}", userPlan.getBudget());
         log.info("userPlan.city: {}", userPlan.getCity());
         log.info("userPlan.district: {}", userPlan.getDistrict());
+        log.info("userPlan.status: {}", userPlan.getStatus());
 
-        userPlanService.createNewUserPlan(user, userPlan);
+        userPlanService.createNewUserPlan(userInfo, userPlan);
+        model.addAttribute("infoSubmitted", true);
 
-        return "redirect:/home"; // url 매핑
+        model.addAttribute("userPlan", userPlan);
+        model.addAttribute("user", userInfo);
+        return "html/new-user-plan";
     }
 
     @GetMapping("/{userPlanId}")
@@ -132,35 +141,9 @@ public class UserPlanController {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
-        return "test/userPlan";
+        return "user-plan";
     }
 
-    @GetMapping("/{userPlanId}/places")
-    public String selectLikedPlaces(HttpServletRequest request, Model model,
-                                    @PathVariable("userPlanId") ObjectId userPlanId) throws IllegalAccessException {
-        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
-
-        HttpSession session = request.getSession();
-        List<SessionUser> places = (List<SessionUser>) session.getAttribute("recommendation-result");
-
-        model.addAttribute("userPlan", userPlan);
-        model.addAttribute("likedPlaceList", new LikedPlaceList());
-        model.addAttribute("places", places);
-
-        return "test/selectLikedPlacesForm";
-    }
-
-    @PostMapping("/{userPlanId}/places")
-    public String saveLikedPlacesToUserPlan(@PathVariable("userPlanId") ObjectId userPlanId,
-                                            @ModelAttribute("likedPlaceList") LikedPlaceList likedPlaceList,
-                                            @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
-        User user = userService.findUserByEmail(oAuth2User);
-        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
-
-        userPlanService.savePlaceToUserPlan(user, userPlan, likedPlaceList);
-
-        return "redirect:/home";
-    }
 
     @GetMapping("/{userPlanId}/user-plan-info")
     public String updateUserPlanNameAndStatusForm(@PathVariable("userPlanId") ObjectId userPlanId,
