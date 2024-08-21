@@ -155,9 +155,7 @@ public class UserPlanController {
     public String updateUserPlanNameAndStatusForm(@PathVariable("userPlanId") ObjectId userPlanId,
                                                   Model model) throws IllegalAccessException {
         UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
-
         model.addAttribute("userPlan", userPlan);
-        model.addAttribute("userPlanInfo", new UpdateUserPlanInfoDto());
 
         return "test/editUserPlanInfoForm";
     }
