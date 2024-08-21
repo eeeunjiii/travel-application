@@ -260,33 +260,84 @@ $(function(){
 /*=========================================================================
         USER PLAN 제작 관련
  =========================================================================*/
+
+ // 예산 상관 없음
+ function toggleInput() {
+             var budgetInput = document.getElementById('budgetInput');
+             var budgetNoLimit = document.getElementById('budgetNoLimit');
+             var budgetDirectInput = document.getElementById('budgetDirectInput');
+             var budgetHidden = document.getElementById('budgetHidden');
+             if(budgetDirectInput.checked) {
+                 budgetInput.style.display='inline';
+                 budgetHidden.value='';
+             } else if(budgetNoLimit.checked) {
+                 budgetInput.style.display='none';
+                 budgetHidden.value=9999999;
+             }
+         }
+
+
 //오늘 날짜 가져오기
-document.addEventListener('DOMContentLoaded', function() {
-    const dateElement = document.getElementById('current-date');
-    const today = new Date();
+//document.addEventListener('DOMContentLoaded', function() {
+//    const dateElement = document.getElementById('current-date');
+//    const today = new Date();
+//
+//    // 29 March 2021
+//    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+//    const formattedDate = today.toLocaleDateString('en-US', options);
+//
+//    dateElement.textContent = formattedDate;
+//    fetchRecommendations();
+//});
 
-    // 29 March 2021
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = today.toLocaleDateString('en-US', options);
+ document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').setAttribute('min', today);
 
-    dateElement.textContent = formattedDate;
-    fetchRecommendations();
-});
+            document.getElementById('startDate').addEventListener('change', function() {
+                var startDate = this.value;
+                document.getElementById('endDate').setAttribute('min', startDate);
+            });
+ });
 
 
 //예산 조정 바
-const rangeSlider = document.getElementById('budget');
-const rangeValue = document.getElementById('rangeValue');
+//const rangeSlider = document.getElementById('budget');
+//const rangeValue = document.getElementById('rangeValue');
+//
+//rangeSlider.addEventListener('input', function() {
+//    rangeValue.textContent = rangeSlider.value;
+//});
 
-rangeSlider.addEventListener('input', function() {
-    rangeValue.textContent = rangeSlider.value;
-});
+function toggleInput() {
+     var budgetInput = document.getElementById('budgetInput');
+     var budgetNoLimit = document.getElementById('budgetNoLimit');
+     var budgetDirectInput = document.getElementById('budgetDirectInput');
+     var budgetHidden = document.getElementById('budgetHidden');
+     if(budgetDirectInput.checked) {
+          budgetInput.style.display='inline';
+          budgetHidden.value='';
+            } else if(budgetNoLimit.checked) {
+                budgetInput.style.display='none';
+                budgetHidden.value=9999999;
+            }
+        }
+        function updateRangeValue() {
+            var rangeSlider = document.getElementById('budget');
+            var rangeValue = document.getElementById('rangeValue');
+            var budgetHidden = document.getElementById('budgetHidden');
+            rangeValue.textContent = rangeSlider.value;
+            budgetHidden.value = rangeSlider.value;
+        }
+        window.onload = function() {
+            toggleInput();
+}
 
 //지역
 function loadSubregions() {
     var city = $('#city').val();
     $.ajax({
-        url: '/user-plans/districts',
+        url: '/user-plan/districts',
         type: 'GET',
         data: { city: city },
         success: function(data) {

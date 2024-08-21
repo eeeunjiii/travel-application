@@ -30,7 +30,7 @@ public class PlanController {
         User user = userService.findUserByEmail(oAuth2User);
 
         List<Plan> plans = planService.findAll();
-        List<Plan> savedPlans=user.getSavedPlans();
+        List<SavedPlan> savedPlans=user.getSavedPlans();
 
         model.addAttribute("plans", plans);
         model.addAttribute("savedPlans", savedPlans);

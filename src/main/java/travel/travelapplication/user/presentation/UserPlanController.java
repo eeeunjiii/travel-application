@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.constant.Status;
 import travel.travelapplication.dto.user.UserDto;
-import travel.travelapplication.dto.userplan.SelectedPlaceDto;
-import travel.travelapplication.dto.userplan.UserPlanDto;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
