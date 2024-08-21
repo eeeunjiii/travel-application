@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.plan.application.PlanService;
+import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.SavedPlan;
-      
-import java.util.List;      
+import travel.travelapplication.user.domain.User;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -19,11 +23,17 @@ import java.util.List;
 @Slf4j
 public class PlanController {
     private final PlanService planService;
+    private final UserService userService;
 
     @GetMapping("/community")
-    public String allPlans(Model model) {
+    public String allPlans(Model model, @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
+        User user = userService.findUserByEmail(oAuth2User);
+
         List<Plan> plans = planService.findAll();
+        List<Plan> savedPlans=user.getSavedPlans();
+
         model.addAttribute("plans", plans);
+        model.addAttribute("savedPlans", savedPlans);
 
         return "test/communityList";
     }
