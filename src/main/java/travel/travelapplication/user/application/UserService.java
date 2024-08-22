@@ -148,13 +148,16 @@ public class UserService {
 
     public void addLike(ObjectId userId, Place place) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        user.addLikedPlace(place);
+        List<Place> likedPlaces = user.getLikedPlaces();
+        if (!likedPlaces.contains(place)) {
+            likedPlaces.add(place);
+        }
         userRepository.save(user);
     }
 
-    public void removeLike(ObjectId userId, Place place) {
+    public void delLike(ObjectId userId, Place place) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        user.removeLikedPlace(place);
+        user.delLikedPlace(place);
         userRepository.save(user);
     }
 }

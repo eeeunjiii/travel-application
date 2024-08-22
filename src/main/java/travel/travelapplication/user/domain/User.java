@@ -35,7 +35,6 @@ public class User {
     private List<Tag> tags = new ArrayList<>();
 
     @DBRef
-    @ManyToMany(cascade = CascadeType.ALL)
     private List<Place> likedPlaces = new ArrayList<>();
 
     @DBRef
@@ -53,7 +52,7 @@ public class User {
         this.likedPlaces.add(place);
     }
 
-    public void removeLikedPlace(Place place) {
+    public void delLikedPlace(Place place) {
         this.likedPlaces.remove(place);
     }
 

@@ -23,7 +23,7 @@ public class PlaceService {
 
     public Place findByPlaceId(String placeId) {
         return placeRepository.findByPlaceId(placeId)
-                .orElseThrow(() -> new IllegalArgumentException("place not found: "+placeId));
+                .orElseThrow(() -> new IllegalArgumentException("place not found: " + placeId));
     }
 }
 
