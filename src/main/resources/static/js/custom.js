@@ -258,7 +258,7 @@ $(function(){
 });
 
 /*=========================================================================
-        USER PLAN 제작 관련
+            USER PLAN 제작 관련
  =========================================================================*/
 //오늘 날짜 가져오기
 document.addEventListener('DOMContentLoaded', function() {
@@ -316,9 +316,9 @@ async function fetchRecommendations() {
         placeItem.innerHTML = `
             <a>
                 <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                <img src="카카오맵에서 가져온 사진" alt="여행지 사진">
+                <img src="카카오맵에서 가져온 사진" alt="${recommendation.placeId}">
                 <h5>${recommendation.name}</h5>
-                <p><a href="카카오맵 장소 설명으로 이동">상세 설명 보기</a></p>
+                <p><a href="카카오맵 장소 설명으로 이동">${recommendation.address}</a></p>
             </a>
         `;
         container.appendChild(placeItem);
@@ -336,17 +336,65 @@ async function fetchRecommendations() {
     });
 }
 
-// 여행정보 제출 시 추천 데이터 가져오기
-//document.addEventListener('DOMContentLoaded', initializePage);
 
 
+/*=========================================================================
+            장소 좋아요 관련
+ =========================================================================*/
 
 function toggleHeart(element) {
   if (element.textContent === '🩶') {
-    element.textContent = '❤️'; // 채운 하트로 변경
-  } else {
-    element.textContent = '🩶'; // 빈 하트로 변경
+    element.textContent = '❤️';
+    addLike(element);
+  } else if(element.textContent === '❤️'){
+    element.textContent = '🩶';
+    delLike(element);
+  }else{
+      element.textContent = '🩶';
   }
+}
+
+function addLike(element) {
+    const placeItem = element.closest('.place-item');
+    const placeId = placeItem.querySelector('img').alt;
+    const placeName = placeItem.querySelector('h5').textContent;
+    const placeAddress = placeItem.querySelector('p').textContent;
+
+    console.log('Liked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
+
+    sendLikeRequest('/places/add-like', placeId, 'POST');
+}
+
+function delLike(element){
+    const placeItem = element.closest('.place-item');
+    const placeId = placeItem.querySelector('img').alt;
+    const placeName = placeItem.querySelector('h5').textContent;
+    const placeAddress = placeItem.querySelector('p').textContent;
+
+    console.log('Unliked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
+
+    sendLikeRequest('/places/del-like', placeId, 'DELETE');
+}
+
+async function sendLikeRequest(url, data, methodType){
+    try {
+        const response = await fetch(url, {
+            method: methodType,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 

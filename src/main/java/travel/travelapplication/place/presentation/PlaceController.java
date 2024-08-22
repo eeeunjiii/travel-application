@@ -17,6 +17,7 @@ import travel.travelapplication.place.domain.Place;
 @Slf4j
 public class PlaceController {
     private final PlaceService placeService;
+
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Place> findPlaceById(@RequestParam(name = "id") ObjectId id) {
@@ -35,5 +36,20 @@ public class PlaceController {
     @GetMapping("/user-id-data")
     public Long sendUserId() {
         return 112L; // 로그인한 사용자의 user_id 반환하기
+    }
+
+
+    @PostMapping("/add-like")
+    public ResponseEntity<String> addLike(@RequestBody String placeId) {
+        Place place = placeService.findByPlaceId(placeId);
+        System.out.println("Add like: " + place);
+        return ResponseEntity.ok("Like added successfully");
+    }
+
+    @DeleteMapping("/del-like")
+    public ResponseEntity<String> delLike(@RequestBody String placeId) {
+        Place place = placeService.findByPlaceId(placeId);
+        System.out.println("Delete like: " + place);
+        return ResponseEntity.ok("Like deleted successfully");
     }
 }

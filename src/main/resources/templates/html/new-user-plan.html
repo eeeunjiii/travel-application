@@ -160,7 +160,7 @@
                         <li class="list-inline-item">
                             <th:block sec:authorize="isAuthenticated()">
                                 <div th:if="${user != null}" th:object="${user}">
-                                    <span th:text="*{name}">username</span><br>
+                                    <span th:text="*{email}">username</span><br>
                                 </div>
                                 <div th:if="${user == null}">
                                     <span>anonymous</span><br>
@@ -252,18 +252,18 @@
                             <div class="widget-header text-center">
                                 <h3 class="widget-title">Time Table</h3>
                             </div>
-                            <div class="widget-content">
+                            <div class="widget-content" th:if="${infoSubmitted}">
                                 <ul class="list">
                                     <!-- href는 음식점, 교통수단 등 오른쪽 화면에 표시할 내용으로 바꾸면 될 듯 -->
-                                    <li data-location="restaurant1"><a href="">아침 식사</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity1"><a href="#">오전 일정 1</a> <span>9:00 - 11:00</span></li>
-                                    <li data-location="activity2"><a href="#">오전 일정 2</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="restaurant2"><a href="#">점심 식사</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity3"><a href="#">오후 일정 1</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity4"><a href="#">오후 일정 2</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="restaurant3"><a href="#">저녁 식사</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity5"><a href="#">야간 일정 1</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity6"><a href="#">야간 일정 2</a><span>9:00 - 11:00</span></li>
+                                    <li id="restaurant1">아침 식사<span>9:00 - 11:00</span></li>
+                                    <li id="activity1">오전 일정 1 <span>9:00 - 11:00</span></li>
+                                    <li id="activity2">오전 일정 2<span>9:00 - 11:00</span></li>
+                                    <li id="restaurant2">점심 식사<span>9:00 - 11:00</span></li>
+                                    <li id="activity3">오후 일정 1<span>9:00 - 11:00</span></li>
+                                    <li id="activity4">오후 일정 2<span>9:00 - 11:00</span></li>
+                                    <li id="restaurant3">저녁 식사<span>9:00 - 11:00</span></li>
+                                    <li id="activity5">야간 일정 1<span>9:00 - 11:00</span></li>
+                                    <li id="activity6">야간 일정 2<span>9:00 - 11:00</span></li>
                                 </ul>
                             </div>
 
@@ -290,7 +290,7 @@
                                     <h3>다른 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" id="other-list">
                                             <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
@@ -354,7 +354,7 @@
                                     <h3>좋아요 누른 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" id="liked-list">
                                             <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>

@@ -35,6 +35,7 @@ public class User {
     private List<Tag> tags = new ArrayList<>();
 
     @DBRef
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Place> likedPlaces = new ArrayList<>();
 
     @DBRef
@@ -46,6 +47,14 @@ public class User {
 
     @PersistenceCreator
     public User() {
+    }
+
+    public void addLikedPlace(Place place) {
+        this.likedPlaces.add(place);
+    }
+
+    public void removeLikedPlace(Place place) {
+        this.likedPlaces.remove(place);
     }
 
     @PersistenceCreator
