@@ -12,7 +12,6 @@ import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.plan.application.PlanService;
 import travel.travelapplication.user.application.UserService;
-import travel.travelapplication.user.domain.SavedPlan;
 import travel.travelapplication.user.domain.User;
 
 import java.util.List;
@@ -30,19 +29,42 @@ public class PlanController {
         User user = userService.findUserByEmail(oAuth2User);
 
         List<Plan> plans = planService.findAll();
-        List<SavedPlan> savedPlans=user.getSavedPlans();
+        List<Plan> savedPlans=user.getSavedPlans();
 
         model.addAttribute("plans", plans);
         model.addAttribute("savedPlans", savedPlans);
+
+        for(Plan plan:savedPlans) {
+            log.info("savedPlans.element: {}", plan.getName());
+        }
 
         return "test/communityList";
     }
 
     @GetMapping("/community/{planId}")
-    public String plan(@PathVariable("planId") ObjectId planId, Model model) {
-        Plan plan=planService.findById(planId);
+    public String plan(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+                       @PathVariable("planId") ObjectId planId, Model model) throws IllegalAccessException {
+        User user=userService.findUserByEmail(oAuth2User);
+
+        Plan plan = planService.findById(planId);
+        List<Plan> savedPlans=user.getSavedPlans();
+
         model.addAttribute("plan", plan);
+        model.addAttribute("savedPlans", savedPlans);
+
         return "test/plan";
+    }
+
+    @PostMapping("/community/save/{planId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> savePlanToUser(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+                                                  @PathVariable("planId") ObjectId planId) throws IllegalAccessException {
+        User user=userService.findUserByEmail(oAuth2User);
+        Plan plan=planService.findById(planId);
+
+        boolean isSaved = planService.saveSelectedPlan(user, plan);
+
+        return ResponseEntity.ok(isSaved);
     }
 
     @GetMapping("/{id}")
@@ -53,12 +75,6 @@ public class PlanController {
 
     @DeleteMapping("/{id}")
     public void deletePlan(@RequestParam(name = "id") ObjectId id){
-    }
-
-    @PostMapping
-    public ResponseEntity<SavedPlan> savePlan(@RequestParam(name = "id") ObjectId id){
-        SavedPlan savedPlan = new SavedPlan(planService.findById(id));
-        return ResponseEntity.ok(savedPlan);
     }
   
     @GetMapping("/search") // 특정 장소가 포함된 지도 조회 (키워드가 없으면 모두 출력)

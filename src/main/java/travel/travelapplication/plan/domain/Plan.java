@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.user.domain.UserPlan;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Document(collection = "Plan")
@@ -51,5 +52,18 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
         Optional.ofNullable(updatedPlan.getName()).ifPresent(none -> this.name= updatedPlan.getName());
         Optional.ofNullable(updatedPlan.getUserPlan()).ifPresent(none -> this.userPlan= updatedPlan.getUserPlan());
         Optional.ofNullable(updatedPlan.getUserEmail()).ifPresent(none -> this.userEmail= updatedPlan.getUserEmail());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this==o) return true;
+        if(o==null || getClass()!=o.getClass()) return false;
+        Plan plan=(Plan) o;
+        return Objects.equals(id, plan.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

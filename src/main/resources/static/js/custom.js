@@ -390,8 +390,6 @@ async function fetchRecommendations() {
 // 여행정보 제출 시 추천 데이터 가져오기
 //document.addEventListener('DOMContentLoaded', initializePage);
 
-
-
 function toggleHeart(element) {
   if (element.textContent === '🩶') {
     element.textContent = '❤️'; // 채운 하트로 변경
@@ -401,3 +399,34 @@ function toggleHeart(element) {
 }
 
 
+/*=========================================================================
+                                PLAN
+ =========================================================================*/
+$(document).on('click', '.bookmark-icon', function() {
+    var planId=$(this).data('plan-id');
+    var $icon=$(this);
+    var isCurrentlySaved = $icon.hasClass('fas');
+
+    $.ajax({
+        url: `/plans/community/save/${planId}`,
+        type: 'POST',
+        success: function(isSaved) {
+            if (isSaved) {
+                if (isCurrentlySaved) {
+                    $icon.removeClass('fas fa-bookmark').addClass('far fa-bookmark');
+                } else {
+                    $icon.removeClass('far fa-bookmark').addClass('fas fa-bookmark');
+                }
+            } else {
+                if (isCurrentlySaved) {
+                    $icon.removeClass('fas fa-bookmark').addClass('far fa-bookmark');
+                } else {
+                    $icon.removeClass('far fa-bookmark').addClass('fas fa-bookmark');
+                }
+            }
+        },
+        error: function() {
+            alert('일정을 저장하는 데 실패했습니다');
+        }
+    });
+});

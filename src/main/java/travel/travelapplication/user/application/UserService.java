@@ -8,6 +8,7 @@ import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
 import travel.travelapplication.place.repository.TagRepository;
+import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
@@ -29,7 +30,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User updateUserName(String email, String username) throws IllegalAccessException {
+    public void updateUserName(String email, String username) throws IllegalAccessException {
         User user=userRepository.findByEmail(email)
                 .orElse(null);
 
@@ -47,7 +48,6 @@ public class UserService {
 
             user.update(updatedUser);
             save(user);
-            return user;
         } else {
             throw new IllegalAccessException("존재하지 않는 사용자입니다.");
         }
@@ -114,6 +114,22 @@ public class UserService {
         } else {
             throw new IllegalAccessException("존재하지 않는 사용자입니다.");
         }
+    }
+
+    public void updateUserSavedPlans(User user, List<Plan> savedPlans) {
+        User updatedUser=User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .userPlans(user.getUserPlans())
+                .tags(user.getTags())
+                .likedPlaces(user.getLikedPlaces())
+                .savedPlans(savedPlans)
+                .role(user.getRole())
+                .accessToken(user.getAccessToken())
+                .build();
+
+        user.update(updatedUser);
+        save(user);
     }
 
     public List<Tag> findAllTag(User user) throws IllegalAccessException {
