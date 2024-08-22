@@ -150,7 +150,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         List<Place> likedPlaces = user.getLikedPlaces();
         if (!likedPlaces.contains(place)) {
-            likedPlaces.add(place);
+            user.addLikedPlace(place);
         }
         userRepository.save(user);
     }

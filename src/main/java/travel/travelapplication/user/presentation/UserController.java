@@ -67,16 +67,5 @@ public class UserController {
         return "test/userPlans";
     }
 
-    @PostMapping("/liked-places")
-    public String addLikedPlace() {
-
-        return "";
-    }
-
-    @DeleteMapping("/liked-places")
-    public String delLikedPlace() {
-
-        return "";
-    }
 
 }
