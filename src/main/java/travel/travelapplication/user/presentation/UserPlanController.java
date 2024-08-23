@@ -16,6 +16,7 @@ import travel.travelapplication.dto.user.UserDto;
 import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.dto.userplan.SelectedPlaceDto;
 import travel.travelapplication.dto.userplan.UserPlanDto;
+import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
@@ -124,6 +125,7 @@ public class UserPlanController {
         log.info("user.name: {}", userInfo.getName());
         log.info("user.email: {}", userInfo.getEmail());
 
+        log.info("userPlan.name: {}", userPlan.getName());
         log.info("userPlan.startDate: {}", userPlan.getStartDate());
         log.info("userPlan.endDate: {}", userPlan.getEndDate());
         log.info("userPlan.budget: {}", userPlan.getBudget());
@@ -162,17 +164,20 @@ public class UserPlanController {
         return "test/selectLikedPlacesForm";
     }
 
-    @PostMapping("/{userPlanId}/places")
-    public String saveLikedPlacesToUserPlan(@PathVariable("userPlanId") ObjectId userPlanId,
-                                            @ModelAttribute("likedPlaceList") LikedPlaceList likedPlaceList,
-                                            @AuthenticationPrincipal CustomOAuth2User oAuth2User)
+    @PostMapping("/save-places")
+    public String savePlacesToUserPlan(@PathVariable("userPlanId") ObjectId userPlanId,
+                                       @ModelAttribute("selectedPlaces") List<String> selectedPlaceId, Model model,
+                                       @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
-        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
+        List<Place> selectedPlaces = new ArrayList<>();
 
-        userPlanService.savePlaceToUserPlan(user, userPlan, likedPlaceList);
+        model.addAttribute("selectedPlaces", selectedPlaces);
+        userPlanService.savePlaceToNewUserPlan(user, selectedPlaceId);
 
-        return "test/selectLikedPlacesForm";
+        log.info(selectedPlaces.toString());
+
+        return "test/savedUserPlan";
     }
 
 }

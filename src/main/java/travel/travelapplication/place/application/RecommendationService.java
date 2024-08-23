@@ -28,7 +28,7 @@ public class RecommendationService {
     @Async
     public CompletableFuture<List<Recommendation>> fetchData() {
         ResponseEntity<List<Recommendation>> response = restTemplate.exchange(
-                "http://127.0.0.1:5000/data",
+                "http://127.0.0.1:5000/recommendations",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Recommendation>>() {

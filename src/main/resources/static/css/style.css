@@ -2200,6 +2200,17 @@ section {
   color: white;
 }
 
+.selection-number {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
 .widget-content div div {
   margin-bottom: 5px;
   font-weight: bold;

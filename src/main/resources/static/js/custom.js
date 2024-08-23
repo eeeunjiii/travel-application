@@ -257,11 +257,40 @@ $(function(){
 
 });
 
+
+/*=========================================================================
+            상시 사용 함수
+ =========================================================================*/
+document.addEventListener('DOMContentLoaded', function() {
+    fetchRecommendations();
+});
+
+async function sendRequest(url, data, methodType){
+    try {
+        const response = await fetch(url, {
+            method: methodType,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 /*=========================================================================
             USER PLAN 제작 관련
  =========================================================================*/
 //오늘 날짜 가져오기
-document.addEventListener('DOMContentLoaded', function() {
+function getCurrentDate(){
     const dateElement = document.getElementById('current-date');
     const today = new Date();
 
@@ -270,8 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const formattedDate = today.toLocaleDateString('en-US', options);
 
     dateElement.textContent = formattedDate;
-    fetchRecommendations();
-});
+}
 
 
 //예산 조정 바
@@ -324,17 +352,56 @@ async function fetchRecommendations() {
         container.appendChild(placeItem);
     });
 
-    // 추천 결과도 선택 가능하도록 수정
+    // 추천 결과도 선택에 포함
+    selectPlaces();
+}
+
+
+
+function selectPlaces(){
+    const selectedPlaces = [];
     document.querySelectorAll('.place-item').forEach(item => {
         item.addEventListener('click', function() {
-            const selected = document.querySelector('.place-item.selected');
-            if (selected && selected !== this) {
-                selected.classList.remove('selected');
+            const selectedIndex = selectedPlaces.indexOf(this);
+
+            if (selectedIndex > -1) {
+                selectedPlaces.splice(selectedIndex, 1); // selectedIndex로부터 1개 항목 제거
+                this.classList.remove('selected');
+                const numberSpan = this.querySelector('.selection-index');
+                if (numberSpan) numberSpan.remove();
+            } else {
+                if (selectedPlaces.length < 6) { // 최대 6개까지만 선택 가능
+                    selectedPlaces.push(this);
+                    this.classList.add('selected');
+                    let numberSpan = document.createElement('span');
+                    numberSpan.classList.add('selection-index');
+                    this.prepend(numberSpan);
+                }
             }
-            this.classList.toggle('selected', !this.classList.contains('selected'));
+
+            // 선택된 순서에 따라 번호 매기기
+            selectedPlaces.forEach((item, index) => {
+                let numberSpan = item.querySelector('.selection-index');
+                if (!numberSpan) {
+                    numberSpan = document.createElement('span');
+                    numberSpan.classList.add('selection-index');
+                    item.prepend(numberSpan);
+                }
+                numberSpan.textContent = `${index + 1}`;
+            });
         });
     });
+
 }
+
+// 선택한 장소 저장
+//document.getElementById('saveButton').addEventListener('click', function(event) {
+//    const selectedPlaceIds = selectedPlaces.map(place => place.getAttribute('data-place-id'));
+//
+//    console.log('선택된 장소 IDs:', selectedPlaces);
+//    sendRequest('/user-plan/save-places', placeId, 'POST');
+//
+//}
 
 
 
@@ -362,7 +429,7 @@ function addLike(element) {
 
     console.log('Liked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
 
-    sendLikeRequest('/places/add-like', placeId, 'POST');
+    sendRequest('/places/add-like', placeId, 'POST');
 }
 
 function delLike(element){
@@ -373,28 +440,9 @@ function delLike(element){
 
     console.log('Unliked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
 
-    sendLikeRequest('/places/del-like', placeId, 'DELETE');
+    sendRequest('/places/del-like', placeId, 'DELETE');
 }
 
-async function sendLikeRequest(url, data, methodType){
-    try {
-        const response = await fetch(url, {
-            method: methodType,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const result = await response.json();
-        console.log('Server response:', result);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
 
 

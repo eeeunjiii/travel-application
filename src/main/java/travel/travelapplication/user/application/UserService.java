@@ -81,7 +81,7 @@ public class UserService {
     }
 
     public void updateUserPlan(User user, UserPlan userPlan,
-                               List<Place> userPlanPlaces, List<Place> likedPlaces) throws IllegalAccessException {
+                               List<Place> userPlanPlaces) throws IllegalAccessException {
         if (userPlan != null) {
             UserPlan updatedUserPlan = UserPlan.builder()
                     .name(userPlan.getName())
@@ -107,7 +107,7 @@ public class UserService {
                     .userPlans(user.getUserPlans())
                     .savedPlans(user.getSavedPlans())
                     .tags(user.getTags())
-                    .likedPlaces(likedPlaces)
+//                    .likedPlaces(likedPlaces)
                     .role(user.getRole())
                     .build();
 

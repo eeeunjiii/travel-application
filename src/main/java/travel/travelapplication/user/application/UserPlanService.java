@@ -2,6 +2,7 @@ package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import travel.travelapplication.dto.userplan.SelectedPlaceDto;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.domain.User;
@@ -22,7 +23,7 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 @RequiredArgsConstructor
 @Slf4j
 public class UserPlanService {
-  
+
     private final UserService userService;
     private final PlaceService placeService;
     private final UserPlanRepository userPlanRepository;
@@ -49,7 +50,7 @@ public class UserPlanService {
         UserPlan userPlan = userPlanRepository.findById(userPlanId)
                 .orElse(null);
 
-        if(userPlan!=null) {
+        if (userPlan != null) {
             return userPlan;
         } else {
             throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
@@ -57,24 +58,21 @@ public class UserPlanService {
     }
 
     public void shareUserPlan(UserPlan userPlan) { // 공개 처리 -> 커뮤니티 공유
-        Plan plan=new Plan(userPlan.getName(), userPlan);
+        Plan plan = new Plan(userPlan.getName(), userPlan);
         planRepository.insert(plan);
     }
 
-    public void savePlaceToUserPlan(User user, UserPlan userPlan,
-                                    LikedPlaceList likedPlaceList) throws IllegalAccessException {
-        List<Place> likedPlaces = new LinkedList<>();
+    public void savePlaceToNewUserPlan(User user, List<String> selectedPlaceId) throws IllegalAccessException {
+        UserPlan userPlan = new UserPlan();
         List<Place> userPlanPlaces = new LinkedList<>();
 
-        for(String likedPlaceId : likedPlaceList.getLikedPlaces()) {
-            Place place = placeService.findByPlaceId(likedPlaceId);
-
+        for (String placeId : selectedPlaceId) {
+            Place place = placeService.findByPlaceId(placeId);
             userPlanPlaces.add(place);
-            likedPlaces.add(place);
         }
 
         UserPlan savedUserPlan = updateUserPlanPlaces(userPlan, userPlanPlaces);
-        userService.updateUserPlan(user, savedUserPlan, userPlanPlaces, likedPlaces);
+        userService.updateUserPlan(user, savedUserPlan, userPlanPlaces);
     }
 
     private UserPlan updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
