@@ -5,7 +5,7 @@
     <title>Plan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/custom.js"></script>
+    <script src="/resources/static/js/custom.js"></script>
 </head>
 <body>
     <div>
@@ -64,8 +64,167 @@
     </div>
 
     <div>
+        <h3>댓글</h3>
+
+        <!-- comments가 비어 있을 때 -->
+        <div th:if="${#lists.isEmpty(comments) or comments == null}">
+            <p>아직 댓글이 없습니다. 첫 번째 댓글을 작성해보세요!</p>
+            <textarea id="commentContent" placeholder="댓글을 입력하세요"></textarea><br>
+            <button class="submitComment" type="button">댓글 등록</button>
+        </div>
+
+        <!-- comments가 있을 때 -->
+        <div th:unless="${#lists.isEmpty(comments)}">
+            <div id="commentList">
+                <h4>댓글 목록</h4>
+                <ul>
+                    <li th:each="comment : ${comments}">
+                        <div style="display: flex; align-items: center;">
+                            <p style="margin-right: 10px;" th:text="${comment.email}">사용자</p>:
+                            <p th:text="${comment.content}">댓글 내용</p>
+                        </div>
+                        <button class="reply-button" th:data-comment-id="${comment.id}" type="button">답글</button>
+
+                        <div class="reply-form" style="display:none; margin-top: 10px;">
+                            <textarea th:id="'replyContent-' + ${comment.id}" placeholder="답글을 입력하세요"></textarea><br>
+                            <button class="submitReply" type="button" th:data-comment-id="${comment.id}">답글 등록</button>
+                        </div>
+
+                        <ul th:id="'replyList-' + ${comment.id}">
+                            <li th:if="${#lists.isEmpty(comment.replies)}" class="no-reply-text">
+                                아직 답글이 없습니다. 첫 번째 답글을 작성해보세요!
+                            </li>
+                            <li th:each="reply : ${comment.replies}">
+                                <div style="display: flex; align-items: center;">
+                                    <p style="margin-right: 10px;" th:text="${reply.email}">사용자</p>:
+                                    <p th:text="${reply.content}">답글 내용</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 댓글 입력 폼 -->
+            <div>
+                <textarea id="commentContent" placeholder="댓글을 입력하세요"></textarea><br>
+                <button class="submitComment" type="button">댓글 등록</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
         <button onclick="location.href='communityList.html'"
                 th:onclick="|location.href='@{/plans/community}'|" type="button">커뮤니티 목록</button>
     </div>
+
 </body>
+<script>
+    $(document).on('click', '.submitComment', function() {
+            const content = $('#commentContent').val();
+            const planId = /*[[${plan.id}]]*/ '[[${plan.id}]]';
+            const email = /*[[${#authentication.getPrincipal().getEmail()}]]*/ '[[${#authentication.getPrincipal().getEmail()}]]';
+            const commentDto={
+                content: content,
+                email: email
+            };
+
+            console.log("Submitting comment with content: ", content);
+
+            $.ajax({
+                url: `/plans/community/comment/${planId}`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(commentDto),
+                success: function(response) {
+                    if(response) {
+                        const newCommentElement = $(`
+                            <li>
+                                <div style="display: flex; align-items: center;">
+                                    <p style="margin-right: 10px;">${response.email}</p>:
+                                    <p>${response.content}</p>
+                                </div>
+
+                                <button class="reply-button" data-comment-id="${response.id}" type="button">답글</button>
+                                <div class="reply-form" style="display:none; margin-top: 10px;">
+                                    <textarea th:id="'replyContent-' + ${response.id}" placeholder="답글을 입력하세요"></textarea><br>
+                                    <button class="submitReply" type="button" th:data-comment-id="${response.id}">답글 등록</button>
+                                </div>
+                                <ul th:id="'replyList-' + ${response.id}">
+                                    <li class="no-reply-text">아직 답글이 없습니다. 첫 번째 답글을 작성해보세요!</li>
+                                </ul>
+                            </li>
+                        `);
+
+                        $('#commentList > ul').append(newCommentElement);
+
+                        newCommentElement.find('.reply-button').click(function() {
+                            $(this).next('.reply-form').toggle();
+                        });
+
+                        $('#commentContent').val('');
+                    } else {
+                        alert('댓글 등록에 실패했습니다.');
+                    }
+                },
+                error: function() {
+                    alert('댓글 등록에 실패했습니다.');
+                }
+            });
+    });
+
+    // 답글 버튼 클릭 시 답글 폼 토글
+    $(document).on('click', '.reply-button', function() {
+        $(this).next('.reply-form').toggle();
+    });
+
+    // 답글 등록 버튼 클릭 시 동작
+    $(document).on('click', '.submitReply', function() {
+        const commentId=$(this).data('comment-id');
+        const content=$(`#replyContent-${commentId}`).val();
+        const email=/*[[${#authentication.getPrincipal().getEmail()}]]*/ '[[${#authentication.getPrincipal().getEmail()}]]';
+
+        const replyDto={
+            content: content,
+            email: email
+        };
+
+        const submitButton = $(this);
+
+        console.log(`Content value: ${commentId}`);
+
+
+        $.ajax({
+            url: `/plans/community/reply/${commentId}`,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(replyDto),
+            success: function(response) {
+                if(response) {
+                    const replyElement=$(`
+                        <li>
+                            <div style="display: flex; align-items: center;">
+                                <p style="margin-right: 10px;">${response.email}</p>:
+                                <p>${response.content}</p>
+                            </div>
+                        </li>
+                    `);
+
+                    const replyList = $(`#replyList-${commentId}`);
+                    replyList.find('.no-reply-text').remove();
+                    replyList.append(replyElement);
+
+                    submitButton.prev('.replyContent').val('');  // 입력 필드 초기화
+                    submitButton.closest('.reply-form').hide();
+                } else {
+                    alert('답글 등록에 실패했습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error occurred while saving reply: ", error);
+            }
+        });
+    });
+</script>
 </html>

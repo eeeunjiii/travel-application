@@ -10,9 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import travel.travelapplication.user.domain.UserPlan;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Document(collection = "Plan")
 @Getter
@@ -35,6 +33,9 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     @DBRef
     private UserPlan userPlan;
 
+    @DBRef
+    private List<Comment> comments=new LinkedList<>();
+
     @PersistenceCreator
     public Plan() {
 
@@ -42,10 +43,11 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
 
     @PersistenceCreator
     @Builder
-    public Plan(String name, UserPlan userPlan, String userEmail) {
+    public Plan(String name, UserPlan userPlan, String userEmail, List<Comment> comments) {
         this.name = name;
         this.userPlan = userPlan;
         this.userEmail=userEmail;
+        this.comments=comments;
     }
 
     public void update(Plan updatedPlan) {
