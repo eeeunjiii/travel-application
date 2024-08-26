@@ -42,7 +42,7 @@ public class PlaceController {
     @PostMapping("/add-like")
     public ResponseEntity<String> addLike(@RequestBody String placeId) {
         Place place = placeService.findByPlaceId(placeId);
-        System.out.println("Add like: " + place);
+        System.out.println("Add like: " + place.toString());
         return ResponseEntity.ok("Like added successfully");
     }
 

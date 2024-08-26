@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -167,9 +169,10 @@ public class UserPlanController {
     }
 
     @PostMapping("/save-places")
-    public String savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
-                                       Model model,
-                                       @AuthenticationPrincipal CustomOAuth2User oAuth2User)
+    public ResponseEntity<Map<String, Object>> savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
+                                                                    Model model,
+                                                                    @ModelAttribute("userPlan") UserPlanInfoDto userPlan,
+                                                                    @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
         List<Place> selectedPlaces = new ArrayList<>();
@@ -181,9 +184,14 @@ public class UserPlanController {
         model.addAttribute("selectedPlaces", selectedPlaces);
         userPlanService.savePlaceToNewUserPlan(user, selectedPlaceId);
 
+        // JSON으로 변환
+        Map<String, Object> response = new HashMap<>();
+        response.put("selectedPlaces", selectedPlaces);
+        response.put("userPlan", userPlan);
+
         log.info(selectedPlaces.toString());
 
-        return "test/savedUserPlan";
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
