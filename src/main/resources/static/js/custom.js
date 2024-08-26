@@ -261,6 +261,8 @@ $(function(){
 /*=========================================================================
             상시 사용 함수
  =========================================================================*/
+ let selectedPlaces = [];
+
 document.addEventListener('DOMContentLoaded', function() {
     fetchRecommendations();
 });
@@ -357,12 +359,12 @@ async function fetchRecommendations() {
 }
 
 
-
 function selectPlaces(){
-    const selectedPlaces = [];
+
     document.querySelectorAll('.place-item').forEach(item => {
         item.addEventListener('click', function() {
-            const selectedIndex = selectedPlaces.indexOf(this);
+            const placeId = this.querySelector('img').getAttribute('alt')
+            const selectedIndex = selectedPlaces.indexOf(placeId);
 
             if (selectedIndex > -1) {
                 selectedPlaces.splice(selectedIndex, 1); // selectedIndex로부터 1개 항목 제거
@@ -371,7 +373,7 @@ function selectPlaces(){
                 if (numberSpan) numberSpan.remove();
             } else {
                 if (selectedPlaces.length < 6) { // 최대 6개까지만 선택 가능
-                    selectedPlaces.push(this);
+                    selectedPlaces.push(placeId);
                     this.classList.add('selected');
                     let numberSpan = document.createElement('span');
                     numberSpan.classList.add('selection-index');
@@ -380,14 +382,20 @@ function selectPlaces(){
             }
 
             // 선택된 순서에 따라 번호 매기기
-            selectedPlaces.forEach((item, index) => {
-                let numberSpan = item.querySelector('.selection-index');
-                if (!numberSpan) {
-                    numberSpan = document.createElement('span');
-                    numberSpan.classList.add('selection-index');
-                    item.prepend(numberSpan);
+            selectedPlaces.forEach((alt, index) => {
+                const placeItem = Array.from(document.querySelectorAll('.place-item')).find(item =>
+                item.querySelector('img').getAttribute('alt') === alt
+                );
+
+                if (placeItem) {
+                    let numberSpan = placeItem.querySelector('.selection-index');
+                    if (!numberSpan) {
+                        numberSpan = document.createElement('span');
+                        numberSpan.classList.add('selection-index');
+                        placeItem.prepend(numberSpan);
+                    }
+                    numberSpan.textContent = `${index + 1}`;
                 }
-                numberSpan.textContent = `${index + 1}`;
             });
         });
     });
@@ -395,13 +403,13 @@ function selectPlaces(){
 }
 
 // 선택한 장소 저장
-//document.getElementById('saveButton').addEventListener('click', function(event) {
+document.getElementById('saveButton').addEventListener('click', function() {
 //    const selectedPlaceIds = selectedPlaces.map(place => place.getAttribute('data-place-id'));
-//
-//    console.log('선택된 장소 IDs:', selectedPlaces);
-//    sendRequest('/user-plan/save-places', placeId, 'POST');
-//
-//}
+
+    console.log('선택된 장소 IDs:', selectedPlaces);
+    sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
+
+});
 
 
 

@@ -426,7 +426,9 @@
                         <!-- post bottom section -->
                         <div class="post-bottom">
                             <div class="row d-flex align-items-center">
-                                <button id="saveButton">저장</button>
+                                <button id="saveButton"
+                                        onclick="sendRequest('/user-plan/save-places', selectedPlaces, 'POST');">저장
+                                </button>
                             </div>
                         </div>
 

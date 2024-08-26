@@ -16,6 +16,7 @@ import travel.travelapplication.dto.user.UserDto;
 import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.dto.userplan.SelectedPlaceDto;
 import travel.travelapplication.dto.userplan.UserPlanDto;
+import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
@@ -34,6 +35,7 @@ public class UserPlanController {
 
     private final UserPlanService userPlanService;
     private final UserService userService;
+    private final PlaceService placeService;
 
     @GetMapping("/single")
     public String userPlan() {
@@ -165,13 +167,17 @@ public class UserPlanController {
     }
 
     @PostMapping("/save-places")
-    public String savePlacesToUserPlan(@PathVariable("userPlanId") ObjectId userPlanId,
-                                       @ModelAttribute("selectedPlaces") List<String> selectedPlaceId, Model model,
+    public String savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
+                                       Model model,
                                        @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
         List<Place> selectedPlaces = new ArrayList<>();
 
+        for (String placeId : selectedPlaceId) {
+            Place place = placeService.findByPlaceId(placeId);
+            selectedPlaces.add(place);
+        }
         model.addAttribute("selectedPlaces", selectedPlaces);
         userPlanService.savePlaceToNewUserPlan(user, selectedPlaceId);
 
