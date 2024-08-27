@@ -61,6 +61,10 @@
             <button th:onclick="|location.href='@{/user-plan/{userPlanId}/places(userPlanId=${userPlan.id})}'|"
                     type="button">좋아요 여행지 선택</button>
         </div>
+        <div>
+            <button th:onclick="|location.href='@{/places/{userPlanId}/routes(userPlanId=${userPlan.id})}'|"
+                    type="button">여행 경로 확인</button>
+        </div>
     </div>
 </div>
 
