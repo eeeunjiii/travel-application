@@ -8,8 +8,8 @@ import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
 import travel.travelapplication.place.repository.TagRepository;
+import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.User;
-import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
 import travel.travelapplication.user.repository.UserRepository;
 
@@ -23,13 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
-    private final UserPlanRepository userPlanRepository;
 
     public void save(User user) {
         userRepository.save(user);
     }
 
-    public User updateUserName(String email, String username) throws IllegalAccessException {
+    public void updateUserName(String email, String username) throws IllegalAccessException {
         User user=userRepository.findByEmail(email)
                 .orElse(null);
 
@@ -47,7 +46,6 @@ public class UserService {
 
             user.update(updatedUser);
             save(user);
-            return user;
         } else {
             throw new IllegalAccessException("존재하지 않는 사용자입니다.");
         }
@@ -78,25 +76,7 @@ public class UserService {
         }
     }
 
-    public void updateUserPlan(User user, UserPlan userPlan,
-                               List<Place> userPlanPlaces, List<Place> likedPlaces) throws IllegalAccessException {
-        if(userPlan!=null) {
-            UserPlan updatedUserPlan = UserPlan.builder()
-                    .name(userPlan.getName())
-                    .startDate(userPlan.getStartDate())
-                    .endDate(userPlan.getEndDate())
-                    .budget(userPlan.getBudget())
-                    .city(userPlan.getCity())
-                    .district(userPlan.getDistrict())
-                    .status(userPlan.getStatus())
-                    .places(userPlanPlaces)
-                    .routes(userPlan.getRoutes())
-                    .build();
-
-            userPlan.update(updatedUserPlan);
-            userPlanRepository.save(userPlan);
-        }
-
+    public void updateLikedPlaces(User user, List<Place> likedPlaces) throws IllegalAccessException {
         if(user!=null) {
             User updatedUser = User.builder()
                     .name(user.getName())
@@ -114,6 +94,22 @@ public class UserService {
         } else {
             throw new IllegalAccessException("존재하지 않는 사용자입니다.");
         }
+    }
+
+    public void updateUserSavedPlans(User user, List<Plan> savedPlans) {
+        User updatedUser=User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .userPlans(user.getUserPlans())
+                .tags(user.getTags())
+                .likedPlaces(user.getLikedPlaces())
+                .savedPlans(savedPlans)
+                .role(user.getRole())
+                .accessToken(user.getAccessToken())
+                .build();
+
+        user.update(updatedUser);
+        save(user);
     }
 
     public List<Tag> findAllTag(User user) throws IllegalAccessException {

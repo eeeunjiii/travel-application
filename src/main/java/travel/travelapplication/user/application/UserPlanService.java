@@ -68,7 +68,7 @@ public class UserPlanService {
         if(existingPlan!=null) {
             planService.updatePlanFromUserPlanInfo(existingPlan, userPlan);
         } else {
-            Plan plan=new Plan(userPlan.getName(), userPlan,  user.getEmail());
+            Plan plan=new Plan(userPlan.getName(), userPlan,  user.getEmail(), new LinkedList<>());
             planRepository.insert(plan);
         }
     }
@@ -91,11 +91,11 @@ public class UserPlanService {
             }
         }
 
-        UserPlan savedUserPlan = updateUserPlanPlaces(userPlan, userPlanPlaces);
-        userService.updateUserPlan(user, savedUserPlan, userPlanPlaces, likedPlaces);
+        updateUserPlanPlaces(userPlan, userPlanPlaces);
+        userService.updateLikedPlaces(user, likedPlaces);
     }
 
-    private UserPlan updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
+    private void updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
         UserPlan updatedUserPlan = UserPlan.builder()
                 .name(userPlan.getName())
                 .startDate(userPlan.getStartDate())
@@ -110,7 +110,6 @@ public class UserPlanService {
 
         userPlan.update(updatedUserPlan);
         save(userPlan);
-        return userPlan;
     }
 
     public void save(UserPlan userPlan) {

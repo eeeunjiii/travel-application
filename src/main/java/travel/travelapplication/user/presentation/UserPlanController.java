@@ -1,6 +1,7 @@
 package travel.travelapplication.user.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -9,10 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
+import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.constant.Status;
-import travel.travelapplication.dto.user.UserDto;
-import travel.travelapplication.dto.userplan.SelectedPlaceDto;
-import travel.travelapplication.dto.userplan.UserPlanDto;
+import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
@@ -112,8 +112,7 @@ public class UserPlanController {
 
     @PostMapping("/plan-info")
     public String saveUserPlan(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-                               @ModelAttribute("userPlan") UserPlanInfoDto userPlan,
-                               @ModelAttribute("user") UserDto user, Model model,
+                               @ModelAttribute("userPlan") UserPlanInfoDto userPlan, Model model,
                                HttpServletRequest request)
             throws IllegalAccessException {
         User userInfo = userService.findUserByEmail(oAuth2User);
@@ -142,6 +141,33 @@ public class UserPlanController {
         model.addAttribute("userPlan", userPlan);
 
         return "user-plan";
+    }
+
+    @GetMapping("/{userPlanId}/places")
+    public String selectLikedPlaces(HttpServletRequest request, Model model,
+                                    @PathVariable("userPlanId") ObjectId userPlanId) throws IllegalAccessException {
+        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
+
+        HttpSession session = request.getSession();
+        List<SessionUser> places = (List<SessionUser>) session.getAttribute("recommendation-result");
+
+        model.addAttribute("userPlan", userPlan);
+        model.addAttribute("likedPlaceList", new LikedPlaceList());
+        model.addAttribute("places", places);
+
+        return "test/selectLikedPlacesForm";
+    }
+
+    @PostMapping("/{userPlanId}/places")
+    public String saveLikedPlacesToUserPlan(@PathVariable("userPlanId") ObjectId userPlanId,
+                                            @ModelAttribute("likedPlaceList") LikedPlaceList likedPlaceList,
+                                            @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
+        User user = userService.findUserByEmail(oAuth2User);
+        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
+
+        userPlanService.savePlaceToUserPlan(user, userPlan, likedPlaceList);
+
+        return "redirect:/home";
     }
 
 

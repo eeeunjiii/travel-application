@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Route</title>
+</head>
+<body>
+<div id="map" style="width:700px;height:800px;"></div>
+<div>
+    <ul>
+        <li>총 거리
+            <ul>
+                <li th:text="${distance}">총 거리</li>
+            </ul>
+        </li>
+
+        <li>총 소요 시간
+            <ul>
+                <li th:text="${duration}">총 소요 시간</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84e05213a8dae264f7570545fdfc11a3&libraries=services,clusterer,drawing"></script>
+<script th:inline="javascript">
+    var positions = /*[[${apiResult}]]*/ [];
+
+    var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(positions[0].y, positions[0].x),
+                level: 2
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var linePath = positions.map(function(position) {
+            return new kakao.maps.LatLng(position.y, position.x);
+        });
+
+        // 출발지 마커
+        var startSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png',
+            startSize = new kakao.maps.Size(50, 45),
+            startOption = {
+                offset: new kakao.maps.Point(15, 43)
+            };
+
+        var startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
+        var startPosition = new kakao.maps.LatLng(positions[0].y, positions[0].x);
+
+        var startMarker = new kakao.maps.Marker({
+            map: map,
+            position: startPosition,
+            title: positions[0].name,
+            draggable: false,
+            image: startImage
+        });
+
+        // 도착지 마커
+        var arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png',
+            arriveSize = new kakao.maps.Size(50, 45),
+            arriveOption = {
+                offset: new kakao.maps.Point(15, 43)
+            };
+
+        var arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
+
+        var len=positions.length;
+
+        var arrivePosition = new kakao.maps.LatLng(positions[len-1].y, positions[len-1].x);
+
+        var arriveMarker = new kakao.maps.Marker({
+            map: map,
+            position: arrivePosition,
+            title: positions[len-1].name,
+            draggable: false,
+            image: arriveImage
+        });
+
+        var polyline = new kakao.maps.Polyline({
+            path: linePath,
+            strokeWeight: 5,
+            strokeColor: '#146C43',
+            strokeOpacity: 1,
+            strokeStyle: 'solid'
+        });
+
+        polyline.setMap(map);
+    </script>
+</body>
+</html>
