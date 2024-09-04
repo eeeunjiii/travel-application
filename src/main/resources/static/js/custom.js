@@ -257,8 +257,39 @@ $(function(){
 
 });
 
+
 /*=========================================================================
-        USER PLAN 제작 관련
+            상시 사용 함수
+ =========================================================================*/
+ let selectedPlaces = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchRecommendations();
+});
+
+async function sendRequest(url, data, methodType){
+    try {
+        const response = await fetch(url, {
+            method: methodType,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+/*=========================================================================
+            USER PLAN 제작 관련
  =========================================================================*/
 
  // 예산 상관 없음
@@ -275,7 +306,6 @@ $(function(){
                  budgetHidden.value=9999999;
              }
          }
-
 
 //오늘 날짜 가져오기
 //document.addEventListener('DOMContentLoaded', function() {
@@ -367,36 +397,112 @@ async function fetchRecommendations() {
         placeItem.innerHTML = `
             <a>
                 <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                <img src="카카오맵에서 가져온 사진" alt="여행지 사진">
+                <img src="카카오맵에서 가져온 사진" alt="${recommendation.placeId}">
                 <h5>${recommendation.name}</h5>
-                <p><a href="카카오맵 장소 설명으로 이동">상세 설명 보기</a></p>
+                <p><a href="카카오맵 장소 설명으로 이동">${recommendation.address}</a></p>
             </a>
         `;
         container.appendChild(placeItem);
     });
 
-    // 추천 결과도 선택 가능하도록 수정
-    document.querySelectorAll('.place-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const selected = document.querySelector('.place-item.selected');
-            if (selected && selected !== this) {
-                selected.classList.remove('selected');
-            }
-            this.classList.toggle('selected', !this.classList.contains('selected'));
-        });
-    });
+    // 추천 결과도 선택에 포함
+    selectPlaces();
 }
 
-// 여행정보 제출 시 추천 데이터 가져오기
-//document.addEventListener('DOMContentLoaded', initializePage);
+
+function selectPlaces(){
+
+    document.querySelectorAll('.place-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const placeId = this.querySelector('img').getAttribute('alt')
+            const selectedIndex = selectedPlaces.indexOf(placeId);
+
+            if (selectedIndex > -1) {
+                selectedPlaces.splice(selectedIndex, 1); // selectedIndex로부터 1개 항목 제거
+                this.classList.remove('selected');
+                const numberSpan = this.querySelector('.selection-index');
+                if (numberSpan) numberSpan.remove();
+            } else {
+                if (selectedPlaces.length < 6) { // 최대 6개까지만 선택 가능
+                    selectedPlaces.push(placeId);
+                    this.classList.add('selected');
+                    let numberSpan = document.createElement('span');
+                    numberSpan.classList.add('selection-index');
+                    this.prepend(numberSpan);
+                }
+            }
+
+            // 선택된 순서에 따라 번호 매기기
+            selectedPlaces.forEach((alt, index) => {
+                const placeItem = Array.from(document.querySelectorAll('.place-item')).find(item =>
+                item.querySelector('img').getAttribute('alt') === alt
+                );
+
+                if (placeItem) {
+                    let numberSpan = placeItem.querySelector('.selection-index');
+                    if (!numberSpan) {
+                        numberSpan = document.createElement('span');
+                        numberSpan.classList.add('selection-index');
+                        placeItem.prepend(numberSpan);
+                    }
+                    numberSpan.textContent = `${index + 1}`;
+                }
+            });
+        });
+    });
+
+}
+
+// 선택한 장소 저장
+document.getElementById('saveButton').addEventListener('click', function() {
+    const userPlanId = document.getElementById('userPlanId').value;
+
+    console.log('선택된 장소 IDs:', selectedPlaces);
+    sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
+
+});
+
+
+
+/*=========================================================================
+            장소 좋아요 관련
+ =========================================================================*/
 
 function toggleHeart(element) {
   if (element.textContent === '🩶') {
-    element.textContent = '❤️'; // 채운 하트로 변경
-  } else {
-    element.textContent = '🩶'; // 빈 하트로 변경
+    element.textContent = '❤️';
+    addLike(element);
+  } else if(element.textContent === '❤️'){
+    element.textContent = '🩶';
+    delLike(element);
+  }else{
+      element.textContent = '🩶';
   }
 }
+
+function addLike(element) {
+    const placeItem = element.closest('.place-item');
+    const placeId = placeItem.querySelector('img').alt;
+    const placeName = placeItem.querySelector('h5').textContent;
+    const placeAddress = placeItem.querySelector('p').textContent;
+
+    console.log('Liked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
+
+    sendRequest('/places/add-like', placeId, 'POST');
+}
+
+function delLike(element){
+    const placeItem = element.closest('.place-item');
+    const placeId = placeItem.querySelector('img').alt;
+    const placeName = placeItem.querySelector('h5').textContent;
+    const placeAddress = placeItem.querySelector('p').textContent;
+
+    console.log('Unliked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
+
+    sendRequest('/places/del-like', placeId, 'DELETE');
+}
+
+
 
 
 /*=========================================================================

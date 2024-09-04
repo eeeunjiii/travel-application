@@ -24,14 +24,14 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 @RequiredArgsConstructor
 @Slf4j
 public class UserPlanService {
-  
+
     private final UserService userService;
     private final PlaceService placeService;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
     private final PlanService planService;
-
-    public void createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
+  
+    public UserPlan createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
         UserPlan userPlan = userPlanInfoDto.toEntity();
 
         UserPlan savedUserPlan = userPlanRepository.insert(userPlan);
@@ -41,27 +41,39 @@ public class UserPlanService {
 
         user.update(user);
         userService.save(user);
-
+      
         if(isPublic(userPlan.getStatus())) {
             shareUserPlan(savedUserPlan, user);
         }
+      
+        return userPlan;
     }
 
     public List<UserPlan> findAllUserPlan(User user) {
         return user.getUserPlans();
     }
 
-    public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
-        UserPlan userPlan = userPlanRepository.findById(userPlanId)
-                .orElse(null);
+    public UserPlan findUserPlanById(String userPlanId) throws IllegalAccessException {
 
-        if(userPlan!=null) {
-            return userPlan;
+        if (ObjectId.isValid(userPlanId)) { // String -> ObjectId
+            ObjectId objectId = new ObjectId(userPlanId);
+            System.out.println("ObjectId: " + objectId);
+
+            UserPlan userPlan = userPlanRepository.findById(objectId)
+                    .orElse(null);
+
+            if (userPlan != null) {
+                System.out.println("user plan found");
+                return userPlan;
+            } else {
+                throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+            }
+
         } else {
-            throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+            throw new IllegalAccessException("userPlanId is not valid");
         }
     }
-
+  
     public void shareUserPlan(UserPlan userPlan, User user) { // 공개 처리 -> 커뮤니티 공유
         Plan existingPlan=planRepository.findByUserPlan(userPlan);
 
@@ -75,24 +87,6 @@ public class UserPlanService {
 
     private boolean isPublic(Status status) {
         return status.equals(Status.PUBLIC);
-    }
-
-    public void savePlaceToUserPlan(User user, UserPlan userPlan,
-                                    LikedPlaceList likedPlaceList) throws IllegalAccessException {
-        List<Place> likedPlaces = user.getLikedPlaces();
-        List<Place> userPlanPlaces = new LinkedList<>();
-
-        for(String likedPlaceId : likedPlaceList.getLikedPlaces()) {
-            Place place = placeService.findByPlaceId(likedPlaceId);
-
-            userPlanPlaces.add(place);
-            if(!likedPlaces.contains(place)) {
-                likedPlaces.add(place);
-            }
-        }
-
-        updateUserPlanPlaces(userPlan, userPlanPlaces);
-        userService.updateLikedPlaces(user, likedPlaces);
     }
 
     private void updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {

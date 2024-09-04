@@ -18,6 +18,8 @@ public class RecommendationController {
     @GetMapping("/recommendations")
     public CompletableFuture<List<Recommendation>> fetchData() {
         return service.fetchData();
+    }
+
 
     }
 }

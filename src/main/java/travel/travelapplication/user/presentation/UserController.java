@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
+import travel.travelapplication.dto.user.UserDto;
 import travel.travelapplication.user.application.UserPlanService;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
@@ -18,12 +19,11 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/myroom")
+@RequestMapping("/my-page")
 public class UserController {
 
     private final UserService userService;
     private final UserPlanService userPlanService;
-    private final ResourceLoader resourceLoader;
 
     @GetMapping
     public String profile() {
@@ -39,7 +39,7 @@ public class UserController {
         model.addAttribute("oldName", user.getName());
         model.addAttribute("userEmail", user.getEmail());
 
-        return "editUsername";
+        return "test/editUsername";
     }
 
     @PostMapping("/profile/username")
@@ -66,4 +66,6 @@ public class UserController {
 
         return "test/userPlans";
     }
+
+
 }

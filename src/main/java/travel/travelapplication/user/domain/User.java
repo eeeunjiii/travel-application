@@ -49,6 +49,14 @@ public class User {
     public User() {
     }
 
+    public void addLikedPlace(Place place) {
+        this.likedPlaces.add(place);
+    }
+
+    public void delLikedPlace(Place place) {
+        this.likedPlaces.remove(place);
+    }
+
     @PersistenceCreator
     @Builder
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,

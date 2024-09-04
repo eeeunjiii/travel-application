@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Saved User Plan</title>
+</head>
+<body>
+<div>여행 제목</div>
+<div th:text="${userPlan.name}"></div>
+
+<div>여행 시작일</div>
+<div th:text="${userPlan.startDate}"></div>
+
+<div>여행 종료일</div>
+<div th:text="${userPlan.endDate}"></div>
+
+<div>여행 예산</div>
+<div th:text="${userPlan.budget}"></div>
+
+<div>시 · 도</div>
+<div th:text="${userPlan.city}"></div>
+
+<div>시 · 군 · 구</div>
+<div th:text="${userPlan.district}"></div>
+
+<div th:text="${userPlan.status}"></div>
+
+<div>선택된 장소</div>
+<div th:text="${selectedPlaces}"></div>
+</body>
+</html>

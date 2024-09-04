@@ -150,28 +150,28 @@
                 </nav>
 
                 <!-- post header -->
-                <div class="post-header">
-                    <h1 class="title mt-0 mb-3">
-                        <input type="text" id="titleInput" value="일정 제목"/>
-                    </h1>
-                    <ul class="meta list-inline mb-0">
-                        <li class="list-inline-item"><a href="#"><img class="author"
-                                                                      src="static/images/other/default.png"
-                                                                      alt="author"/></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <th:block sec:authorize="isAuthenticated()">
-                                <div th:if="${user != null}" th:object="${user}">
-                                    <span th:text="*{name}">username</span><br>
-                                </div>
-                                <div th:if="${user == null}">
-                                    <span>anonymous</span><br>
-                                </div>
-                            </th:block>
-                        </li>
-                        <li class="list-inline-item" id="current-date"></li>
-                    </ul>
-                </div>
+                <!--                <div class="post-header">-->
+                <!--                    <h1 class="title mt-0 mb-3">-->
+                <!--                        <input type="text" id="titleInput" value="일정 제목"/>-->
+                <!--                    </h1>-->
+                <!--                    <ul class="meta list-inline mb-0">-->
+                <!--                        <li class="list-inline-item"><a href="#"><img class="author"-->
+                <!--                                                                      src="static/images/other/default.png"-->
+                <!--                                                                      alt="author"/></a>-->
+                <!--                        </li>-->
+                <!--                        <li class="list-inline-item">-->
+                <!--                            <th:block sec:authorize="isAuthenticated()">-->
+                <!--                                <div th:if="${user != null}" th:object="${user}">-->
+                <!--                                    <span th:text="*{email}">username</span><br>-->
+                <!--                                </div>-->
+                <!--                                <div th:if="${user == null}">-->
+                <!--                                    <span>anonymous</span><br>-->
+                <!--                                </div>-->
+                <!--                            </th:block>-->
+                <!--                        </li>-->
+                <!--                        <li class="list-inline-item" id="current-date"></li>-->
+                <!--                    </ul>-->
+                <!--                </div>-->
             </div>
 
         </div>
@@ -198,6 +198,8 @@
                                 <div th:if="${not infoSubmitted}">
                                     <form action="#" th:action="@{/user-plan/plan-info}" th:object="${userPlan}"
                                           th:method="post">
+                                        <div>여행 제목</div>
+                                        <input type="text" th:field="*{name}">
 
                                         <div>여행 시작일</div>
                                         <input type="date" th:field="*{startDate}"/>
@@ -242,6 +244,9 @@
                                     </form>
                                 </div>
                                 <div th:if="${infoSubmitted}">
+                                    <div>여행 제목</div>
+                                    <div th:text="${userPlan.name}"></div>
+
                                     <div>여행 시작일</div>
                                     <div th:text="${userPlan.startDate}"></div>
 
@@ -265,18 +270,18 @@
                             <div class="widget-header text-center">
                                 <h3 class="widget-title">Time Table</h3>
                             </div>
-                            <div class="widget-content">
+                            <div class="widget-content" th:if="${infoSubmitted}">
                                 <ul class="list">
                                     <!-- href는 음식점, 교통수단 등 오른쪽 화면에 표시할 내용으로 바꾸면 될 듯 -->
-                                    <li data-location="restaurant1"><a href="">아침 식사</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity1"><a href="#">오전 일정 1</a> <span>9:00 - 11:00</span></li>
-                                    <li data-location="activity2"><a href="#">오전 일정 2</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="restaurant2"><a href="#">점심 식사</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity3"><a href="#">오후 일정 1</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity4"><a href="#">오후 일정 2</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="restaurant3"><a href="#">저녁 식사</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity5"><a href="#">야간 일정 1</a><span>9:00 - 11:00</span></li>
-                                    <li data-location="activity6"><a href="#">야간 일정 2</a><span>9:00 - 11:00</span></li>
+                                    <li id="restaurant1">아침 식사<span>9:00 - 11:00</span></li>
+                                    <li id="activity1">오전 일정 1 <span>9:00 - 11:00</span></li>
+                                    <li id="activity2">오전 일정 2<span>9:00 - 11:00</span></li>
+                                    <li id="restaurant2">점심 식사<span>9:00 - 11:00</span></li>
+                                    <li id="activity3">오후 일정 1<span>9:00 - 11:00</span></li>
+                                    <li id="activity4">오후 일정 2<span>9:00 - 11:00</span></li>
+                                    <li id="restaurant3">저녁 식사<span>9:00 - 11:00</span></li>
+                                    <li id="activity5">야간 일정 1<span>9:00 - 11:00</span></li>
+                                    <li id="activity6">야간 일정 2<span>9:00 - 11:00</span></li>
                                 </ul>
                             </div>
 
@@ -303,7 +308,7 @@
                                     <h3>다른 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" id="other-list">
                                             <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
@@ -367,7 +372,7 @@
                                     <h3>좋아요 누른 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" id="liked-list">
                                             <div class="place-item">
                                                 <a>
                                                     <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
@@ -433,7 +438,9 @@
                         <!-- post bottom section -->
                         <div class="post-bottom">
                             <div class="row d-flex align-items-center">
-                                <button id="saveButton">저장</button>
+                                <button id="saveButton"
+                                        onclick="sendRequest('/user-plan/save-places', selectedPlaces, 'POST');">저장
+                                </button>
                             </div>
                         </div>
 
