@@ -30,7 +30,7 @@ public class UserPlanService {
     private final PlanRepository planRepository;
 
     // 1. 여행 사전정보(초기 일정 생성) 2. 추천 여행 장소 중 선택하여 일정 생성(기존 일정 업데이트)
-    public void createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
+    public UserPlan createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
         UserPlan userPlan = userPlanInfoDto.toEntity();
 
         UserPlan savedUserPlan = userPlanRepository.insert(userPlan);
@@ -40,20 +40,32 @@ public class UserPlanService {
 
         user.update(user);
         userService.save(user);
+
+        return userPlan;
     }
 
     public List<UserPlan> findAllUserPlan(User user) {
         return user.getUserPlans();
     }
 
-    public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
-        UserPlan userPlan = userPlanRepository.findById(userPlanId)
-                .orElse(null);
+    public UserPlan findUserPlanById(String userPlanId) throws IllegalAccessException {
 
-        if (userPlan != null) {
-            return userPlan;
+        if (ObjectId.isValid(userPlanId)) {
+            ObjectId objectId = new ObjectId(userPlanId);
+            System.out.println("ObjectId: " + objectId);
+
+            UserPlan userPlan = userPlanRepository.findById(objectId)
+                    .orElse(null);
+
+            if (userPlan != null) {
+                System.out.println("user plan found");
+                return userPlan;
+            } else {
+                throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+            }
+
         } else {
-            throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+            throw new IllegalAccessException("userPlanId is not valid");
         }
     }
 
@@ -71,11 +83,11 @@ public class UserPlanService {
             userPlanPlaces.add(place);
         }
 
-        UserPlan savedUserPlan = updateUserPlanPlaces(userPlan, userPlanPlaces);
-        userService.updateUserPlan(user, savedUserPlan, userPlanPlaces);
+        updateUserPlanPlaces(userPlan, userPlanPlaces);
+        userService.updateUserPlan(user, userPlan, userPlanPlaces);
     }
 
-    private UserPlan updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
+    public UserPlan updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
         UserPlan updatedUserPlan = UserPlan.builder()
                 .name(userPlan.getName())
                 .startDate(userPlan.getStartDate())

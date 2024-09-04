@@ -404,7 +404,7 @@ function selectPlaces(){
 
 // 선택한 장소 저장
 document.getElementById('saveButton').addEventListener('click', function() {
-//    const selectedPlaceIds = selectedPlaces.map(place => place.getAttribute('data-place-id'));
+    const userPlanId = document.getElementById('userPlanId').value;
 
     console.log('선택된 장소 IDs:', selectedPlaces);
     sendRequest('/user-plan/save-places', selectedPlaces, 'POST');

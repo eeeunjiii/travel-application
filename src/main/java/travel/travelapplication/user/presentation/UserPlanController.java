@@ -112,15 +112,9 @@ public class UserPlanController {
         return districts;
     }
 
-//    @GetMapping("/plan-info")
-//    public String userPlanInfoForm(Model model) {
-//        model.addAttribute("userPlan", new UserPlanInfoDto());
-//        return "test/getPlanInfoForm";
-//    }
-
     @PostMapping("/plan-info")
     public String saveUserPlan(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-                               @ModelAttribute("userPlan") UserPlanInfoDto userPlan,
+                               @ModelAttribute("userPlan") UserPlanInfoDto userPlanInfoDto,
                                @ModelAttribute("user") UserDto user, Model model,
                                HttpServletRequest request)
             throws IllegalAccessException {
@@ -129,24 +123,27 @@ public class UserPlanController {
         log.info("user.name: {}", userInfo.getName());
         log.info("user.email: {}", userInfo.getEmail());
 
-        log.info("userPlan.name: {}", userPlan.getName());
-        log.info("userPlan.startDate: {}", userPlan.getStartDate());
-        log.info("userPlan.endDate: {}", userPlan.getEndDate());
-        log.info("userPlan.budget: {}", userPlan.getBudget());
-        log.info("userPlan.city: {}", userPlan.getCity());
-        log.info("userPlan.district: {}", userPlan.getDistrict());
-        log.info("userPlan.status: {}", userPlan.getStatus());
+        log.info("userPlan.name: {}", userPlanInfoDto.getName());
+        log.info("userPlan.startDate: {}", userPlanInfoDto.getStartDate());
+        log.info("userPlan.endDate: {}", userPlanInfoDto.getEndDate());
+        log.info("userPlan.budget: {}", userPlanInfoDto.getBudget());
+        log.info("userPlan.city: {}", userPlanInfoDto.getCity());
+        log.info("userPlan.district: {}", userPlanInfoDto.getDistrict());
+        log.info("userPlan.status: {}", userPlanInfoDto.getStatus());
 
-        userPlanService.createNewUserPlan(userInfo, userPlan);
+        UserPlan userPlan = userPlanService.createNewUserPlan(userInfo, userPlanInfoDto);
         model.addAttribute("infoSubmitted", true);
 
-        model.addAttribute("userPlan", userPlan);
+        model.addAttribute("userPlanId", userPlan.getId());
+        model.addAttribute("userPlan", userPlanInfoDto);
         model.addAttribute("user", userInfo);
+
+        log.info("userPlan.id: {}", userPlan.getId());
         return "html/new-user-plan";
     }
 
     @GetMapping("/{userPlanId}")
-    public String userPlan(@PathVariable("userPlanId") ObjectId userPlanId, Model model) throws IllegalAccessException {
+    public String userPlan(@PathVariable("userPlanId") String userPlanId, Model model) throws IllegalAccessException {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
@@ -155,7 +152,7 @@ public class UserPlanController {
 
     @GetMapping("/{userPlanId}/places")
     public String selectLikedPlaces(HttpServletRequest request, Model model,
-                                    @PathVariable("userPlanId") ObjectId userPlanId) throws IllegalAccessException {
+                                    @PathVariable("userPlanId") String userPlanId) throws IllegalAccessException {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
 
         HttpSession session = request.getSession();
@@ -169,12 +166,16 @@ public class UserPlanController {
     }
 
     @PostMapping("/save-places")
-    public ResponseEntity<Map<String, Object>> savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
-                                                                    Model model,
-                                                                    @ModelAttribute("userPlan") UserPlanInfoDto userPlan,
-                                                                    @AuthenticationPrincipal CustomOAuth2User oAuth2User)
+    @ResponseBody
+    public Map<String, Object> savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
+                                                    Model model, @RequestParam("userPlanId") String userPlanId,
+                                                    UserPlanInfoDto userPlanInfo,
+                                                    @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
+        UserPlan foundUserPlan = userPlanService.findUserPlanById(userPlanId);
+        log.info("userPlan.id: {}", userPlanId);
+
         List<Place> selectedPlaces = new ArrayList<>();
 
         for (String placeId : selectedPlaceId) {
@@ -182,16 +183,16 @@ public class UserPlanController {
             selectedPlaces.add(place);
         }
         model.addAttribute("selectedPlaces", selectedPlaces);
-        userPlanService.savePlaceToNewUserPlan(user, selectedPlaceId);
+        userPlanService.updateUserPlanPlaces(foundUserPlan, selectedPlaces);
 
         // JSON으로 변환
         Map<String, Object> response = new HashMap<>();
         response.put("selectedPlaces", selectedPlaces);
-        response.put("userPlan", userPlan);
+        response.put("userPlan", userPlanInfo);
 
         log.info(selectedPlaces.toString());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
 }
