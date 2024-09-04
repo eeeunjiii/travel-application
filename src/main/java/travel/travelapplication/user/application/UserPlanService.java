@@ -2,9 +2,10 @@ package travel.travelapplication.user.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import travel.travelapplication.dto.userplan.SelectedPlaceDto;
+import travel.travelapplication.constant.Status;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.plan.application.PlanService;
 import travel.travelapplication.user.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class UserPlanService {
     private final PlaceService placeService;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
-
-    // 1. 여행 사전정보(초기 일정 생성) 2. 추천 여행 장소 중 선택하여 일정 생성(기존 일정 업데이트)
+    private final PlanService planService;
+  
     public UserPlan createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
         UserPlan userPlan = userPlanInfoDto.toEntity();
 
@@ -40,7 +41,11 @@ public class UserPlanService {
 
         user.update(user);
         userService.save(user);
-
+      
+        if(isPublic(userPlan.getStatus())) {
+            shareUserPlan(savedUserPlan, user);
+        }
+      
         return userPlan;
     }
 
@@ -50,7 +55,7 @@ public class UserPlanService {
 
     public UserPlan findUserPlanById(String userPlanId) throws IllegalAccessException {
 
-        if (ObjectId.isValid(userPlanId)) {
+        if (ObjectId.isValid(userPlanId)) { // String -> ObjectId
             ObjectId objectId = new ObjectId(userPlanId);
             System.out.println("ObjectId: " + objectId);
 
@@ -68,26 +73,23 @@ public class UserPlanService {
             throw new IllegalAccessException("userPlanId is not valid");
         }
     }
+  
+    public void shareUserPlan(UserPlan userPlan, User user) { // 공개 처리 -> 커뮤니티 공유
+        Plan existingPlan=planRepository.findByUserPlan(userPlan);
 
-    public void shareUserPlan(UserPlan userPlan) { // 공개 처리 -> 커뮤니티 공유
-        Plan plan = new Plan(userPlan.getName(), userPlan);
-        planRepository.insert(plan);
-    }
-
-    public void savePlaceToNewUserPlan(User user, List<String> selectedPlaceId) throws IllegalAccessException {
-        UserPlan userPlan = new UserPlan();
-        List<Place> userPlanPlaces = new LinkedList<>();
-
-        for (String placeId : selectedPlaceId) {
-            Place place = placeService.findByPlaceId(placeId);
-            userPlanPlaces.add(place);
+        if(existingPlan!=null) {
+            planService.updatePlanFromUserPlanInfo(existingPlan, userPlan);
+        } else {
+            Plan plan=new Plan(userPlan.getName(), userPlan,  user.getEmail(), new LinkedList<>());
+            planRepository.insert(plan);
         }
-
-        updateUserPlanPlaces(userPlan, userPlanPlaces);
-        userService.updateUserPlan(user, userPlan, userPlanPlaces);
     }
 
-    public UserPlan updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
+    private boolean isPublic(Status status) {
+        return status.equals(Status.PUBLIC);
+    }
+
+    private void updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
         UserPlan updatedUserPlan = UserPlan.builder()
                 .name(userPlan.getName())
                 .startDate(userPlan.getStartDate())
@@ -102,10 +104,47 @@ public class UserPlanService {
 
         userPlan.update(updatedUserPlan);
         save(userPlan);
-        return userPlan;
     }
 
     public void save(UserPlan userPlan) {
         userPlanRepository.save(userPlan);
+    }
+
+    public void updateUserPlanInfo(User user, UserPlan userPlan, UpdateUserPlanInfoDto userPlanInfoDto) {
+        UserPlan updatedUserPlan=updateNameAndStatus(userPlan, userPlanInfoDto);
+
+        user.update(user);
+        userService.save(user);
+
+        if(isPublic(userPlan.getStatus())) {
+            shareUserPlan(updatedUserPlan, user); // 만약 공개로 그대로 두고, 이름을 게속 바꾸면 이름만 다른 동일한 일정이 계속 저장되는 문제 발생
+        } else {
+            removePlanByUserPlan(updatedUserPlan);
+        }
+    }
+
+    private UserPlan updateNameAndStatus(UserPlan userPlan, UpdateUserPlanInfoDto userPlanInfoDto) {
+        UserPlan updatedUserPlan=UserPlan.builder()
+                .name(userPlanInfoDto.getName())
+                .startDate(userPlan.getStartDate())
+                .endDate(userPlan.getEndDate())
+                .budget(userPlan.getBudget())
+                .city(userPlan.getCity())
+                .district(userPlan.getDistrict())
+                .status(userPlanInfoDto.getStatus())
+                .places(userPlan.getPlaces())
+                .routes(userPlan.getRoutes())
+                .build();
+
+        userPlan.update(updatedUserPlan);
+        save(userPlan);
+        return userPlan;
+    }
+
+    private void removePlanByUserPlan(UserPlan userPlan) {
+        Plan planToRemove=planRepository.findByUserPlan(userPlan);
+        if(planToRemove!=null) {
+            planRepository.delete(planToRemove);
+        }
     }
 }

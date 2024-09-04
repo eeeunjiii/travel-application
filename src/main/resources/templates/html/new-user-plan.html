@@ -21,6 +21,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="../js/custom.js"></script>
+
 </head>
 
 <body>
@@ -206,9 +208,19 @@
                                         <input type="date" th:field="*{endDate}"/>
 
                                         <div>여행 예산</div>
-                                        <input type="range" id="budget" th:field="*{budget}" min="1" max="100"
-                                               value="50"/>
-                                        <span id="rangeValue"> 50 </span>
+                                        <label>
+                                            <input type="radio" name="budgetOption" value="noBudget" id="budgetNoLimit" onclick="toggleInput()" checked>
+                                            예산 상관 없음
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="budgetOption" value="customBudget" id="budgetDirectInput" onclick="toggleInput()">
+                                            예산 직접 입력
+                                        </label>
+                                        <div id="budgetInput" style="display:none;">
+                                            <input type="range" id="budget" min="1" max="100" value="50" oninput="updateRangeValue()"/>
+                                            <span id="rangeValue">50</span>
+                                        </div>
+                                        <input type="hidden" id="budgetHidden" th:field="*{budget}" />
 
                                         <div>시 · 도</div>
                                         <select id="city" name="city" onchange="loadSubregions()">

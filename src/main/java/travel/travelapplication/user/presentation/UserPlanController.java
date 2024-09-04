@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.constant.Status;
-import travel.travelapplication.dto.user.UserDto;
 import travel.travelapplication.dto.userplan.LikedPlaceList;
-import travel.travelapplication.dto.userplan.SelectedPlaceDto;
 import travel.travelapplication.dto.userplan.UserPlanDto;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
@@ -115,8 +113,7 @@ public class UserPlanController {
     @PostMapping("/plan-info")
     public String saveUserPlan(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
                                @ModelAttribute("userPlan") UserPlanInfoDto userPlanInfoDto,
-                               @ModelAttribute("user") UserDto user, Model model,
-                               HttpServletRequest request)
+                               Model model)
             throws IllegalAccessException {
         User userInfo = userService.findUserByEmail(oAuth2User);
 
@@ -152,7 +149,7 @@ public class UserPlanController {
 
     @GetMapping("/{userPlanId}/places")
     public String selectLikedPlaces(HttpServletRequest request, Model model,
-                                    @PathVariable("userPlanId") String userPlanId) throws IllegalAccessException {
+                                    @PathVariable("userPlanId") ObjectId userPlanId) throws IllegalAccessException {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
 
         HttpSession session = request.getSession();
@@ -195,4 +192,24 @@ public class UserPlanController {
         return response;
     }
 
+    @GetMapping("/{userPlanId}/user-plan-info")
+    public String updateUserPlanNameAndStatusForm(@PathVariable("userPlanId") ObjectId userPlanId,
+                                                  Model model) throws IllegalAccessException {
+        UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
+        model.addAttribute("userPlan", userPlan);
+
+        return "test/editUserPlanInfoForm";
+    }
+
+    @PostMapping("/{userPlanId}/user-plan-info")
+    public String updateUserPlanNameAndStatus(@PathVariable("userPlanId") ObjectId userPlanId,
+                                              @ModelAttribute("updateUserPlan") UpdateUserPlanInfoDto userPlanInfo,
+                                              @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
+        User user=userService.findUserByEmail(oAuth2User);
+        UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
+
+        userPlanService.updateUserPlanInfo(user, userPlan, userPlanInfo);
+
+        return "redirect:/home";
+    }
 }

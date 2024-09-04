@@ -9,8 +9,8 @@ import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
 import travel.travelapplication.place.repository.PlaceRepository;
 import travel.travelapplication.place.repository.TagRepository;
+import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.User;
-import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
 import travel.travelapplication.user.repository.UserRepository;
 
@@ -31,8 +31,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User updateUserName(String email, String username) throws IllegalAccessException {
-        User user = userRepository.findByEmail(email)
+    public void updateUserName(String email, String username) throws IllegalAccessException {
+        User user=userRepository.findByEmail(email)
                 .orElse(null);
 
         if (user != null) {
@@ -49,7 +49,6 @@ public class UserService {
 
             user.update(updatedUser);
             save(user);
-            return user;
         } else {
             throw new IllegalAccessException("존재하지 않는 사용자입니다.");
         }
@@ -107,7 +106,7 @@ public class UserService {
                     .userPlans(user.getUserPlans())
                     .savedPlans(user.getSavedPlans())
                     .tags(user.getTags())
-//                    .likedPlaces(likedPlaces)
+                    .likedPlaces(user.getLikedPlaces())
                     .role(user.getRole())
                     .build();
 

@@ -1,6 +1,5 @@
 package travel.travelapplication.place.presentation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +11,15 @@ import travel.travelapplication.place.domain.Recommendation;
 public class RecommendationController {
     private final RecommendationService service;
 
+    public RecommendationController(RecommendationService service) {
+        this.service = service;
+    }
+
     @GetMapping("/recommendations")
     public CompletableFuture<List<Recommendation>> fetchData() {
         return service.fetchData();
     }
 
 
-    public RecommendationController(RecommendationService service) {
-        this.service = service;
     }
 }
