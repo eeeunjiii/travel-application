@@ -53,24 +53,15 @@ public class UserPlanService {
         return user.getUserPlans();
     }
 
-    public UserPlan findUserPlanById(String userPlanId) throws IllegalAccessException {
+    public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
+        UserPlan userPlan = userPlanRepository.findById(userPlanId)
+                .orElse(null);
 
-        if (ObjectId.isValid(userPlanId)) { // String -> ObjectId
-            ObjectId objectId = new ObjectId(userPlanId);
-            System.out.println("ObjectId: " + objectId);
-
-            UserPlan userPlan = userPlanRepository.findById(objectId)
-                    .orElse(null);
-
-            if (userPlan != null) {
-                System.out.println("user plan found");
-                return userPlan;
-            } else {
-                throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
-            }
-
+        if (userPlan != null) {
+            System.out.println("user plan found");
+            return userPlan;
         } else {
-            throw new IllegalAccessException("userPlanId is not valid");
+            throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
         }
     }
   
@@ -89,7 +80,7 @@ public class UserPlanService {
         return status.equals(Status.PUBLIC);
     }
 
-    private void updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
+    public void updateUserPlanPlaces(UserPlan userPlan, List<Place> places) {
         UserPlan updatedUserPlan = UserPlan.builder()
                 .name(userPlan.getName())
                 .startDate(userPlan.getStartDate())

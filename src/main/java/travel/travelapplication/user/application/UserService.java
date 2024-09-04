@@ -11,6 +11,7 @@ import travel.travelapplication.place.repository.PlaceRepository;
 import travel.travelapplication.place.repository.TagRepository;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.User;
+import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
 import travel.travelapplication.user.repository.UserRepository;
 
@@ -77,6 +78,22 @@ public class UserService {
         } else {
             throw new IllegalAccessException("존재하지 않는 사용자입니다.");
         }
+    }
+
+    public void updateUserSavedPlans(User user, List<Plan> savedPlans) {
+        User updatedUser=User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .userPlans(user.getUserPlans())
+                .tags(user.getTags())
+                .likedPlaces(user.getLikedPlaces())
+                .savedPlans(savedPlans)
+                .role(user.getRole())
+                .accessToken(user.getAccessToken())
+                .build();
+
+        user.update(updatedUser);
+        save(user);
     }
 
     public void updateUserPlan(User user, UserPlan userPlan,

@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,6 @@ import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.constant.Status;
 import travel.travelapplication.dto.userplan.LikedPlaceList;
-import travel.travelapplication.dto.userplan.UserPlanDto;
 import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.user.application.UserService;
@@ -140,7 +137,7 @@ public class UserPlanController {
     }
 
     @GetMapping("/{userPlanId}")
-    public String userPlan(@PathVariable("userPlanId") String userPlanId, Model model) throws IllegalAccessException {
+    public String userPlan(@PathVariable("userPlanId") ObjectId userPlanId, Model model) throws IllegalAccessException {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
@@ -165,7 +162,7 @@ public class UserPlanController {
     @PostMapping("/save-places")
     @ResponseBody
     public Map<String, Object> savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
-                                                    Model model, @RequestParam("userPlanId") String userPlanId,
+                                                    Model model, @RequestParam("userPlanId") ObjectId userPlanId,
                                                     UserPlanInfoDto userPlanInfo,
                                                     @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {

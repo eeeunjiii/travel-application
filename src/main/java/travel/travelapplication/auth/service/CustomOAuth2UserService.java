@@ -134,13 +134,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             userRepository.save(findUser);
             return findUser;
         }
-
     }
 
     private User getUser(OAuthAttributes attributes) {
         return userRepository.findByEmail(attributes.getEmail())
                 .orElse(null);
     }
-
-
 }

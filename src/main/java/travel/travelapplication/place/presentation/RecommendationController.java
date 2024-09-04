@@ -19,7 +19,4 @@ public class RecommendationController {
     public CompletableFuture<List<Recommendation>> fetchData() {
         return service.fetchData();
     }
-
-
-    }
 }
