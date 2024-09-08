@@ -411,7 +411,6 @@ async function fetchRecommendations() {
 
 
 function selectPlaces(){
-
     document.querySelectorAll('.place-item').forEach(item => {
         item.addEventListener('click', function() {
             const placeId = this.querySelector('img').getAttribute('alt')
@@ -453,15 +452,87 @@ function selectPlaces(){
 
 }
 
+
 // 선택한 장소 저장
 document.getElementById('saveButton').addEventListener('click', function() {
-    const userPlanId = document.getElementById('userPlanId').value;
+//    const userPlanIdElement = document.getElementById('userPlanId');
+//    const userPlanId = userPlanIdElement ? userPlanIdElement.textContent.trim() : '';
 
     console.log('선택된 장소 IDs:', selectedPlaces);
+
     sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
 
 });
 
+async function fetchUserPlans() {
+    try {
+        const response = await fetch('/user-plan/all');
+        const userPlans = await response.json();
+        console.log(userPlans); // 응답 데이터 구조를 확인하기 위한 콘솔 출력
+        if (!Array.isArray(userPlans)) {
+             throw new Error("Expected an array but got: " + typeof userPlans);
+        }
+
+        const container = document.getElementById('userPlansContainer');
+        container.innerHTML = '';
+        container.innerHTML = userPlans.map(plan => `
+            <div class="post post-list-sm circle">
+                <div class="thumb circle">
+                    <span class="number">><</span>
+                    <a href="/user-plan/${plan.id}">
+                        <div class="inner">
+                            <img src="images/posts/tabs-1.jpg" alt="post-title"/>
+                        </div>
+                    </a>
+                </div>
+                <div class="details clearfix">
+                    <h6 class="post-title my-0"><a href="/user-plan/${plan.id}">${plan.name}</a></h6>
+                    <ul class="meta list-inline mt-1 mb-0">
+                        <li class="list-inline-item">${plan.city}</li>
+                    </ul>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error fetching plans:', error);
+    }
+}
+
+async function fetchPlans() {
+    try {
+        const response = await fetch('/community/all');
+        const plans = await response.json();
+        console.log(plans); // 응답 데이터 구조를 확인하기 위한 콘솔 출력
+        if (!Array.isArray(plans)) {
+             throw new Error("Expected an array but got: " + typeof plans);
+        }
+
+        const container = document.getElementById('communityContainer');
+        container.innerHTML = '';
+        container.innerHTML = plans.map(plan => {
+            console.log(plan.id);
+            return `
+            <div class="post post-list-sm circle">
+                <div class="thumb circle">
+                    <span class="number">><</span>
+                    <a href="/plans/${plan.id}">
+                        <div class="inner">
+                            <img src="images/posts/tabs-1.jpg" alt="post-title"/>
+                        </div>
+                    </a>
+                </div>
+                <div class="details clearfix">
+                    <h6 class="post-title my-0"><a href="/user-plan/${plan.id}">${plan.name}</a></h6>
+                    <ul class="meta list-inline mt-1 mb-0">
+                        <li class="list-inline-item">${plan.city}</li>
+                    </ul>
+                </div>
+            </div>
+        `}).join('');
+    } catch (error) {
+        console.error('Error fetching plans:', error);
+    }
+}
 
 
 /*=========================================================================
