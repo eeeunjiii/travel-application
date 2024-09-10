@@ -35,9 +35,16 @@ public class PlanController {
     private final CommentService commentService;
 
     @GetMapping("/community")
-    public String allPlans() throws IllegalAccessException {
-
+    public String allPlans(Model model) throws IllegalAccessException {
+        List<Plan> plans = planRepository.findAll();
+        model.addAttribute("plans", plans);
         return "html/community";
+    }
+
+    @GetMapping("/community/all")
+    public void getPlans(Model model) {
+        List<Plan> plans = planRepository.findAll();
+        model.addAttribute("plans", plans);
     }
 
     @GetMapping("/community/{planId}")
