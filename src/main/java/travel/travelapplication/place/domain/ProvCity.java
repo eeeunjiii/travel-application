@@ -3,14 +3,14 @@ package travel.travelapplication.place.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Document("ProvCity")
+@Document(collection = "ProvCity")
 @Getter
+@NoArgsConstructor
 public class ProvCity {
 
     @Id
@@ -18,11 +18,9 @@ public class ProvCity {
 
     private String name;
 
-    @DBRef
-    private List<CityCountyDistrict> citys = new ArrayList<>();
+    private List<String> districts=new ArrayList<>();
 
-    public ProvCity(String name, List<CityCountyDistrict> citys) {
+    public ProvCity(String name) {
         this.name = name;
-        this.citys = citys;
     }
 }

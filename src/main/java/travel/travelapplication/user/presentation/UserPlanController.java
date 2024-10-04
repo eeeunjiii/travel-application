@@ -14,8 +14,10 @@ import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.constant.Status;
 import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.place.application.PlaceService;
+import travel.travelapplication.place.application.ProvCityService;
 import travel.travelapplication.place.application.RecommendationService;
 import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.place.domain.ProvCity;
 import travel.travelapplication.place.domain.Recommendation;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
@@ -36,6 +38,7 @@ public class UserPlanController {
     private final UserService userService;
     private final PlaceService placeService;
     private final RecommendationService recommendationService;
+    private final ProvCityService provCityService;
 
     @GetMapping("/single")
     public String userPlan() {
@@ -88,28 +91,13 @@ public class UserPlanController {
     @ResponseBody
     public List<String> getDistricts(@RequestParam("city") String city) {
         List<String> districts = new ArrayList<>();
+        Optional<ProvCity> provCities=provCityService.getCity(city);
 
-        if ("서울".equals(city)) {
-            districts.add("강남구");
-            districts.add("강동구");
-            districts.add("강북구");
-            districts.add("강서구");
-            districts.add("관악구");
-        } else if ("경기".equals(city)) {
-            districts.add("광명시");
-            districts.add("광주시");
-            districts.add("과천시");
-            districts.add("구리시");
-            districts.add("군포시");
-        } else if ("인천".equals(city)) {
-            districts.add("연수구");
-            districts.add("중구");
-            districts.add("부평구");
-            districts.add("남동구");
-            districts.add("서구");
-        } else if ("대전".equals(city)) {
-            districts.add("유성구");
+        if(provCities.isPresent()) {
+            ProvCity provCity=provCities.get();
+            districts=provCity.getDistricts();
         }
+
         return districts;
     }
 
