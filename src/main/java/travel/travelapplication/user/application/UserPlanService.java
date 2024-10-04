@@ -9,14 +9,12 @@ import travel.travelapplication.plan.application.PlanService;
 import travel.travelapplication.user.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.plan.repository.PlanRepository;
 import travel.travelapplication.user.repository.UserPlanRepository;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 
@@ -26,7 +24,6 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 public class UserPlanService {
 
     private final UserService userService;
-    private final PlaceService placeService;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
     private final PlanService planService;

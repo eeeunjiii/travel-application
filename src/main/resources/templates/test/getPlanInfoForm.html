@@ -74,7 +74,7 @@
             <h2>여행 정보 입력</h2>
         </div>
 
-        <form action="getPlanInfoForm.html" th:action th:object="${userPlan}" th:method="post">
+        <form action="getPlanInfoForm.html" th:action="@{/user-plan/plan-info}" th:object="${userPlan}" th:method="post">
             <div>
                 <div>여행명</div>
                 <input type="text" th:field="*{name}" />
@@ -115,7 +115,7 @@
                 <div>시 · 도</div>
                 <select id="city" name="city" onchange="loadSubregions()">
                     <option value="">==시 · 도 선택==</option>
-                    <option th:each="city : ${cities}" th:value="${city.key}"
+                    <option th:each="city : ${cities}" th:value="${city.value}"
                              th:text="${city.value}">서울</option>
                 </select>
             </div>

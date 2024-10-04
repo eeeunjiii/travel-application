@@ -14,7 +14,9 @@ import travel.travelapplication.auth.dto.SessionUser;
 import travel.travelapplication.constant.Status;
 import travel.travelapplication.dto.userplan.LikedPlaceList;
 import travel.travelapplication.place.application.PlaceService;
+import travel.travelapplication.place.application.RecommendationService;
 import travel.travelapplication.place.domain.Place;
+import travel.travelapplication.place.domain.Recommendation;
 import travel.travelapplication.user.application.UserService;
 import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
@@ -33,6 +35,7 @@ public class UserPlanController {
     private final UserPlanService userPlanService;
     private final UserService userService;
     private final PlaceService placeService;
+    private final RecommendationService recommendationService;
 
     @GetMapping("/single")
     public String userPlan() {
@@ -49,7 +52,8 @@ public class UserPlanController {
         model.addAttribute("userPlan", new UserPlanInfoDto());
         model.addAttribute("infoSubmitted", false);
 
-        return "html/new-user-plan";
+//        return "html/new-user-plan";
+        return "test/getPlanInfoForm";
     }
 
     @ModelAttribute("statuses")
@@ -85,24 +89,26 @@ public class UserPlanController {
     public List<String> getDistricts(@RequestParam("city") String city) {
         List<String> districts = new ArrayList<>();
 
-        if ("SEOUL".equals(city)) {
+        if ("서울".equals(city)) {
             districts.add("강남구");
             districts.add("강동구");
             districts.add("강북구");
             districts.add("강서구");
             districts.add("관악구");
-        } else if ("GYEONGGI".equals(city)) {
+        } else if ("경기".equals(city)) {
             districts.add("광명시");
             districts.add("광주시");
             districts.add("과천시");
             districts.add("구리시");
             districts.add("군포시");
-        } else if ("INCHEON".equals(city)) {
+        } else if ("인천".equals(city)) {
             districts.add("연수구");
             districts.add("중구");
             districts.add("부평구");
             districts.add("남동구");
             districts.add("서구");
+        } else if ("대전".equals(city)) {
+            districts.add("유성구");
         }
         return districts;
     }
@@ -126,6 +132,10 @@ public class UserPlanController {
         log.info("userPlan.status: {}", userPlanInfoDto.getStatus());
 
         UserPlan userPlan = userPlanService.createNewUserPlan(userInfo, userPlanInfoDto);
+
+        List<Recommendation> recommendations = recommendationService.sendUserPlanInfo(userPlan, userInfo);
+        recommendationService.savePlacesToSession(recommendations);
+
         model.addAttribute("infoSubmitted", true);
 
         model.addAttribute("userPlanId", userPlan.getId());
@@ -133,7 +143,8 @@ public class UserPlanController {
         model.addAttribute("user", userInfo);
 
         log.info("userPlan.id: {}", userPlan.getId());
-        return "html/new-user-plan";
+//        return "html/new-user-plan";
+        return "redirect:/home";
     }
 
     @GetMapping("/{userPlanId}")
@@ -141,7 +152,8 @@ public class UserPlanController {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
-        return "user-plan";
+//        return "user-plan";
+        return "test/userPlan";
     }
 
     @GetMapping("/{userPlanId}/places")

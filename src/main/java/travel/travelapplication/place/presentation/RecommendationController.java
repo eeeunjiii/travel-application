@@ -15,8 +15,8 @@ public class RecommendationController {
         this.service = service;
     }
 
-    @GetMapping("/recommendations")
-    public CompletableFuture<List<Recommendation>> fetchData() {
-        return service.fetchData();
-    }
+//    @GetMapping("/recommendations")
+//    public CompletableFuture<List<Recommendation>> fetchData() {
+//        return service.fetchData();
+//    }
 }
