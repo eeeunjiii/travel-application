@@ -55,11 +55,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         try {
             List<Recommendation> recommendations = results.get();
             List<SessionUser> sessions = (List<SessionUser>) httpSession.getAttribute("recommendation-result");
-            if(sessions == null) {
+            if (sessions == null) {
                 sessions = new ArrayList<>();
             }
 
-            for(Recommendation recommendation:recommendations) {
+            for (Recommendation recommendation : recommendations) {
                 SessionUser sessionUser = recommendation.toSessionUser();
                 sessions.add(sessionUser);
             }
@@ -114,9 +114,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         if (findUser == null) {
-
             User user = User.builder()
-                    .name(name)
+                    .name(attributes.getName())
                     .email(attributes.getEmail())
                     .role(role)
                     .accessToken(accessToken)
@@ -125,10 +124,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     .tags(null)
                     .savedPlans(null)
                     .build();
+            if (name == null) {
+                name = "anonymous";
+            }
             userRepository.insert(user);
             return user;
         } else {
-            // 기존 유저 이름이 null인 경우 anonymous로 이름 변경
             findUser.setName(name);
             findUser.setAccessToken(accessToken);
             userRepository.save(findUser);

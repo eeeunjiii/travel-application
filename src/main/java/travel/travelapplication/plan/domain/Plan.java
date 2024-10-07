@@ -34,7 +34,7 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     private UserPlan userPlan;
 
     @DBRef
-    private List<Comment> comments=new LinkedList<>();
+    private List<Comment> comments = new LinkedList<>();
 
     @PersistenceCreator
     public Plan() {
@@ -46,21 +46,25 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     public Plan(String name, UserPlan userPlan, String userEmail, List<Comment> comments) {
         this.name = name;
         this.userPlan = userPlan;
-        this.userEmail=userEmail;
-        this.comments=comments;
+        this.userEmail = userEmail;
+        this.comments = comments;
     }
 
     public void update(Plan updatedPlan) {
-        Optional.ofNullable(updatedPlan.getName()).ifPresent(none -> this.name= updatedPlan.getName());
-        Optional.ofNullable(updatedPlan.getUserPlan()).ifPresent(none -> this.userPlan= updatedPlan.getUserPlan());
-        Optional.ofNullable(updatedPlan.getUserEmail()).ifPresent(none -> this.userEmail= updatedPlan.getUserEmail());
+        Optional.ofNullable(updatedPlan.getName()).ifPresent(none -> this.name = updatedPlan.getName());
+        Optional.ofNullable(updatedPlan.getUserPlan()).ifPresent(none -> this.userPlan = updatedPlan.getUserPlan());
+        Optional.ofNullable(updatedPlan.getUserEmail()).ifPresent(none -> this.userEmail = updatedPlan.getUserEmail());
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this==o) return true;
-        if(o==null || getClass()!=o.getClass()) return false;
-        Plan plan=(Plan) o;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Plan plan = (Plan) o;
         return Objects.equals(id, plan.id);
     }
 
@@ -68,4 +72,6 @@ public class Plan { // 커뮤니티 public 처리된 UserPlan
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }
