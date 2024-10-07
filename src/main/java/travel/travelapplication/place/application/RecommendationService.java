@@ -78,4 +78,12 @@ public class RecommendationService {
         }
         httpSession.setAttribute("recommendation-result", sessions);
     }
+
+    public List<Recommendation> getRandomPlaces() { // 다른 여행지
+        return webClient.get()
+                .uri("/send-places")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Recommendation>>() {})
+                .block();
+    }
 }

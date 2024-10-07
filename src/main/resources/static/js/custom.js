@@ -468,41 +468,34 @@ document.getElementById('saveButton').addEventListener('click', function() {
             장소 좋아요 관련
  =========================================================================*/
 
-function toggleHeart(element) {
-  if (element.textContent === '🩶') {
-    element.textContent = '❤️';
-    addLike(element);
-  } else if(element.textContent === '❤️'){
-    element.textContent = '🩶';
-    delLike(element);
-  }else{
-      element.textContent = '🩶';
-  }
+function toggleHeart(heartElement) {
+    var placeId=$(heartElement).data('place-id');
+    var isLiked=$(heartElement).hasClass('liked');
+
+    $.ajax({
+        url: `/places/like/${placeId}`,
+        type: 'POST',
+        success: function(isNowLiked) {
+            if(isNowLiked) {
+                if(isLiked) {
+                    $(heartElement).removeClass('liked').addClass('not-liked').text('🩶');
+                } else {
+                    $(heartElement).removeClass('not-liked').addClass('liked').text('❤️');
+                }
+                $(heartElement).removeClass('not-liked').addClass('liked').text('❤️');
+            } else {
+                if(isLiked) {
+                    $(heartElement).removeClass('liked').addClass('not-liked').text('🩶');
+                } else {
+                    $(heartElement).removeClass('not-liked').addClass('liked').text('❤️');
+                }
+            }
+        },
+        error: function() {
+            alert('장소 좋아요 처리에 실패했습니다.');
+        }
+    });
 }
-
-function addLike(element) {
-    const placeItem = element.closest('.place-item');
-    const placeId = placeItem.querySelector('img').alt;
-    const placeName = placeItem.querySelector('h5').textContent;
-    const placeAddress = placeItem.querySelector('p').textContent;
-
-    console.log('Liked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
-
-    sendRequest('/places/add-like', placeId, 'POST');
-}
-
-function delLike(element){
-    const placeItem = element.closest('.place-item');
-    const placeId = placeItem.querySelector('img').alt;
-    const placeName = placeItem.querySelector('h5').textContent;
-    const placeAddress = placeItem.querySelector('p').textContent;
-
-    console.log('Unliked - id:', placeId, 'name: ', placeName, 'address: ', placeAddress);
-
-    sendRequest('/places/del-like', placeId, 'DELETE');
-}
-
-
 
 
 /*=========================================================================

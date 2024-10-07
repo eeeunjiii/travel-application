@@ -6,7 +6,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
 import travel.travelapplication.plan.domain.Plan;
 
@@ -35,8 +34,7 @@ public class User {
     @DBRef
     private List<Tag> tags = new ArrayList<>();
 
-    @DBRef
-    private List<Place> likedPlaces = new ArrayList<>();
+    private List<Long> likedPlaces = new ArrayList<>();
 
     @DBRef
     private List<Plan> savedPlans = new ArrayList<>();
@@ -49,18 +47,10 @@ public class User {
     public User() {
     }
 
-    public void addLikedPlace(Place place) {
-        this.likedPlaces.add(place);
-    }
-
-    public void delLikedPlace(Place place) {
-        this.likedPlaces.remove(place);
-    }
-
     @PersistenceCreator
     @Builder
     public User(String name, String email, List<UserPlan> userPlans, List<Tag> tags,
-                List<Place> likedPlaces, List<Plan> savedPlans, String role, String accessToken) {
+                List<Long> likedPlaces, List<Plan> savedPlans, String role, String accessToken) {
         this.name = name;
         this.email = email;
         this.userPlans = userPlans;

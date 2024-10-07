@@ -55,8 +55,7 @@ public class UserPlanController {
         model.addAttribute("userPlan", new UserPlanInfoDto());
         model.addAttribute("infoSubmitted", false);
 
-//        return "html/new-user-plan";
-        return "test/getPlanInfoForm";
+        return "html/new-user-plan";
     }
 
     @ModelAttribute("statuses")
@@ -107,22 +106,10 @@ public class UserPlanController {
                                Model model)
             throws IllegalAccessException {
         User userInfo = userService.findUserByEmail(oAuth2User);
-
-        log.info("user.name: {}", userInfo.getName());
-        log.info("user.email: {}", userInfo.getEmail());
-
-        log.info("userPlan.name: {}", userPlanInfoDto.getName());
-        log.info("userPlan.startDate: {}", userPlanInfoDto.getStartDate());
-        log.info("userPlan.endDate: {}", userPlanInfoDto.getEndDate());
-        log.info("userPlan.budget: {}", userPlanInfoDto.getBudget());
-        log.info("userPlan.city: {}", userPlanInfoDto.getCity());
-        log.info("userPlan.district: {}", userPlanInfoDto.getDistrict());
-        log.info("userPlan.status: {}", userPlanInfoDto.getStatus());
-
         UserPlan userPlan = userPlanService.createNewUserPlan(userInfo, userPlanInfoDto);
 
         List<Recommendation> recommendations = recommendationService.sendUserPlanInfo(userPlan, userInfo);
-        recommendationService.savePlacesToSession(recommendations);
+        List<Recommendation> randomPlaces=recommendationService.getRandomPlaces();
 
         model.addAttribute("infoSubmitted", true);
 
@@ -130,9 +117,12 @@ public class UserPlanController {
         model.addAttribute("userPlan", userPlanInfoDto);
         model.addAttribute("user", userInfo);
 
-        log.info("userPlan.id: {}", userPlan.getId());
-//        return "html/new-user-plan";
-        return "redirect:/home";
+        model.addAttribute("recommendations", recommendations);
+        model.addAttribute("randomPlaces", randomPlaces);
+
+        model.addAttribute("likedPlaces", userInfo.getLikedPlaces());
+
+        return "html/new-user-plan";
     }
 
     @GetMapping("/{userPlanId}")

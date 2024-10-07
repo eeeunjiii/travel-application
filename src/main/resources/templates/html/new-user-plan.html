@@ -225,7 +225,7 @@
                                         <div>시 · 도</div>
                                         <select id="city" name="city" onchange="loadSubregions()">
                                             <option value="">==시 · 도 선택==</option>
-                                            <option th:each="city : ${cities}" th:value="${city.key}"
+                                            <option th:each="city : ${cities}" th:value="${city.value}"
                                                     th:text="${city.value}">서울
                                             </option>
                                         </select>
@@ -299,8 +299,15 @@
                                     <h3>추천 여행지</h3>
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
-                                        <div class="col-md-4" id="recom-list">
-
+                                        <div class="col-md-4">
+                                            <div class="place-item" th:each="place : ${recommendations}">
+                                                <a>
+                                                    <div class="heart-icon">🩶</div>
+                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
+                                                    <h5 th:text="${place.name}">여행지 명</h5>
+                                                    <p th:text="${place.address}">여행지 주소</p>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -309,60 +316,16 @@
                                     <!-- 여행지 -->
                                     <div class="instagram-feed d-flex flex-wrap">
                                         <div class="col-md-4" id="other-list">
-                                            <div class="place-item">
+                                            <div class="place-item" th:each="place:${randomPlaces}">
                                                 <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
+                                                    <div class="heart-icon" th:data-place-id="${place.placeId}"
+                                                    th:classappend="${#lists.contains(likedPlaces, place.placeId)} ? 'liked' : 'not-liked'"
+                                                    style="cursor: pointer;"
+                                                    onclick="toggleHeart(this)">🩶</div>
+
                                                     <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="place-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="place-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="place-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="place-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="place-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
-                                                </a>
-                                            </div>
-                                            <div class="place-item">
-                                                <a>
-                                                    <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                                                    <img src="images/insta/insta-1.jpg" alt="여행지 사진">
-                                                    <h5>블루라인 파크</h5>
-                                                    <p>상세 설명</p>
+                                                    <h5 th:text="${place.name}">여행지 명</h5>
+                                                    <p th:text="${place.address}">여행지 주소</p>
                                                 </a>
                                             </div>
                                         </div>

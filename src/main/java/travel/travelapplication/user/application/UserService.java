@@ -26,7 +26,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
     private final UserPlanRepository userPlanRepository;
-    private final PlaceRepository placeRepository;
 
     public void save(User user) {
         userRepository.save(user);
@@ -162,18 +161,19 @@ public class UserService {
         }
     }
 
-    public void addLike(ObjectId userId, Place place) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        List<Place> likedPlaces = user.getLikedPlaces();
-        if (!likedPlaces.contains(place)) {
-            user.addLikedPlace(place);
-        }
-        userRepository.save(user);
-    }
+    public void updateLikedPlaces(User user, List<Long> likedPlaces) {
+        User updatedUser=User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .accessToken(user.getAccessToken())
+                .userPlans(user.getUserPlans())
+                .savedPlans(user.getSavedPlans())
+                .tags(user.getTags())
+                .likedPlaces(likedPlaces)
+                .role(user.getRole())
+                .build();
 
-    public void delLike(ObjectId userId, Place place) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        user.delLikedPlace(place);
-        userRepository.save(user);
+        user.update(updatedUser);
+        save(user);
     }
 }
