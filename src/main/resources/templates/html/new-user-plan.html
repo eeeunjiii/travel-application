@@ -266,7 +266,6 @@
 
                                     <div th:text="${userPlan.status}"></div>
 
-                                    <!--                                    <div th:text="${userPlanId}"></div>-->
                                 </div>
                             </div>
                         </div>
@@ -299,6 +298,7 @@
                         <!-- post content -->
                         <div class="instagram" th:if="${infoSubmitted}">
                             <div class="container-xl">
+
                                 <div class="place-container">
                                     <h3>추천 여행지</h3>
                                     <!-- 여행지 -->
@@ -436,14 +436,16 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <button id="saveButton">저장</button>
+
                             </div>
                         </div>
 
                         <!-- post bottom section -->
-                        <div class="post-bottom">
+                        <div class="post-bottom" th:if="${infoSubmitted}">
                             <div class="row d-flex align-items-center">
-                                <button id="saveButton">저장
-                                </button>
+
                             </div>
                         </div>
 

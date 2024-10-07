@@ -36,7 +36,7 @@ public class UserPlan {
 
     private String city;
     private String district; // 여행 지역 (여행 정보 입력)
-  
+
     private Status status; // public, private
 
     @CreatedDate
@@ -51,6 +51,7 @@ public class UserPlan {
     @DBRef
     private List<Route> routes = new ArrayList<>();
 
+
     @PersistenceCreator
     public UserPlan() {
 
@@ -58,18 +59,20 @@ public class UserPlan {
 
     @PersistenceCreator
     @Builder
-    public UserPlan(String name, LocalDate startDate, LocalDate endDate, Long budget, String city, String district,
+    public UserPlan(String name, LocalDate startDate, LocalDate endDate, Long budget, String city,
+                    String district,
                     Status status, List<Place> places, List<Route> routes) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.budget = budget;
-        this.city=city;
-        this.district=district;
+        this.city = city;
+        this.district = district;
         this.status = status;
         this.places = places;
         this.routes = routes;
     }
+
 
     public void addPlace(Place place) {
         this.places.add(place);
@@ -77,11 +80,14 @@ public class UserPlan {
 
     public void update(UserPlan updatedUserPlan) {
         Optional.ofNullable(updatedUserPlan.getName()).ifPresent(none -> this.name = updatedUserPlan.getName());
-        Optional.ofNullable(updatedUserPlan.getStartDate()).ifPresent(none -> this.startDate = updatedUserPlan.getStartDate());
-        Optional.ofNullable(updatedUserPlan.getEndDate()).ifPresent(none -> this.endDate = updatedUserPlan.getEndDate());
+        Optional.ofNullable(updatedUserPlan.getStartDate())
+                .ifPresent(none -> this.startDate = updatedUserPlan.getStartDate());
+        Optional.ofNullable(updatedUserPlan.getEndDate())
+                .ifPresent(none -> this.endDate = updatedUserPlan.getEndDate());
         Optional.ofNullable(updatedUserPlan.getBudget()).ifPresent(none -> this.budget = updatedUserPlan.getBudget());
         Optional.ofNullable(updatedUserPlan.getCity()).ifPresent(none -> this.city = updatedUserPlan.getCity());
-        Optional.ofNullable(updatedUserPlan.getDistrict()).ifPresent(none -> this.district = updatedUserPlan.getDistrict());
+        Optional.ofNullable(updatedUserPlan.getDistrict())
+                .ifPresent(none -> this.district = updatedUserPlan.getDistrict());
         Optional.ofNullable(updatedUserPlan.getStatus()).ifPresent(none -> this.status = updatedUserPlan.getStatus());
         Optional.ofNullable(updatedUserPlan.getPlaces()).ifPresent(none -> this.places = updatedUserPlan.getPlaces());
         Optional.ofNullable(updatedUserPlan.getRoutes()).ifPresent(none -> this.routes = updatedUserPlan.getRoutes());

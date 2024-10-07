@@ -288,6 +288,29 @@ async function sendRequest(url, data, methodType){
     }
 }
 
+async function fetchData(url, method, myData) {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myData)
+        });
+
+        const result = await response.json();
+
+        if (result.redirectUrl) {
+            window.location.href = result.redirectUrl; // 서버에서 제공한 리디렉션 URL로 이동
+        } else {
+            console.log('fetched data: ', result);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
 /*=========================================================================
             USER PLAN 제작 관련
  =========================================================================*/
@@ -387,7 +410,6 @@ async function fetchRecommendations() {
     const recommendations = await response.json();
     console.log('Fetched recommendations:', recommendations);
 
-
     const container = document.getElementById('recom-list');
     container.innerHTML = ''; // 기존 요소들을 지우고 새로운 것들로 대체
 
@@ -395,12 +417,12 @@ async function fetchRecommendations() {
         const placeItem = document.createElement('div');
         placeItem.className = 'place-item';
         placeItem.innerHTML = `
-            <a>
+             <a>
                 <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
                 <img src="카카오맵에서 가져온 사진" alt="${recommendation.placeId}">
                 <h5>${recommendation.name}</h5>
                 <p><a href="카카오맵 장소 설명으로 이동">${recommendation.address}</a></p>
-            </a>
+             </a>
         `;
         container.appendChild(placeItem);
     });
@@ -455,14 +477,12 @@ function selectPlaces(){
 
 // 선택한 장소 저장
 document.getElementById('saveButton').addEventListener('click', function() {
-//    const userPlanIdElement = document.getElementById('userPlanId');
-//    const userPlanId = userPlanIdElement ? userPlanIdElement.textContent.trim() : '';
-
     console.log('선택된 장소 IDs:', selectedPlaces);
-
     sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
-
+    fetchData('/user-plan/save-places', 'POST', selectedPlaces);
 });
+
+
 
 
 

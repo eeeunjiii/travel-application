@@ -25,5 +25,10 @@ public class PlaceService {
         return placeRepository.findByPlaceId(placeId)
                 .orElseThrow(() -> new IllegalArgumentException("place not found: " + placeId));
     }
+
+    public Place findByStringifiedId(String objectId) {
+        return placeRepository.findByStringifiedId(objectId)
+                .orElseThrow(() -> new IllegalArgumentException("place not found: " + objectId));
+    }
 }
 

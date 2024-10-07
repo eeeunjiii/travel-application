@@ -32,25 +32,5 @@ public class FetchController {
         return service.fetchData();
     }
 
-    @GetMapping("/user-plan/all")
-    public List<UserPlan> getAllPlans()
-            throws IllegalAccessException {
-        return userPlanRepository.findAll();
-    }
-
-    @GetMapping("/community/all")
-    public List<Map<String, Object>> getPlans() {
-        List<Plan> plans = planRepository.findAll();
-        List<Map<String, Object>> response = new ArrayList<>();
-
-        for (Plan plan : plans) {
-            Map<String, Object> planMap = new HashMap<>();
-            planMap.put("id", plan.getId().toString());  // ObjectId를 명시적으로 포함
-            planMap.put("name", plan.getName());
-            planMap.put("createdAt", plan.getCreatedAt());
-            response.add(planMap);
-        }
-        return response;
-    }
 
 }
