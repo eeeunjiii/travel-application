@@ -1,22 +1,26 @@
 package travel.travelapplication.user.application;
 
+import static travel.travelapplication.dto.userplan.UserPlanDto.UpdateUserPlanInfoDto;
+import static travel.travelapplication.dto.userplan.UserPlanDto.UserPlanInfoDto;
+
+import java.util.LinkedList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
 import travel.travelapplication.constant.Status;
-import travel.travelapplication.place.application.PlaceService;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.plan.application.PlanService;
-import travel.travelapplication.user.domain.User;
-import org.bson.types.ObjectId;
-import org.springframework.stereotype.Service;
 import travel.travelapplication.plan.domain.Plan;
-import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.plan.repository.PlanRepository;
+import travel.travelapplication.user.domain.User;
+import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
-
-import java.util.*;
-
-import static travel.travelapplication.dto.userplan.UserPlanDto.*;
+import org.springframework.data.domain.Sort;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +28,12 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 public class UserPlanService {
 
     private final UserService userService;
+    @Autowired
+    private MongoTemplate mongoTemplate;
     private final UserPlanRepository userPlanRepository;
     private final PlanRepository planRepository;
     private final PlanService planService;
-  
+
     public UserPlan createNewUserPlan(User user, UserPlanInfoDto userPlanInfoDto) {
         UserPlan userPlan = userPlanInfoDto.toEntity();
 
@@ -38,37 +44,44 @@ public class UserPlanService {
 
         user.update(user);
         userService.save(user);
-      
-        if(isPublic(userPlan.getStatus())) {
+
+        if (isPublic(userPlan.getStatus())) {
             shareUserPlan(savedUserPlan, user);
         }
-      
+
+        if (savedUserPlan.getId() != null) {
+            mongoTemplate.save(savedUserPlan);
+        }
+
         return userPlan;
     }
+
 
     public List<UserPlan> findAllUserPlan(User user) {
         return user.getUserPlans();
     }
 
     public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
+
         UserPlan userPlan = userPlanRepository.findById(userPlanId)
                 .orElse(null);
 
         if (userPlan != null) {
-            System.out.println("user plan found");
+            log.info("user plan found");
             return userPlan;
         } else {
             throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
         }
     }
-  
-    public void shareUserPlan(UserPlan userPlan, User user) { // 공개 처리 -> 커뮤니티 공유
-        Plan existingPlan=planRepository.findByUserPlan(userPlan);
 
-        if(existingPlan!=null) {
+
+    public void shareUserPlan(UserPlan userPlan, User user) { // 공개 처리 -> 커뮤니티 공유
+        Plan existingPlan = planRepository.findByUserPlan(userPlan);
+
+        if (existingPlan != null) {
             planService.updatePlanFromUserPlanInfo(existingPlan, userPlan);
         } else {
-            Plan plan=new Plan(userPlan.getName(), userPlan,  user.getEmail(), new LinkedList<>());
+            Plan plan = new Plan(userPlan.getName(), userPlan, user.getEmail(), new LinkedList<>());
             planRepository.insert(plan);
         }
     }
@@ -94,17 +107,45 @@ public class UserPlanService {
         save(userPlan);
     }
 
+    public void mergePlacesToUserPlanInfo(UserPlan userPlan, List<Place> places) {
+        Query query = new Query().with(Sort.by(Sort.Direction.DESC, "_id")).limit(1);
+        UserPlan lastUserPlan = mongoTemplate.findOne(query, UserPlan.class);
+
+        if (lastUserPlan != null) {
+            UserPlan updatedUserPlan = UserPlan.builder()
+                    .name(userPlan.getName() != null ? userPlan.getName() : lastUserPlan.getName())
+                    .startDate(userPlan.getStartDate() != null ? userPlan.getStartDate() : lastUserPlan.getStartDate())
+                    .endDate(userPlan.getEndDate() != null ? userPlan.getEndDate() : lastUserPlan.getEndDate())
+                    .budget(userPlan.getBudget() != null ? userPlan.getBudget() : lastUserPlan.getBudget())
+                    .city(userPlan.getCity() != null ? userPlan.getCity() : lastUserPlan.getCity())
+                    .district(userPlan.getDistrict() != null ? userPlan.getDistrict() : lastUserPlan.getDistrict())
+                    .status(userPlan.getStatus() != null ? userPlan.getStatus() : lastUserPlan.getStatus())
+                    .places(places != null ? places : lastUserPlan.getPlaces()) // 새로운 places로 덮어씀
+                    .routes(userPlan.getRoutes() != null ? userPlan.getRoutes() : lastUserPlan.getRoutes())
+                    .build();
+
+            // 3. 병합된 document 저장
+            userPlan.update(updatedUserPlan);
+            save(userPlan);
+            mongoTemplate.remove(lastUserPlan);
+        } else {
+            save(userPlan);
+        }
+
+
+    }
+
     public void save(UserPlan userPlan) {
         userPlanRepository.save(userPlan);
     }
 
     public void updateUserPlanInfo(User user, UserPlan userPlan, UpdateUserPlanInfoDto userPlanInfoDto) {
-        UserPlan updatedUserPlan=updateNameAndStatus(userPlan, userPlanInfoDto);
+        UserPlan updatedUserPlan = updateNameAndStatus(userPlan, userPlanInfoDto);
 
         user.update(user);
         userService.save(user);
 
-        if(isPublic(userPlan.getStatus())) {
+        if (isPublic(userPlan.getStatus())) {
             shareUserPlan(updatedUserPlan, user); // 만약 공개로 그대로 두고, 이름을 게속 바꾸면 이름만 다른 동일한 일정이 계속 저장되는 문제 발생
         } else {
             removePlanByUserPlan(updatedUserPlan);
@@ -112,7 +153,7 @@ public class UserPlanService {
     }
 
     private UserPlan updateNameAndStatus(UserPlan userPlan, UpdateUserPlanInfoDto userPlanInfoDto) {
-        UserPlan updatedUserPlan=UserPlan.builder()
+        UserPlan updatedUserPlan = UserPlan.builder()
                 .name(userPlanInfoDto.getName())
                 .startDate(userPlan.getStartDate())
                 .endDate(userPlan.getEndDate())
@@ -130,8 +171,8 @@ public class UserPlanService {
     }
 
     private void removePlanByUserPlan(UserPlan userPlan) {
-        Plan planToRemove=planRepository.findByUserPlan(userPlan);
-        if(planToRemove!=null) {
+        Plan planToRemove = planRepository.findByUserPlan(userPlan);
+        if (planToRemove != null) {
             planRepository.delete(planToRemove);
         }
     }

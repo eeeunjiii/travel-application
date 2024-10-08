@@ -157,8 +157,7 @@ public class UserPlanController {
                                                     @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
         User user = userService.findUserByEmail(oAuth2User);
-        UserPlan foundUserPlan = userPlanService.findUserPlanById(userPlanId);
-        log.info("userPlan.id: {}", userPlanId);
+        UserPlan userPlan = new UserPlan();
 
         List<Place> selectedPlaces = new ArrayList<>();
 
@@ -167,12 +166,17 @@ public class UserPlanController {
             selectedPlaces.add(place);
         }
         model.addAttribute("selectedPlaces", selectedPlaces);
-        userPlanService.updateUserPlanPlaces(foundUserPlan, selectedPlaces);
+//        userPlanService.updateUserPlanPlaces(foundUserPlan, selectedPlaces);
+//        userPlanService.updateUserPlanPlaces(userPlan, selectedPlaces);
+        userPlanService.mergePlacesToUserPlanInfo(userPlan, selectedPlaces);
+
+        model.addAttribute("userPlan", userPlan);
 
         // JSON으로 변환
         Map<String, Object> response = new HashMap<>();
         response.put("selectedPlaces", selectedPlaces);
         response.put("userPlan", userPlanInfo);
+        response.put("redirectUrl", "/home");
 
         log.info(selectedPlaces.toString());
 

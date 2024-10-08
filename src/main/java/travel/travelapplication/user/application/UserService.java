@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
-import travel.travelapplication.place.repository.PlaceRepository;
 import travel.travelapplication.place.repository.TagRepository;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.User;
@@ -32,7 +31,7 @@ public class UserService {
     }
 
     public void updateUserName(String email, String username) throws IllegalAccessException {
-        User user=userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElse(null);
 
         if (user != null) {

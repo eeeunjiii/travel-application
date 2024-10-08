@@ -58,165 +58,136 @@
 
 
 <!-- site wrapper -->
-<div class="site-wrapper">
+< class="site-wrapper">
 
-    <div class="main-overlay"></div>
+<div class="main-overlay"></div>
 
-    <!-- header -->
-    <header class="header-default">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-xl">
-                <!-- site logo -->
-                <a class="navbar-brand" href="index.html"><img src="images/logo.svg" alt="logo"/></a>
+<!-- header -->
+<header class="header-default">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-xl">
+            <!-- site logo -->
+            <a class="navbar-brand" href="index.html"><img src="images/logo.svg" alt="logo"/></a>
 
-                <div class="collapse navbar-collapse">
-                    <!-- menus -->
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle" href="index.html">Home</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="index.html">Magazine</a></li>
-                                <li><a class="dropdown-item" href="personal.html">Personal</a></li>
-                                <li><a class="dropdown-item" href="personal-alt.html">Personal Alt</a></li>
-                                <li><a class="dropdown-item" href="minimal.html">Minimal</a></li>
-                                <li><a class="dropdown-item" href="classic.html">Classic</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category.html">Lifestyle</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category.html">Inspiration</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#">Pages</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="category.html">Category</a></li>
-                                <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
-                                <li><a class="dropdown-item" href="user-plan-list">User Plan</a></li>
-                                <li><a class="dropdown-item" href="my-page.html">My Page</a></li>
-                                <li><a class="dropdown-item" href="myroom/profile">Profile</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="myroom/profile">Profile</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- header right section -->
-                <div class="header-right">
-                    <!-- social icons -->
-                    <!--                    <ul class="social-icons list-unstyled list-inline mb-0">-->
-                    <!--                        <th:block sec:authorize="isAnonymous()">-->
-                    <!--                            <script type="text/javascript">-->
-                    <!--                                window.location.href = "/loginForm";-->
-                    <!--                            </script>-->
-                    <!--                        </th:block>-->
-
-                    <!--                        <th:block sec:authorize="isAuthenticated()">-->
-                    <!--                            <div th:object="${user}">-->
-                    <!--                                <a href="/logout" class="icons me-2 ms-2" role="button">Logout</a>-->
-                    <!--                            </div>-->
-
-                    <!--                        </th:block>-->
-                    <!--                    </ul>-->
-                </div>
-                <!-- header buttons -->
-                <div class="header-buttons">
-                    <button class="search icon-button">
-                        <i class="icon-magnifier"></i>
-                    </button>
-                    <button class="burger-menu icon-button">
-                        <span class="burger-icon"></span>
-                    </button>
-                </div>
+            <div class="collapse navbar-collapse">
+                <!-- menus -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="index.html">Home</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="index.html">Magazine</a></li>
+                            <li><a class="dropdown-item" href="personal.html">Personal</a></li>
+                            <li><a class="dropdown-item" href="personal-alt.html">Personal Alt</a></li>
+                            <li><a class="dropdown-item" href="minimal.html">Minimal</a></li>
+                            <li><a class="dropdown-item" href="classic.html">Classic</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Lifestyle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Inspiration</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="category.html">Category</a></li>
+                            <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
+                            <li><a class="dropdown-item" href="user-plan-list">User Plan</a></li>
+                            <li><a class="dropdown-item" href="my-page.html">My Page</a></li>
+                            <li><a class="dropdown-item" href="myroom/profile">Profile</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="myroom/profile">Profile</a>
+                    </li>
+                </ul>
             </div>
 
-        </nav>
-    </header>
+            <!-- header right section -->
+            <div class="header-right">
+                <!-- social icons -->
+                <!--                    <ul class="social-icons list-unstyled list-inline mb-0">-->
+                <!--                        <th:block sec:authorize="isAnonymous()">-->
+                <!--                            <script type="text/javascript">-->
+                <!--                                window.location.href = "/loginForm";-->
+                <!--                            </script>-->
+                <!--                        </th:block>-->
 
-    <!-- section main content -->
-    <section class="main-content">
+                <!--                        <th:block sec:authorize="isAuthenticated()">-->
+                <!--                            <div th:object="${user}">-->
+                <!--                                <a href="/logout" class="icons me-2 ms-2" role="button">Logout</a>-->
+                <!--                            </div>-->
 
-        <div class="container-xl">
-            <input type="button" class="btn-add" value="일정 추가" onclick="window.location.href='/user-plan/new';">
-            <div class="row gy-4">
-                <div class="col-lg-8">
-                    <!-- post single -->
-                    <!--                    <div class="post post-single">-->
-                    <!-- post content -->
-                    <div class="post-content clearfix">
-                        <!-- 일정 목록 -->
-                        <div class="plan-list">
-                            <div class="widget rounded">
-                                <div class="widget-header text-center">
-                                    <h3 class="widget-title">여행 일정 목록</h3>
-                                    <img src="images/wave.svg" class="wave" alt="wave"/>
-                                </div>
-                                <div class="widget-content">
-                                    <!-- post -->
-                                    <div class="post post-list-sm circle">
-                                        <div class="thumb circle">
-                                            <span class="number">><</span>
-                                            <a href="html/user-plan">
-                                                <div class="inner">
-                                                    <img src="images/posts/tabs-1.jpg" alt="post-title"/>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="details clearfix">
-                                            <h6 class="post-title my-0"><a href="blog-single.html">Plan Name</a></h6>
-                                            <ul class="meta list-inline mt-1 mb-0">
-                                                <li class="list-inline-item">Plan Creator</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- post -->
-                                    <div class="post post-list-sm circle">
-                                        <div class="thumb circle">
-                                            <span class="number">><</span>
-                                            <a href="blog-single.html">
-                                                <div class="inner">
-                                                    <img src="images/posts/tabs-1.jpg" alt="post-title"/>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="details clearfix">
-                                            <h6 class="post-title my-0"><a href="single">Plan Name</a></h6>
-                                            <ul class="meta list-inline mt-1 mb-0">
-                                                <li class="list-inline-item">Plan Creator</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- post -->
-                                    <div class="post post-list-sm circle">
-                                        <div class="thumb circle">
-                                            <span class="number">><</span>
-                                            <a href="blog-single.html">
-                                                <div class="inner">
-                                                    <img src="images/posts/tabs-1.jpg" alt="post-title"/>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="details clearfix">
-                                            <h6 class="post-title my-0"><a href="html/user-plan">Plan Name</a></h6>
-                                            <ul class="meta list-inline mt-1 mb-0">
-                                                <li class="list-inline-item">Plan Creator</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
+                <!--                        </th:block>-->
+                <!--                    </ul>-->
+            </div>
+            <!-- header buttons -->
+            <div class="header-buttons">
+                <button class="search icon-button">
+                    <i class="icon-magnifier"></i>
+                </button>
+                <button class="burger-menu icon-button">
+                    <span class="burger-icon"></span>
+                </button>
             </div>
         </div>
-    </section>
-</div>
+
+    </nav>
+</header>
+
+<!-- section main content -->
+<section class="main-content">
+
+    <div class="container-xl">
+        <input type="button" class="btn-add" value="일정 추가" onclick="window.location.href='/user-plan/new';">
+        <div class="row gy-4">
+            <div class="col-lg-8">
+                <!-- post single -->
+                <!--                    <div class="post post-single">-->
+                <!-- post content -->
+                <div class="post-content clearfix">
+                    <!-- 일정 목록 -->
+                    <div class="plan-list">
+                        <div class="widget rounded">
+                            <div class="widget-header text-center">
+                                <h3 class="widget-title">여행 일정 목록</h3>
+                                <img src="images/wave.svg" class="wave" alt="wave"/>
+                            </div>
+                            <div class="widget-content" id="userPlansContainer">
+                                <div th:each="userPlan : ${userPlans}" class="post post-list-sm circle">
+                                    <div class="thumb circle">
+                                        <span class="number">><</span>
+                                        <a th:href="@{/user-plan/{userPlanId}(userPlanId=${userPlan.id})}">
+                                            <div class="inner">
+                                                <img src="images/posts/tabs-1.jpg" alt="post-title"/>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="details clearfix">
+                                        <h6 class="post-title my-0">
+                                            <a th:href="@{/user-plan/{userPlanId}(userPlanId=${userPlan.id})}"
+                                               th:text="${userPlan.name}">Plan Name</a>
+                                        </h6>
+                                        <ul class="meta list-inline mt-1 mb-0">
+                                            <li class="list-inline-item" th:text="${userPlan.createdAt}">Created
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
 
 <!-- canvas menu -->
 <div class="canvas-menu d-flex align-items-end flex-column">
@@ -275,6 +246,6 @@
 <script src="/js/slick.min.js"></script>
 <script src="/js/jquery.sticky-sidebar.min.js"></script>
 <script src="/js/custom.js"></script>
-
+<script>document.addEventListener('DOMContentLoaded', fetchUserPlans);</script>
 </body>
 </html>
