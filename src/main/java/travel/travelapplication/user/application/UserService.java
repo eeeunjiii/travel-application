@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import travel.travelapplication.auth.CustomOAuth2User;
 import travel.travelapplication.place.domain.Place;
 import travel.travelapplication.place.domain.Tag;
-import travel.travelapplication.place.repository.PlaceRepository;
 import travel.travelapplication.place.repository.TagRepository;
 import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.user.domain.User;
@@ -26,7 +25,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
     private final UserPlanRepository userPlanRepository;
-    private final PlaceRepository placeRepository;
 
     public void save(User user) {
         userRepository.save(user);
@@ -80,6 +78,22 @@ public class UserService {
         }
     }
 
+    public void updateUserSavedPlans(User user, List<Plan> savedPlans) {
+        User updatedUser=User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .userPlans(user.getUserPlans())
+                .tags(user.getTags())
+                .likedPlaces(user.getLikedPlaces())
+                .savedPlans(savedPlans)
+                .role(user.getRole())
+                .accessToken(user.getAccessToken())
+                .build();
+
+        user.update(updatedUser);
+        save(user);
+    }
+
     public void updateUserPlan(User user, UserPlan userPlan,
                                List<Place> userPlanPlaces) throws IllegalAccessException {
         if (userPlan != null) {
@@ -118,22 +132,6 @@ public class UserService {
         }
     }
 
-    public void updateUserSavedPlans(User user, List<Plan> savedPlans) {
-        User updatedUser = User.builder()
-                .name(user.getName())
-                .email(user.getEmail())
-                .userPlans(user.getUserPlans())
-                .tags(user.getTags())
-                .likedPlaces(user.getLikedPlaces())
-                .savedPlans(savedPlans)
-                .role(user.getRole())
-                .accessToken(user.getAccessToken())
-                .build();
-
-        user.update(updatedUser);
-        save(user);
-    }
-
     public List<Tag> findAllTag(User user) throws IllegalAccessException {
         return user.getTags();
     }
@@ -162,18 +160,19 @@ public class UserService {
         }
     }
 
-    public void addLike(ObjectId userId, Place place) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        List<Place> likedPlaces = user.getLikedPlaces();
-        if (!likedPlaces.contains(place)) {
-            user.addLikedPlace(place);
-        }
-        userRepository.save(user);
-    }
+    public void updateLikedPlaces(User user, List<Long> likedPlaces) {
+        User updatedUser=User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .accessToken(user.getAccessToken())
+                .userPlans(user.getUserPlans())
+                .savedPlans(user.getSavedPlans())
+                .tags(user.getTags())
+                .likedPlaces(likedPlaces)
+                .role(user.getRole())
+                .build();
 
-    public void delLike(ObjectId userId, Place place) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        user.delLikedPlace(place);
-        userRepository.save(user);
+        user.update(updatedUser);
+        save(user);
     }
 }

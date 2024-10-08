@@ -1,17 +1,8 @@
 package travel.travelapplication.place.presentation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import travel.travelapplication.place.application.RecommendationService;
-import travel.travelapplication.place.domain.Recommendation;
-import travel.travelapplication.plan.domain.Plan;
 import travel.travelapplication.plan.repository.PlanRepository;
-import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
 
 @RestController
@@ -27,10 +18,10 @@ public class FetchController {
         this.planRepository = planRepository;
     }
 
-    @GetMapping("/recommendations")
-    public CompletableFuture<List<Recommendation>> fetchData() {
-        return service.fetchData();
-    }
+//    @GetMapping("/recommendations")
+//    public CompletableFuture<List<Recommendation>> fetchData() {
+//        return service.fetchData();
+//    }
 
 
 }

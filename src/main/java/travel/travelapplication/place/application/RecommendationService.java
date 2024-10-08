@@ -1,41 +1,89 @@
 package travel.travelapplication.place.application;
 
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import travel.travelapplication.auth.dto.SessionUser;
+import travel.travelapplication.dto.userplan.UserPlanInfoRequest;
 import travel.travelapplication.place.domain.Recommendation;
+import travel.travelapplication.user.domain.User;
+import travel.travelapplication.user.domain.UserPlan;
 
 @Service
 @Getter
 public class RecommendationService {
-    private static final String url = "http://127.0.0.1:5000/data"; //추후 사용자 id 매핑 필요
 
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
 
-    @Autowired
-    public RecommendationService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    private final WebClient webClient;
+    private final HttpSession httpSession;
+
+//    @Autowired
+//    public RecommendationService(RestTemplate restTemplate) {
+//        this.restTemplate = restTemplate;
+//    }
+
+    public RecommendationService(WebClient.Builder builder, HttpSession httpSession) {
+        this.webClient = builder
+                .baseUrl("http://127.0.0.1:5000")
+                .build();
+        this.httpSession=httpSession;
     }
 
-    @Async
-    public CompletableFuture<List<Recommendation>> fetchData() {
-        ResponseEntity<List<Recommendation>> response = restTemplate.exchange(
-                "http://127.0.0.1:5000/recommendations",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Recommendation>>() {
-                }
-        );
-        List<Recommendation> recommendations = response.getBody();
-        return CompletableFuture.completedFuture(recommendations);
+
+//    @Async
+//    public CompletableFuture<List<Recommendation>> fetchData() {
+//        ResponseEntity<List<Recommendation>> response = restTemplate.exchange(
+//                "http://127.0.0.1:5000/recommendations",
+//                HttpMethod.GET,
+//                null,
+//                new ParameterizedTypeReference<List<Recommendation>>() {
+//                }
+//        );
+//        List<Recommendation> recommendations = response.getBody();
+//        return CompletableFuture.completedFuture(recommendations);
+//    }
+
+
+    public List<Recommendation> sendUserPlanInfo(UserPlan userPlan, User user) {
+
+        long period= ChronoUnit.DAYS.between(userPlan.getStartDate(), userPlan.getEndDate());
+
+        UserPlanInfoRequest request=new UserPlanInfoRequest(user.getEmail(), userPlan.getCity(),
+                userPlan.getDistrict(), period);
+
+        return webClient.post()
+                .uri("/recommendations")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Recommendation>>() {})
+                .block();
     }
 
+    public void savePlacesToSession(List<Recommendation> recommendations) {
+        List<SessionUser> sessions = (List<SessionUser>) httpSession.getAttribute("recommendation-result");
+        if(sessions == null) {
+            sessions = new ArrayList<>();
+        }
+
+        for(Recommendation recommendation:recommendations) {
+            SessionUser sessionUser = recommendation.toSessionUser();
+            sessions.add(sessionUser);
+        }
+        httpSession.setAttribute("recommendation-result", sessions);
+    }
+
+    public List<Recommendation> getRandomPlaces() { // 다른 여행지
+        return webClient.get()
+                .uri("/send-places")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Recommendation>>() {})
+                .block();
+    }
 }

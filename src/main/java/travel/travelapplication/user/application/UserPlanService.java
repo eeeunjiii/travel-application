@@ -5,7 +5,6 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.UserPlanInfoDto;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -22,7 +21,6 @@ import travel.travelapplication.user.domain.User;
 import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.repository.UserPlanRepository;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.query.Criteria;
 
 @Service
 @RequiredArgsConstructor

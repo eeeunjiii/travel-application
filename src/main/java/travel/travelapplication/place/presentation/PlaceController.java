@@ -4,8 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -45,36 +43,13 @@ public class PlaceController {
         return 112L; // 로그인한 사용자의 user_id 반환하기
     }
 
+    @PostMapping("/like/{placeId}")
+    public ResponseEntity<Boolean> addLikePlace(@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+                                                @PathVariable("placeId") Long placeId) throws IllegalAccessException {
+        User user=userService.findUserByEmail(oAuth2User);
 
-    @PostMapping("/add-like")
-    public ResponseEntity<String> addLike(@RequestBody String placeId,
-                                          @AuthenticationPrincipal CustomOAuth2User oAuth2User)
-            throws IllegalAccessException {
-        User user = userService.findUserByEmail(oAuth2User);
-        Place place = placeService.findByPlaceId(placeId);
-        if (place != null && user != null) {
-            user.addLikedPlace(place);
-            userService.save(user);
-            System.out.println("Add like: " + place.toString());
-            return ResponseEntity.ok("Like added successfully");
-        }
+        boolean isNowLiked=placeService.toggleLikePlace(user, placeId);
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Place or User not found");
-    }
-
-    @DeleteMapping("/del-like")
-    public ResponseEntity<String> delLike(@RequestBody String placeId,
-                                          @AuthenticationPrincipal CustomOAuth2User oAuth2User)
-            throws IllegalAccessException {
-        Place place = placeService.findByPlaceId(placeId);
-        User user = userService.findUserByEmail(oAuth2User);
-
-        if (place != null && user != null) {
-            user.delLikedPlace(place);
-            userService.save(user); // Save user with updated liked places
-            return ResponseEntity.ok("Like deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Place or User not found");
-        }
+        return ResponseEntity.ok(isNowLiked);
     }
 }

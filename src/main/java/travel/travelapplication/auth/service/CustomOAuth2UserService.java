@@ -30,8 +30,6 @@ import java.util.concurrent.ExecutionException;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
-    private final RecommendationService recommendationService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,29 +42,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("access token: {}", userRequest.getAccessToken().getTokenValue());
         log.info("attribute: {}", oAuth2User.getAttributes());
         log.info("OAuth2 로그인 요청 진입");
-
-        CompletableFuture<List<Recommendation>> recommendationFuture = recommendationService.fetchData();
-        CompletableFuture<List<Recommendation>> results = recommendationFuture.thenApply(recommendation -> {
-            List<Recommendation> list = new ArrayList<>(recommendation);
-            return list;
-        });
-
-        // 추천 서비스 호출 (Session 저장)
-        try {
-            List<Recommendation> recommendations = results.get();
-            List<SessionUser> sessions = (List<SessionUser>) httpSession.getAttribute("recommendation-result");
-            if (sessions == null) {
-                sessions = new ArrayList<>();
-            }
-
-            for (Recommendation recommendation : recommendations) {
-                SessionUser sessionUser = recommendation.toSessionUser();
-                sessions.add(sessionUser);
-            }
-            httpSession.setAttribute("recommendation-result", sessions);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
@@ -114,8 +89,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         if (findUser == null) {
+
             User user = User.builder()
-                    .name(attributes.getName())
+                    .name(name)
                     .email(attributes.getEmail())
                     .role(role)
                     .accessToken(accessToken)
@@ -124,24 +100,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     .tags(null)
                     .savedPlans(null)
                     .build();
-            if (name == null) {
-                name = "anonymous";
-            }
             userRepository.insert(user);
             return user;
         } else {
+            // 기존 유저 이름이 null인 경우 anonymous로 이름 변경
             findUser.setName(name);
             findUser.setAccessToken(accessToken);
             userRepository.save(findUser);
             return findUser;
         }
-
     }
 
     private User getUser(OAuthAttributes attributes) {
         return userRepository.findByEmail(attributes.getEmail())
                 .orElse(null);
     }
-
-
 }
