@@ -58,7 +58,7 @@ public class UserPlanService {
 
 
     public List<UserPlan> findAllUserPlan(User user) {
-        return user.getUserPlans();
+        return userPlanRepository.findAll();
     }
 
     public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
@@ -70,7 +70,7 @@ public class UserPlanService {
             log.info("user plan found");
             return userPlan;
         } else {
-            throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+            throw new IllegalAccessException("user plan not found");
         }
     }
 

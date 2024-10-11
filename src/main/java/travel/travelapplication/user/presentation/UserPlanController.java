@@ -25,6 +25,7 @@ import travel.travelapplication.user.domain.UserPlan;
 import travel.travelapplication.user.application.UserPlanService;
 
 import java.util.*;
+import travel.travelapplication.user.repository.UserPlanRepository;
 
 import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 
@@ -35,6 +36,7 @@ import static travel.travelapplication.dto.userplan.UserPlanDto.*;
 public class UserPlanController {
 
     private final UserPlanService userPlanService;
+    private final UserPlanRepository userPlanRepository;
     private final UserService userService;
     private final PlaceService placeService;
     private final RecommendationService recommendationService;
@@ -46,7 +48,12 @@ public class UserPlanController {
     }
 
     @GetMapping("/list")
-    public String userPlanList() {
+    public String userPlanList(@AuthenticationPrincipal CustomOAuth2User oAuth2User, Model model)
+            throws IllegalAccessException {
+        User user = userService.findUserByEmail(oAuth2User);
+        List<UserPlan> userPlans = userPlanService.findAllUserPlan(user);
+        model.addAttribute("userPlans", userPlans);
+
         return "html/user-plan-list";
     }
 
@@ -90,11 +97,11 @@ public class UserPlanController {
     @ResponseBody
     public List<String> getDistricts(@RequestParam("city") String city) {
         List<String> districts = new ArrayList<>();
-        Optional<ProvCity> provCities=provCityService.getCity(city);
+        Optional<ProvCity> provCities = provCityService.getCity(city);
 
-        if(provCities.isPresent()) {
-            ProvCity provCity=provCities.get();
-            districts=provCity.getDistricts();
+        if (provCities.isPresent()) {
+            ProvCity provCity = provCities.get();
+            districts = provCity.getDistricts();
         }
 
         return districts;
@@ -109,7 +116,7 @@ public class UserPlanController {
         UserPlan userPlan = userPlanService.createNewUserPlan(userInfo, userPlanInfoDto);
 
         List<Recommendation> recommendations = recommendationService.sendUserPlanInfo(userPlan, userInfo);
-        List<Recommendation> randomPlaces=recommendationService.getRandomPlaces();
+        List<Recommendation> randomPlaces = recommendationService.getRandomPlaces();
 
         model.addAttribute("infoSubmitted", true);
 
@@ -131,7 +138,8 @@ public class UserPlanController {
         model.addAttribute("userPlan", userPlan);
 
 //        return "user-plan";
-        return "test/userPlan";
+//        return "test/userPlan";
+        return "html/user-plan";
     }
 
     @GetMapping("/{userPlanId}/places")
@@ -186,7 +194,7 @@ public class UserPlanController {
     @GetMapping("/{userPlanId}/user-plan-info")
     public String updateUserPlanNameAndStatusForm(@PathVariable("userPlanId") ObjectId userPlanId,
                                                   Model model) throws IllegalAccessException {
-        UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
+        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
         return "test/editUserPlanInfoForm";
@@ -195,9 +203,10 @@ public class UserPlanController {
     @PostMapping("/{userPlanId}/user-plan-info")
     public String updateUserPlanNameAndStatus(@PathVariable("userPlanId") ObjectId userPlanId,
                                               @ModelAttribute("updateUserPlan") UpdateUserPlanInfoDto userPlanInfo,
-                                              @AuthenticationPrincipal CustomOAuth2User oAuth2User) throws IllegalAccessException {
-        User user=userService.findUserByEmail(oAuth2User);
-        UserPlan userPlan=userPlanService.findUserPlanById(userPlanId);
+                                              @AuthenticationPrincipal CustomOAuth2User oAuth2User)
+            throws IllegalAccessException {
+        User user = userService.findUserByEmail(oAuth2User);
+        UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
 
         userPlanService.updateUserPlanInfo(user, userPlan, userPlanInfo);
 
