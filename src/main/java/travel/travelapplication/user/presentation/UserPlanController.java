@@ -114,18 +114,14 @@ public class UserPlanController {
             throws IllegalAccessException {
         User userInfo = userService.findUserByEmail(oAuth2User);
         UserPlan userPlan = userPlanService.createNewUserPlan(userInfo, userPlanInfoDto);
-
-        List<Recommendation> recommendations = recommendationService.sendUserPlanInfo(userPlan, userInfo);
-        List<Recommendation> randomPlaces = recommendationService.getRandomPlaces();
+        recommendationService.sendUserPlanInfo(userPlan, userInfo);
 
         model.addAttribute("infoSubmitted", true);
 
         model.addAttribute("userPlanId", userPlan.getId());
+        log.info("userPlanId: {} ", userPlan.getId());
         model.addAttribute("userPlan", userPlanInfoDto);
         model.addAttribute("user", userInfo);
-
-        model.addAttribute("recommendations", recommendations);
-        model.addAttribute("randomPlaces", randomPlaces);
 
         model.addAttribute("likedPlaces", userInfo.getLikedPlaces());
 
@@ -137,8 +133,6 @@ public class UserPlanController {
         UserPlan userPlan = userPlanService.findUserPlanById(userPlanId);
         model.addAttribute("userPlan", userPlan);
 
-//        return "user-plan";
-//        return "test/userPlan";
         return "html/user-plan";
     }
 
@@ -160,7 +154,7 @@ public class UserPlanController {
     @PostMapping("/save-places")
     @ResponseBody
     public Map<String, Object> savePlacesToUserPlan(@RequestBody List<String> selectedPlaceId,
-                                                    Model model, @RequestParam("userPlanId") ObjectId userPlanId,
+                                                    Model model,
                                                     UserPlanInfoDto userPlanInfo,
                                                     @AuthenticationPrincipal CustomOAuth2User oAuth2User)
             throws IllegalAccessException {
@@ -174,16 +168,17 @@ public class UserPlanController {
             selectedPlaces.add(place);
         }
         model.addAttribute("selectedPlaces", selectedPlaces);
-//        userPlanService.updateUserPlanPlaces(foundUserPlan, selectedPlaces);
-//        userPlanService.updateUserPlanPlaces(userPlan, selectedPlaces);
+
         userPlanService.mergePlacesToUserPlanInfo(userPlan, selectedPlaces);
+        log.info("merge successful");
 
         model.addAttribute("userPlan", userPlan);
+        log.info("userPlan added");
 
         // JSON으로 변환
         Map<String, Object> response = new HashMap<>();
-        response.put("selectedPlaces", selectedPlaces);
-        response.put("userPlan", userPlanInfo);
+//        response.put("selectedPlaces", selectedPlaces);
+//        response.put("userPlan", userPlanInfo);
         response.put("redirectUrl", "/home");
 
         log.info(selectedPlaces.toString());
