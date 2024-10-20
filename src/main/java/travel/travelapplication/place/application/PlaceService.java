@@ -32,13 +32,13 @@ public class PlaceService {
     }
 
     public boolean toggleLikePlace(User user, Long placeId) {
-        List<Long> likedPlaces=user.getLikedPlaces();
-        boolean isLiked=likedPlaces.stream().anyMatch(likedId -> likedId.equals(placeId));
+        List<Long> likedPlaces = user.getLikedPlaces();
+        boolean isLiked = likedPlaces.stream().anyMatch(likedId -> likedId.equals(placeId));
 
-        if(!isLiked) {
+        if (!isLiked) {
             likedPlaces.add(placeId);
         } else {
-            likedPlaces.removeIf(likedId->likedId.equals(placeId));
+            likedPlaces.removeIf(likedId -> likedId.equals(placeId));
         }
         userService.updateLikedPlaces(user, likedPlaces);
         return !isLiked;

@@ -473,8 +473,7 @@ function selectPlaces(){
 // 선택한 장소 저장
 document.getElementById('saveButton').addEventListener('click', function() {
     console.log('선택된 장소 IDs:', selectedPlaces);
-//    sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
-    sendRequest('/user-plan/save-places', 'POST', selectedPlaces);
+    sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
 });
 
 
