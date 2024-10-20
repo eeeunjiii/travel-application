@@ -263,9 +263,7 @@ $(function(){
  =========================================================================*/
  let selectedPlaces = [];
 
-document.addEventListener('DOMContentLoaded', function() {
-    fetchRecommendations();
-});
+
 
 async function sendRequest(url, data, methodType){
     try {
@@ -282,6 +280,11 @@ async function sendRequest(url, data, methodType){
         }
 
         const result = await response.json();
+        if (result.redirectUrl) {
+                    window.location.href = result.redirectUrl; // 서버에서 제공한 리디렉션 URL로 이동
+                } else {
+                    console.log('fetched data: ', result);
+                }
         console.log('Server response:', result);
     } catch (error) {
         console.error('Error:', error);
@@ -354,14 +357,6 @@ async function fetchData(url, method, myData) {
  });
 
 
-//예산 조정 바
-//const rangeSlider = document.getElementById('budget');
-//const rangeValue = document.getElementById('rangeValue');
-//
-//rangeSlider.addEventListener('input', function() {
-//    rangeValue.textContent = rangeSlider.value;
-//});
-
 function toggleInput() {
      var budgetInput = document.getElementById('budgetInput');
      var budgetNoLimit = document.getElementById('budgetNoLimit');
@@ -404,24 +399,24 @@ function loadSubregions() {
 }
 
 
-//추천 장소 데이터 가져오기
-async function fetchRecommendations() {
-    const response = await fetch('/recommendations');
-    const recommendations = await response.json();
-    console.log('Fetched recommendations:', recommendations);
+//장소 표시
+async function fetchPlaces(endPoint, elementId) {
+     const response = await fetch(`/recommendations?endPoint=${endPoint}`);
+     const places = await response.json();
+    console.log('Fetched places:', places);
 
-    const container = document.getElementById('recom-list');
+    const container = document.getElementById(elementId);
     container.innerHTML = ''; // 기존 요소들을 지우고 새로운 것들로 대체
 
-    recommendations.forEach((recommendation, index) => {
+    places.forEach((place, index) => {
         const placeItem = document.createElement('div');
         placeItem.className = 'place-item';
         placeItem.innerHTML = `
              <a>
                 <div class="heart-icon" onclick="toggleHeart(this)">🩶</div>
-                <img src="카카오맵에서 가져온 사진" alt="${recommendation.placeId}">
-                <h5>${recommendation.name}</h5>
-                <p><a href="카카오맵 장소 설명으로 이동">${recommendation.address}</a></p>
+                <img src="카카오맵에서 가져온 사진" alt="${place.placeId}">
+                <h5>${place.name}</h5>
+                <p><a href="카카오맵 장소 설명으로 이동">${place.address}</a></p>
              </a>
         `;
         container.appendChild(placeItem);
@@ -478,8 +473,8 @@ function selectPlaces(){
 // 선택한 장소 저장
 document.getElementById('saveButton').addEventListener('click', function() {
     console.log('선택된 장소 IDs:', selectedPlaces);
-    sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
-    fetchData('/user-plan/save-places', 'POST', selectedPlaces);
+//    sendRequest('/user-plan/save-places', selectedPlaces, 'POST');
+    sendRequest('/user-plan/save-places', 'POST', selectedPlaces);
 });
 
 

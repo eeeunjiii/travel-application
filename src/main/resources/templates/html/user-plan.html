@@ -179,16 +179,6 @@
                     < class="post post-single">
                     <!-- post content -->
                     <div class="post-content clearfix">
-                        <p>The European languages are members of the same family. Their separate existence is a
-                            myth. For science, music, sport, etc, Europe uses the same <a href="#">vocabulary</a>.
-                            The languages only differ in their grammar, their pronunciation and their most common
-                            words.</p>
-
-                        <p>Everyone realizes why a new common language would be desirable: one could refuse to pay
-                            expensive translators. To achieve this, it
-                            <mark>would be</mark>
-                            necessary to have uniform grammar, pronunciation and more common words.
-                        </p>
 
                         <!--                            지도 표시-->
                         <div id="map"></div>
@@ -208,16 +198,18 @@
                                 map.relayout();
                                 });
 
+
+
+
+
                         </script>
 
-
-                        <p>The languages only differ in their grammar, their pronunciation and their most common
-                            words. Everyone realizes why a new common language would be desirable.</p>
 
                         <!-- 일정 표시 -->
                         <div class="widget rounded">
                             <div class="widget-header text-center">
-                                <h3 class="widget-title">여행 일정</h3>
+                                <h3 class="widget-title"><a th:text="${userPlan.name}">여행 일정</a></h3>
+
                                 <img src="images/wave.svg" class="wave" alt="wave"/>
                             </div>
                             <div class="widget-content">
@@ -231,65 +223,49 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="details clearfix">
-                                        <h6 class="post-title my-0"><a href="blog-single.html">Place Name</a></h6>
+
+                                    <div class="details clearfix" th:each="place : ${userPlan.places}">
+                                        <h6 class="post-title my-0">
+                                            <a th:href="@{'/places/' + ${place.id}}" th:text="${place.name}">Place
+                                                Name</a>
+                                        </h6>
                                         <ul class="meta list-inline mt-1 mb-0">
-                                            <li class="list-inline-item">Place Details</li>
+                                            <li class="list-inline-item" th:text="${place.provCity}">Place Details</li>
                                         </ul>
                                     </div>
+
+
+                                    <!--                                    <div class="details clearfix">-->
+                                    <!--                                        <h6 class="post-title my-0"><a th:text="{userPlan.places}">Place Name</a></h6>-->
+                                    <!--                                        <ul class="meta list-inline mt-1 mb-0">-->
+                                    <!--                                            <li class="list-inline-item">Place Details</li>-->
+                                    <!--                                        </ul>-->
+                                    <!--                                    </div>-->
                                 </div>
                                 <!-- post -->
-                                <div class="post post-list-sm circle">
-                                    <div class="thumb circle">
-                                        <span class="number">><</span>
-                                        <a href="blog-single.html">
-                                            <div class="inner">
-                                                <img src="images/posts/tabs-1.jpg" alt="post-title"/>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="details clearfix">
-                                        <h6 class="post-title my-0"><a href="blog-single.html">Place Name</a></h6>
-                                        <ul class="meta list-inline mt-1 mb-0">
-                                            <li class="list-inline-item">Place Details</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                <!--                                <div class="post post-list-sm circle">-->
+                                <!--                                    <div class="thumb circle">-->
+                                <!--                                        <span class="number">><</span>-->
+                                <!--                                        <a href="blog-single.html">-->
+                                <!--                                            <div class="inner">-->
+                                <!--                                                <img src="images/posts/tabs-1.jpg" alt="post-title"/>-->
+                                <!--                                            </div>-->
+                                <!--                                        </a>-->
+                                <!--                                    </div>-->
+                                <!--                                    <div class="details clearfix">-->
+                                <!--                                        <h6 class="post-title my-0"><a href="blog-single.html">Place Name</a></h6>-->
+                                <!--                                        <ul class="meta list-inline mt-1 mb-0">-->
+                                <!--                                            <li class="list-inline-item">Place Details</li>-->
+                                <!--                                        </ul>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
                                 <!-- post -->
-                                <div class="post post-list-sm circle">
-                                    <div class="thumb circle">
-                                        <span class="number">><</span>
-                                        <a href="blog-single.html">
-                                            <div class="inner">
-                                                <img src="images/posts/tabs-1.jpg" alt="post-title"/>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="details clearfix">
-                                        <h6 class="post-title my-0"><a href="blog-single.html">Place Name</a></h6>
-                                        <ul class="meta list-inline mt-1 mb-0">
-                                            <li class="list-inline-item">Place Details</li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
 
                         <img src="images/posts/single-sm-1.jpg" class="rounded alignleft" alt="...">
-                        <p>One could refuse to pay expensive translators. To achieve this, it would be necessary to
-                            have uniform grammar, pronunciation and more common words.</p>
 
-                        <p>If several languages coalesce, the grammar of the resulting language is more simple and
-                            regular than that of the individual languages. The new common language will be more
-                            simple and regular than the existing <a href="#">European languages</a>. It will be as
-                            simple as Occidental; in fact, it will be Occidental.</p>
-
-                        <p>A collection of textile samples lay spread out on the table - Samsa was a travelling
-                            salesman - and above it there hung a picture that he had recently cut out of an
-                            illustrated magazine and housed in a nice, gilded frame.</p>
-
-                        <h4>I should be incapable of drawing a single stroke</h4>
 
                         <ul>
                             <li>How about if I sleep a little bit</li>

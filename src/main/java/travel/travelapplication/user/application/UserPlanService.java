@@ -58,7 +58,7 @@ public class UserPlanService {
 
 
     public List<UserPlan> findAllUserPlan(User user) {
-        return user.getUserPlans();
+        return userPlanRepository.findAll();
     }
 
     public UserPlan findUserPlanById(ObjectId userPlanId) throws IllegalAccessException {
@@ -70,7 +70,7 @@ public class UserPlanService {
             log.info("user plan found");
             return userPlan;
         } else {
-            throw new IllegalAccessException("존재하지 않는 여행 일정입니다.");
+            throw new IllegalAccessException("user plan not found");
         }
     }
 
@@ -108,6 +108,7 @@ public class UserPlanService {
     }
 
     public void mergePlacesToUserPlanInfo(UserPlan userPlan, List<Place> places) {
+        // 가장 최근 UserPlan 도큐먼트 조회
         Query query = new Query().with(Sort.by(Sort.Direction.DESC, "_id")).limit(1);
         UserPlan lastUserPlan = mongoTemplate.findOne(query, UserPlan.class);
 
@@ -124,14 +125,14 @@ public class UserPlanService {
                     .routes(userPlan.getRoutes() != null ? userPlan.getRoutes() : lastUserPlan.getRoutes())
                     .build();
 
-            // 3. 병합된 document 저장
-            userPlan.update(updatedUserPlan);
-            save(userPlan);
-            mongoTemplate.remove(lastUserPlan);
+            // 병합된 내용으로 lastUserPlan 업데이트
+            lastUserPlan.update(updatedUserPlan);  // lastUserPlan을 직접 업데이트
+            save(lastUserPlan);  // 병합된 lastUserPlan 저장
+            log.info("update successful");
+
         } else {
             save(userPlan);
         }
-
 
     }
 
